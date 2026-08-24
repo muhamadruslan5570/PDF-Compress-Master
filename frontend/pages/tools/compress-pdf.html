@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Compress PDF Online Gratis - MR Compress PDF</title>
+  <meta name="description" content="Kompres file PDF Anda secara online dengan pilihan tingkat kompresi yang fleksibel.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="/pages/compress-pdf.html">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #070d18;
+      --panel: #0e1728;
+      --panel-2: #111c30;
+      --border: #263650;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-2: #3b82f6;
+      --danger: #f87171;
+      --success: #34d399;
+      --radius: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 13, 24, 0.82);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      max-width: var(--max);
+      height: 76px;
+      margin: auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .site-logo {
+      display: block;
+      width: 180px;
+      height: auto;
+      max-height: 50px;
+      object-fit: contain;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .home-link {
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 10px;
+    }
+
+    .home-link:hover {
+      background: rgba(148, 163, 184, 0.10);
+      color: #fff;
+    }
+
+    .free-label {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* =====================================================
+       MAIN TOOL CONTAINER
+    ===================================================== */
+    main {
+      max-width: 860px;
+      margin: auto;
+      padding: 60px 20px 90px;
+    }
+
+    .tool-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.20);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .tool-header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .tool-header p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 580px;
+      margin: auto;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(10, 18, 32, 0.96));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      padding: 36px;
+    }
+
+    /* DROPZONE AREA */
+    .dropzone {
+      border: 2px dashed rgba(99, 102, 241, 0.35);
+      border-radius: 18px;
+      background: rgba(9, 18, 34, 0.6);
+      padding: 45px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .dropzone-icon {
+      font-size: 42px;
+      margin-bottom: 14px;
+    }
+
+    .dropzone h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .dropzone p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* FILE PREVIEW AREA */
+    .file-info {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #091222;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .file-details {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .file-icon {
+      font-size: 28px;
+    }
+
+    .file-name {
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+
+    .file-size {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn-remove {
+      background: transparent;
+      border: 0;
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .btn-remove:hover {
+      background: rgba(248, 113, 113, 0.1);
+    }
+
+    /* COMPRESSION LEVEL OPTIONS */
+    .options-section {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .options-title {
+      font-size: 14px;
+      font-weight: 750;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+    }
+
+    .level-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .level-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #091222;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease;
+      position: relative;
+    }
+
+    .level-card:hover {
+      border-color: #405272;
+    }
+
+    .level-card.active {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.12);
+    }
+
+    .level-card .badge {
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .level-card .level-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .level-card .desc-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .level-card .est-text {
+      font-size: 12px;
+      color: #93c5fd;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* RESULT AREA */
+    .result-section {
+      display: none;
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 16px;
+      background: rgba(52, 211, 153, 0.06);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      text-align: center;
+    }
+
+    .result-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--success);
+      margin-bottom: 16px;
+    }
+
+    .stats-grid {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+
+    .stats-item .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .stats-item .val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.22);
+      transition: transform 0.18s ease;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+    }
+
+    /* ACTION BUTTON */
+    .btn-submit {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.18);
+      transition: transform 0.18s ease, background 0.18s ease;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, #7073f5, #4b8ff4);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* SPINNER */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* MESSAGE */
+    .message {
+      display: none;
+      margin-top: 20px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .message.error {
+      display: block;
+      border: 1px solid rgba(248, 113, 113, 0.25);
+      background: rgba(248, 113, 113, 0.08);
+      color: #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      background: rgba(52, 211, 153, 0.08);
+      color: #a7f3d0;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.10);
+      padding: 22px 16px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .level-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-inner">
+        <a href="./all-tools.html" class="brand" aria-label="MR Compress PDF Home">
+          <img src="/assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="180" height="50">
+        </a>
+
+        <div class="header-right">
+          <a href="./all-tools.html" class="home-link">All Tools</a>
+          <div class="free-label">100% FREE</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN TOOL CONTENT -->
+    <main>
+      <div class="tool-header">
+        <span class="tool-badge">🗜️ PDF COMPRESSOR</span>
+        <h1>Compress PDF Online</h1>
+        <p>Pilih tingkat kompresi sesuai target ukuran file yang Anda inginkan.</p>
+      </div>
+
+      <div class="tool-card">
+        <!-- DROPZONE -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">📄</div>
+          <h3>Pilih atau seret file PDF di sini</h3>
+          <p>Maksimal ukuran file 20MB</p>
+          <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+        </div>
+
+        <!-- FILE PREVIEW -->
+        <div class="file-info" id="fileInfo">
+          <div class="file-details">
+            <span class="file-icon">📑</span>
+            <div>
+              <div class="file-name" id="fileName">document.pdf</div>
+              <div class="file-size" id="fileSize">0 KB</div>
+            </div>
+          </div>
+          <button type="button" class="btn-remove" id="btnRemove">Ganti File</button>
+        </div>
+
+        <!-- COMPRESSION LEVEL OPTIONS -->
+        <div class="options-section" id="optionsSection">
+          <div class="options-title">Pilih Target Ukuran Kompresi:</div>
+          <div class="level-grid">
+            <div class="level-card" data-level="low">
+              <div class="level-title">🟢 Low</div>
+              <div class="desc-text">Kualitas visual terbaik</div>
+              <div class="est-text">Target: 10 MB – 5 MB</div>
+            </div>
+            <div class="level-card active" data-level="recommended">
+              <span class="badge">REKOMENDASI</span>
+              <div class="level-title">🔵 Recommended</div>
+              <div class="desc-text">Standar Pendaftaran</div>
+              <div class="est-text">Target: 1 MB – 500 KB</div>
+            </div>
+            <div class="level-card" data-level="extreme">
+              <div class="level-title">🔴 Extreme</div>
+              <div class="desc-text">Ukuran sangat kecil</div>
+              <div class="est-text">Target: 500 KB – 100 KB</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTON -->
+        <button type="button" class="btn-submit" id="btnCompress" disabled>
+          <span class="spinner" id="btnSpinner"></span>
+          <span id="btnText">Compress PDF Sekarang</span>
+        </button>
+
+        <!-- RESULT & DOWNLOAD BUTTON SECTION -->
+        <div class="result-section" id="resultSection">
+          <div class="result-title">🎉 Kompresi Selesai!</div>
+          <div class="stats-grid">
+            <div class="stats-item">
+              <div class="label">Ukuran Awal</div>
+              <div class="val" id="statOriginal" style="color: var(--muted); text-decoration: line-through;">0 KB</div>
+            </div>
+            <div class="stats-item">
+              <div class="label">Ukuran Akhir</div>
+              <div class="val" id="statCompressed">0 KB</div>
+            </div>
+            <div class="stats-item">
+              <div class="label">Hemat</div>
+              <div class="val" id="statSaved">0%</div>
+            </div>
+          </div>
+          <a href="#" class="btn-download" id="btnDownload" download>
+            ⬇️ Unduh File PDF
+          </a>
+        </div>
+
+        <!-- NOTIFICATION BOX -->
+        <div class="message" id="message"></div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      © 2026 MR Compress PDF. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const dropzone = document.getElementById("dropzone");
+      const fileInput = document.getElementById("fileInput");
+      const fileInfo = document.getElementById("fileInfo");
+      const fileName = document.getElementById("fileName");
+      const fileSize = document.getElementById("fileSize");
+      const btnRemove = document.getElementById("btnRemove");
+      const optionsSection = document.getElementById("optionsSection");
+      const levelCards = document.querySelectorAll(".level-card");
+      const btnCompress = document.getElementById("btnCompress");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const resultSection = document.getElementById("resultSection");
+      const btnDownload = document.getElementById("btnDownload");
+      const message = document.getElementById("message");
+
+      let selectedFile = null;
+      let compressionLevel = "recommended";
+      let downloadUrl = null;
+
+      levelCards.forEach(card => {
+        card.addEventListener("click", () => {
+          levelCards.forEach(c => c.classList.remove("active"));
+          card.classList.add("active");
+          compressionLevel = card.getAttribute("data-level");
+        });
+      });
+
+      dropzone.addEventListener("click", () => fileInput.click());
+
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+
+      dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) handleFile(e.target.files[0]);
+      });
+
+      function handleFile(file) {
+        if (file.type !== "application/pdf") {
+          showMessage("Hanya file berformat PDF yang diperbolehkan.", "error");
+          return;
+        }
+
+        selectedFile = file;
+        fileName.textContent = file.name;
+        const sizeKB = (file.size / 1024).toFixed(1);
+        fileSize.textContent = sizeKB > 1024 ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : sizeKB + " KB";
+
+        dropzone.style.display = "none";
+        fileInfo.style.display = "flex";
+        optionsSection.style.display = "block";
+        btnCompress.style.display = "flex";
+        btnCompress.disabled = false;
+        resultSection.style.display = "none";
+        hideMessage();
+      }
+
+      btnRemove.addEventListener("click", () => {
+        selectedFile = null;
+        fileInput.value = "";
+        dropzone.style.display = "block";
+        fileInfo.style.display = "none";
+        optionsSection.style.display = "none";
+        resultSection.style.display = "none";
+        btnCompress.disabled = true;
+        if (downloadUrl) {
+          URL.revokeObjectURL(downloadUrl);
+          downloadUrl = null;
+        }
+        hideMessage();
+      });
+
+      btnCompress.addEventListener("click", async () => {
+        if (!selectedFile) return;
+
+        btnCompress.disabled = true;
+        btnSpinner.style.display = "inline-block";
+        btnText.textContent = "Mengompresi PDF...";
+        showMessage("Sedang mengompresi PDF Anda, mohon tunggu...", "success");
+        resultSection.style.display = "none";
+
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("level", compressionLevel);
+
+        try {
+          const response = await fetch("http://127.0.0.1:8000/api/compress-pdf", {
+            method: "POST",
+            body: formData
+          });
+
+          if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.detail || errData.message || "Gagal mengompresi PDF.");
+          }
+
+          const blob = await response.blob();
+          
+          // Ambil statistik dari header jika tersedia, atau kalkulasi langsung dari blob
+          const origSize = parseInt(response.headers.get("X-Original-Size")) || selectedFile.size;
+          const compSize = parseInt(response.headers.get("X-Compressed-Size")) || blob.size;
+
+          const origSizeKB = (origSize / 1024).toFixed(1);
+          const compSizeKB = (compSize / 1024).toFixed(1);
+          const savedPercent = (((origSize - compSize) / origSize) * 100).toFixed(0);
+
+          // Render Statistik
+          document.getElementById("statOriginal").textContent = `${origSizeKB} KB`;
+          document.getElementById("statCompressed").textContent = `${compSizeKB} KB`;
+          document.getElementById("statSaved").textContent = `${savedPercent > 0 ? savedPercent : 0}%`;
+
+          // Tautan Unduhan
+          if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+          downloadUrl = URL.createObjectURL(blob);
+          btnDownload.href = downloadUrl;
+          btnDownload.download = `compressed_${selectedFile.name}`;
+
+          resultSection.style.display = "block";
+          btnCompress.style.display = "none";
+          hideMessage();
+        } catch (err) {
+          showMessage(err.message || "Terjadi kesalahan saat mengompresi PDF.", "error");
+          btnCompress.disabled = false;
+        } finally {
+          btnSpinner.style.display = "none";
+          btnText.textContent = "Compress PDF Sekarang";
+        }
+      });
+
+      function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `message ${type}`;
+        message.style.display = "block";
+      }
+
+      function hideMessage() {
+        message.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

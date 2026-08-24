@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FAQ & Support — PDF Master AI</title>
+  <meta name="description" content="Pertanyaan umum dan bantuan layanan PDF Master AI. Kontak Developer: Email & WhatsApp.">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg-primary: #07111f;
+      --bg-secondary: #0c1424;
+      --bg-tertiary: #111c2e;
+      --bg-surface: #162338;
+      
+      --border-color: #1e293b;
+      --border-hover: #334155;
+
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59, 130, 246, 0.12);
+
+      --danger-color: #ef4444;
+      --success-color: #22c55e;
+
+      --header-height: 65px;
+      --max-width: 900px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { 
+      height: 100%; 
+      font-family: Arial, Helvetica, sans-serif; 
+      background-color: var(--bg-primary); 
+      color: var(--text-primary); 
+      line-height: 1.6; 
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* NAVBAR */
+    .navbar {
+      height: var(--header-height);
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7, 17, 31, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo { display: inline-flex; align-items: center; }
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent-color); }
+
+    .btn-nav {
+      padding: 8px 16px;
+      background: var(--accent-color);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
+    .btn-nav:hover { background: var(--accent-hover); }
+
+    /* LAYOUT CONTAINERS */
+    .main-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 50px 24px 80px;
+    }
+
+    /* HERO SECTION */
+    .hero-section {
+      text-align: center;
+      padding-bottom: 40px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--accent-light);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 20px;
+      color: var(--accent-color);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* FAQ ACCORDION STYLES */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 50px;
+    }
+
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .faq-item:hover {
+      border-color: var(--border-hover);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 18px 20px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      gap: 12px;
+    }
+
+    .faq-icon {
+      font-size: 18px;
+      color: var(--accent-color);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 0 20px;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 200px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* DEVELOPER CONTACT SECTION */
+    .developer-card {
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dev-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .dev-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .dev-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .dev-contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .contact-box {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .contact-box:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .contact-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .contact-icon-wrapper.email {
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--accent-color);
+    }
+
+    .contact-icon-wrapper.whatsapp {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--success-color);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .contact-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .contact-link {
+      font-size: 12px;
+      color: var(--accent-color);
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+    }
+    .contact-link:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 60px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .navbar { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hero-title { font-size: 26px; }
+      .dev-contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="../index.html" class="brand-logo" aria-label="PDF Master AI — Home">
+      <img src="../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="../index.html" class="nav-link">Dashboard</a></li>
+      <li><a href="tools/all-tools.html" class="nav-link">PDF Tools</a></li>
+      <li><a href="ai/chat-ai.html" class="nav-link">AI Assistant</a></li>
+      <li><a href="about.html" class="nav-link">About Us</a></li>
+      <li><a href="faq.html" class="nav-link active">FAQ & Support</a></li>
+    </ul>
+
+    <a href="ai/chat-ai.html" class="btn-nav">Coba AI Chat</a>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="main-container">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span>❓</span>
+        <span>Pusat Bantuan</span>
+      </div>
+      <h1 class="hero-title">Frequently Asked Questions</h1>
+      <p class="hero-subtitle">
+        Temukan jawaban cepat untuk pertanyaan yang sering diajukan seputar penggunaan PDF Master AI.
+      </p>
+    </section>
+
+    <!-- FAQ LIST ACCORDION -->
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Apa itu PDF Master AI?</span>
+          <span class="faq-icon">➕</span>
+        </button>
+        <div class="faq-answer">
+          PDF Master AI adalah platform manajemen dokumen pintar yang menggabungkan alat pemrosesan PDF cepat (kompresi, konversi, dll.) dengan asisten kecerdasan buatan berbasis Gemini AI untuk menganalisis dan meringkas dokumen secara instan.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Bagaimana cara mengunggah dokumen PDF ke AI Chat?</span>
+          <span class="faq-icon">➕</span>
+        </button>
+        <div class="faq-answer">
+          Di halaman AI Chat (`chat-ai.html`), klik tombol ikon klip kertas (📎) di sebelah kolom teks untuk memilih file PDF dari perangkat Anda. Teks dari PDF akan diekstraksi otomatis dan dianalisis oleh AI.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Apakah dokumen yang saya unggah aman?</span>
+          <span class="faq-icon">➕</span>
+        </button>
+        <div class="faq-answer">
+          Ya, keamanan dan privasi Anda adalah prioritas utama kami. Dokumen yang diunggah hanya diproses untuk keperluan tugas Anda dan tidak disebarluaskan atau disimpan secara permanen di server publik.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Apakah layanan ini gratis digunakan?</span>
+          <span class="faq-icon">➕</span>
+        </button>
+        <div class="faq-answer">
+          PDF Master AI menyediakan akses fitur utama secara gratis (FREE Plan) untuk kebutuhan pengolahan dokumen harian dan tanya jawab AI.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Bagaimana jika pesan AI mengalami error atau timeout?</span>
+          <span class="faq-icon">➕</span>
+        </button>
+        <div class="faq-answer">
+          Jika koneksi terputus atau terjadi kesalahan, cobalah menekan tombol "+ New Chat" di sidebar untuk mereset riwayat percakapan lokal, lalu pastikan koneksi internet Anda stabil.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DEVELOPER CONTACT SECTION -->
+    <section class="developer-card">
+      <div class="dev-header">
+        <h2 class="dev-title">Kontak Developer</h2>
+        <p class="dev-desc">Memiliki pertanyaan khusus, laporan bug, atau saran pengembangan? Hubungi langsung developer kami.</p>
+      </div>
+
+      <div class="dev-contact-grid">
+        
+        <!-- EMAIL BOX -->
+        <div class="contact-box">
+          <div class="contact-icon-wrapper email">✉️</div>
+          <div class="contact-info">
+            <span class="contact-label">Email Developer</span>
+            <span class="contact-value">muhamadruslan5570@gmail.com</span>
+            <a href="mailto:muhamadruslan5570@gmail.com" class="contact-link">Kirim Email &rarr;</a>
+          </div>
+        </div>
+
+        <!-- WHATSAPP BOX -->
+        <div class="contact-box">
+          <div class="contact-icon-wrapper whatsapp">💬</div>
+          <div class="contact-info">
+            <span class="contact-label">WhatsApp Developer</span>
+            <span class="contact-value">08381055378</span>
+            <a href="https://wa.me/628381055378" target="_blank" rel="noopener noreferrer" class="contact-link">Chat WhatsApp &rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="../index.html">Dashboard</a>
+      <a href="tools/all-tools.html">Tools</a>
+      <a href="ai/chat-ai.html">AI Chat</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan.</p>
+  </footer>
+
+  <script>
+    // ACCORDION TOGGLE INTERACTION
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const faqItem = button.parentElement;
+        const isActive = faqItem.classList.contains('active');
+
+        // Tutup semua item lain
+        document.querySelectorAll('.faq-item').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        // Buka item yang diklik jika sebelumnya tidak aktif
+        if (!isActive) {
+          faqItem.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>My Profile — PDF Master AI</title>
+  <meta name="description" content="Manage your personal profile and account settings on PDF Master AI">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --sidebar-width: 250px;
+      --header-height: 72px;
+
+      --radius: 14px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    /* HEADER */
+    .dashboard-header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--header-height); z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(7, 17, 31, .96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .brand-logo { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .site-logo { display: block; width: 150px; height: auto; max-height: 50px; object-fit: contain; }
+
+    .mobile-menu {
+      display: none; width: 42px; height: 42px;
+      align-items: center; justify-content: center;
+      border: 1px solid var(--border); border-radius: 10px;
+      background: var(--surface-2); color: var(--text); font-size: 21px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .user-menu {
+      display: flex; align-items: center; gap: 10px;
+      padding: 5px 8px 5px 5px;
+      border: 1px solid var(--border); border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--primary); color: white; font-weight: 700; font-size: 14px;
+      background-size: cover; background-position: center; overflow: hidden;
+    }
+
+    .user-info { display: flex; flex-direction: column; gap: 2px; min-width: 110px; }
+    .user-name { font-size: 13px; font-weight: 700; }
+    .user-plan { color: var(--muted); font-size: 11px; }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed; top: var(--header-height); left: 0; bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--surface); border-right: 1px solid var(--border);
+      padding: 24px 14px; overflow-y: auto; z-index: 900;
+    }
+
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-title {
+      padding: 0 12px; margin-bottom: 9px;
+      color: var(--muted-2); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+    }
+
+    .sidebar-link {
+      width: 100%; display: flex; align-items: center; gap: 12px;
+      padding: 11px 12px; margin: 3px 0;
+      border: 1px solid transparent; border-radius: 10px;
+      color: var(--muted); font-size: 14px; transition: .2s ease;
+    }
+
+    .sidebar-link:hover { color: var(--text); background: var(--surface-2); }
+    .sidebar-link.active { color: #fff; background: rgba(59, 130, 246, .13); border-color: rgba(59, 130, 246, .25); }
+    .sidebar-icon { width: 22px; text-align: center; font-size: 16px; }
+    .logout-link { color: #fca5a5; }
+    .logout-link:hover { color: #fecaca; background: rgba(239, 68, 68, .08); }
+
+    /* MAIN */
+    .dashboard-main { margin-left: var(--sidebar-width); padding-top: var(--header-height); min-height: 100vh; }
+    .dashboard-content { width: min(100% - 48px, var(--max)); margin: auto; padding: 38px 0 70px; }
+
+    .page-title-box { margin-bottom: 30px; }
+    .page-title-box h1 { font-size: 28px; margin-bottom: 6px; }
+    .page-title-box p { color: var(--muted); font-size: 14px; }
+
+    .profile-grid { display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+
+    /* PROFILE CARD LEFT */
+    .profile-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px; text-align: center;
+    }
+
+    .profile-avatar-wrapper {
+      position: relative; width: 100px; height: 100px; margin: 0 auto 16px;
+    }
+
+    .profile-avatar-large {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: var(--primary); color: #fff; font-size: 38px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      background-size: cover; background-position: center; overflow: hidden;
+    }
+
+    .btn-upload-avatar {
+      position: absolute; bottom: 0; right: 0;
+      width: 32px; height: 32px;
+      background: var(--surface-3); border: 1px solid var(--border-light);
+      border-radius: 50%; color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px;
+    }
+
+    .btn-delete-avatar {
+      display: none; margin: -6px auto 16px;
+      background: transparent; border: none;
+      color: var(--danger); font-size: 12px; font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-delete-avatar:hover { text-decoration: underline; }
+
+    .profile-card h2 { font-size: 18px; margin-bottom: 4px; }
+    .profile-card .email { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+    .plan-badge {
+      display: inline-block; padding: 4px 12px;
+      background: rgba(59, 130, 246, .14); border: 1px solid rgba(59, 130, 246, .3);
+      color: #60a5fa; border-radius: 999px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .profile-stats {
+      border-top: 1px solid var(--border); padding-top: 20px;
+      display: flex; justify-content: space-around;
+    }
+    .profile-stat-item .val { font-size: 16px; font-weight: 800; color: #fff; }
+    .profile-stat-item .lbl { font-size: 11px; color: var(--muted); }
+
+    /* FORM CARD RIGHT */
+    .form-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+    }
+    .form-card h3 { font-size: 18px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .form-control {
+      width: 100%; padding: 12px 14px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 10px; color: #fff; outline: none; transition: border-color .2s;
+    }
+    .form-control:focus { border-color: var(--primary); }
+
+    .btn-save {
+      padding: 12px 24px; background: var(--primary); color: #fff;
+      border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-save:hover { background: var(--primary-hover); }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .toast-msg {
+      display: none; margin-top: 16px; padding: 12px 16px;
+      border-radius: 10px; font-size: 13px;
+    }
+    .toast-msg.success { display: block; background: rgba(34, 197, 94, .12); border: 1px solid rgba(34, 197, 94, .25); color: #86efac; }
+    .toast-msg.error { display: block; background: rgba(239, 68, 68, .12); border: 1px solid rgba(239, 68, 68, .25); color: #fca5a5; }
+
+    /* FOOTER */
+    footer { margin-left: var(--sidebar-width); background: #0c1424; border-top: 1px solid var(--border); }
+    .footer-bottom { padding: 22px 24px; color: #64748b; font-size: 13px; display: flex; justify-content: space-between; }
+
+    @media (max-width: 900px) { .profile-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 820px) {
+      .mobile-menu { display: flex; }
+      .sidebar { transform: translateX(-100%); transition: transform .25s ease; }
+      .sidebar.is-open { transform: translateX(0); }
+      .dashboard-main, footer { margin-left: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="dashboard-header">
+  <div class="header-left">
+    <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">&#9776;</button>
+    <a href="/pages/dashboard.html" class="brand-logo">
+      <img src="../assets/images/logo.png" alt="PDF Master AI" class="site-logo" width="150" height="50">
+    </a>
+  </div>
+
+  <div class="header-right">
+    <div class="user-menu">
+      <div class="avatar" id="headerAvatar">U</div>
+      <div class="user-info">
+        <div class="user-name" id="headerUserName">User</div>
+        <div class="user-plan" id="headerUserPlan">FREE Plan</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-title">Workspace</div>
+    <a href="/pages/dashboard.html" class="sidebar-link"><span class="sidebar-icon">&#8962;</span><span>Overview</span></a>
+    <a href="/pages/tools/all-tools.html" class="sidebar-link"><span class="sidebar-icon">&#128190;</span><span>All Tools</span></a>
+    <a href="/pages/dashboard.html#pdf-tools" class="sidebar-link"><span class="sidebar-icon">&#128196;</span><span>PDF Tools</span></a>
+    <a href="/pages/dashboard.html#ai" class="sidebar-link"><span class="sidebar-icon">&#10024;</span><span>AI Tools</span></a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Account</div>
+    <a href="/pages/profile.html" class="sidebar-link active"><span class="sidebar-icon">&#128100;</span><span>My Profile</span></a>
+    <a href="/pages/settings.html" class="sidebar-link"><span class="sidebar-icon">&#9881;</span><span>Settings</span></a>
+    <a href="/pages/pricing.html" class="sidebar-link"><span class="sidebar-icon">&#9733;</span><span>Upgrade Plan</span></a>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-title">Support</div>
+    <a href="/pages/faq.html" class="sidebar-link"><span class="sidebar-icon">&#10068;</span><span>Help Center</span></a>
+    <a href="#" class="sidebar-link logout-link" id="logoutButton"><span class="sidebar-icon">&#8617;</span><span>Logout</span></a>
+  </div>
+</aside>
+
+<main class="dashboard-main">
+  <div class="dashboard-content">
+
+    <div class="page-title-box">
+      <h1>My Profile</h1>
+      <p>Kelola informasi data diri dan detail akun Anda.</p>
+    </div>
+
+    <div class="profile-grid">
+      <!-- LEFT CARD -->
+      <div class="profile-card">
+        <div class="profile-avatar-wrapper">
+          <div class="profile-avatar-large" id="profileAvatarLarge">U</div>
+          <label for="avatarInput" class="btn-upload-avatar" title="Ubah Foto">&#9998;</label>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+        </div>
+        <button type="button" class="btn-delete-avatar" id="btnDeleteAvatar">Hapus Foto Avatar</button>
+
+        <h2 id="cardName">User Name</h2>
+        <div class="email" id="cardEmail">user@example.com</div>
+        <div class="plan-badge" id="cardPlan">FREE PLAN</div>
+
+        <div class="profile-stats">
+          <div class="profile-stat-item">
+            <div class="val" id="statPdfs">0</div>
+            <div class="lbl">PDF Processed</div>
+          </div>
+          <div class="profile-stat-item">
+            <div class="val" id="statStorage">0 MB</div>
+            <div class="lbl">Storage</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT FORM -->
+      <div class="form-card">
+        <h3>Informasi Profil</h3>
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="inputName">Nama Lengkap</label>
+            <input type="text" id="inputName" class="form-control" placeholder="Masukkan nama lengkap" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputEmail">Alamat Email</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="user@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="inputPhone">Nomor Telepon / WhatsApp</label>
+            <input type="tel" id="inputPhone" class="form-control" placeholder="+62 812 3456 7890">
+          </div>
+
+          <button type="submit" class="btn-save" id="btnSave">Simpan Perubahan</button>
+          <div class="toast-msg" id="toastMsg"></div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <div>&copy; 2026 <strong>PDF Master AI</strong>. All rights reserved.</div>
+    <div>Smart PDF Workspace</div>
+  </div>
+</footer>
+
+<script>
+  (() => {
+    // URL Backend FastAPI
+    const API_BASE_URL = 'http://127.0.0.1:8000';
+
+    const mobileMenu = document.getElementById('mobileMenu');
+    const sidebar = document.getElementById('sidebar');
+
+    const profileAvatarLarge = document.getElementById('profileAvatarLarge');
+    const headerAvatar = document.getElementById('headerAvatar');
+    const btnDeleteAvatar = document.getElementById('btnDeleteAvatar');
+    const avatarInput = document.getElementById('avatarInput');
+
+    const cardName = document.getElementById('cardName');
+    const cardEmail = document.getElementById('cardEmail');
+    const cardPlan = document.getElementById('cardPlan');
+    const headerUserName = document.getElementById('headerUserName');
+    const headerUserPlan = document.getElementById('headerUserPlan');
+
+    const statPdfs = document.getElementById('statPdfs');
+    const statStorage = document.getElementById('statStorage');
+
+    const profileForm = document.getElementById('profileForm');
+    const inputName = document.getElementById('inputName');
+    const inputEmail = document.getElementById('inputEmail');
+    const inputPhone = document.getElementById('inputPhone');
+    const btnSave = document.getElementById('btnSave');
+    const toastMsg = document.getElementById('toastMsg');
+
+    if (mobileMenu) {
+      mobileMenu.addEventListener('click', () => {
+        sidebar.classList.toggle('is-open');
+      });
+    }
+
+    function showToast(message, type = 'success') {
+      toastMsg.textContent = message;
+      toastMsg.className = `toast-msg ${type}`;
+      setTimeout(() => {
+        toastMsg.className = 'toast-msg';
+      }, 4000);
+    }
+
+    function renderAvatar(avatarUrl, name) {
+      const initial = (name || 'U').charAt(0).toUpperCase();
+
+      if (avatarUrl) {
+        const fullUrl = avatarUrl.startsWith('http')
+          ? avatarUrl
+          : `${API_BASE_URL}${avatarUrl}?t=${new Date().getTime()}`;
+
+        profileAvatarLarge.style.backgroundImage = `url('${fullUrl}')`;
+        profileAvatarLarge.textContent = '';
+
+        headerAvatar.style.backgroundImage = `url('${fullUrl}')`;
+        headerAvatar.textContent = '';
+
+        btnDeleteAvatar.style.display = 'block';
+      } else {
+        profileAvatarLarge.style.backgroundImage = 'none';
+        profileAvatarLarge.textContent = initial;
+
+        headerAvatar.style.backgroundImage = 'none';
+        headerAvatar.textContent = initial;
+
+        btnDeleteAvatar.style.display = 'none';
+      }
+    }
+
+    function renderUI(data) {
+      const name = data.name || 'User Name';
+      const email = data.email || 'user@example.com';
+      const plan = data.plan || 'FREE';
+      const phone = data.phone || '';
+
+      cardName.textContent = name;
+      cardEmail.textContent = email;
+      cardPlan.textContent = `${plan} PLAN`;
+
+      headerUserName.textContent = name;
+      headerUserPlan.textContent = `${plan} Plan`;
+
+      inputName.value = name;
+      inputEmail.value = email;
+      inputPhone.value = phone;
+
+      if (data.stats) {
+        statPdfs.textContent = data.stats.pdfs_processed ?? 0;
+        statStorage.textContent = data.stats.storage_used ?? '0 MB';
+      }
+
+      renderAvatar(data.avatar_url, name);
+    }
+
+    // 1. GET /api/profile
+    async function loadProfile() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        renderUI(data);
+      } catch (error) {
+        console.error('Gagal mengambil data profil:', error);
+        showToast('Gagal terhubung ke server backend.', 'error');
+      }
+    }
+
+    // 2. PUT /api/profile
+    profileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnSave.disabled = true;
+      btnSave.textContent = 'Menyimpan...';
+
+      const payload = {
+        name: inputName.value.trim(),
+        email: inputEmail.value.trim(),
+        phone: inputPhone.value.trim()
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Gagal menyimpan profil.');
+        }
+
+        const updatedData = await response.json();
+        renderUI(updatedData);
+        showToast('✓ Perubahan profil berhasil disimpan!', 'success');
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        showToast(error.message || 'Gagal menyimpan profil.', 'error');
+      } finally {
+        btnSave.disabled = false;
+        btnSave.textContent = 'Simpan Perubahan';
+      }
+    });
+
+    // 3. POST /api/profile/avatar
+    avatarInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Pilih file berformat gambar.', 'error');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        showToast('Mengunggah gambar avatar...', 'success');
+        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Gagal mengunggah gambar.');
+        }
+
+        const result = await response.json();
+        renderAvatar(result.avatar_url, inputName.value);
+        showToast('✓ Foto avatar berhasil diperbarui!', 'success');
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        showToast(error.message || 'Gagal mengunggah foto avatar.', 'error');
+      } finally {
+        avatarInput.value = '';
+      }
+    });
+
+    // 4. DELETE /api/profile/avatar
+    btnDeleteAvatar.addEventListener('click', async () => {
+      if (!confirm('Apakah Anda yakin ingin menghapus foto avatar ini?')) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/`, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Gagal menghapus avatar.');
+        }
+
+        renderAvatar(null, inputName.value);
+        showToast('✓ Foto avatar berhasil dihapus.', 'success');
+      } catch (error) {
+        console.error('Error deleting avatar:', error);
+        showToast(error.message || 'Gagal menghapus foto avatar.', 'error');
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('mr_pdf_user');
+      window.location.href = '/pages/login.html';
+    });
+
+    // Jalankan pertama kali
+    loadProfile();
+  })();
+</script>
+
+</body>
+</html>

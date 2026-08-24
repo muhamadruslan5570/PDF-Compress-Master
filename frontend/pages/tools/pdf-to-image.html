@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PDF to Image Online Gratis - MR PDF Tools</title>
+  <meta name="description" content="Ubah halaman PDF menjadi gambar (PNG / JPEG) dengan kualitas tinggi secara gratis dan mudah.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="/pages/pdf-to-image.html">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #070d18;
+      --panel: #0e1728;
+      --panel-2: #111c30;
+      --border: #263650;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-2: #3b82f6;
+      --danger: #f87171;
+      --success: #34d399;
+      --radius: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 13, 24, 0.82);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      max-width: var(--max);
+      height: 76px;
+      margin: auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .site-logo {
+      display: block;
+      width: 180px;
+      height: auto;
+      max-height: 50px;
+      object-fit: contain;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .home-link {
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 10px;
+    }
+
+    .home-link:hover {
+      background: rgba(148, 163, 184, 0.10);
+      color: #fff;
+    }
+
+    .free-label {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* =====================================================
+       MAIN TOOL CONTAINER
+    ===================================================== */
+    main {
+      max-width: 860px;
+      margin: auto;
+      padding: 60px 20px 90px;
+    }
+
+    .tool-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.20);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .tool-header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .tool-header p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 580px;
+      margin: auto;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(10, 18, 32, 0.96));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      padding: 36px;
+    }
+
+    /* DROPZONE AREA */
+    .dropzone {
+      border: 2px dashed rgba(99, 102, 241, 0.35);
+      border-radius: 18px;
+      background: rgba(9, 18, 34, 0.6);
+      padding: 45px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .dropzone-icon {
+      font-size: 42px;
+      margin-bottom: 14px;
+    }
+
+    .dropzone h3 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .dropzone p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* FILE PREVIEW AREA */
+    .file-info {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      background: #091222;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .file-details {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      overflow: hidden;
+    }
+
+    .file-icon {
+      font-size: 28px;
+    }
+
+    .file-name {
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 320px;
+    }
+
+    .file-size {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .btn-remove {
+      background: transparent;
+      border: 0;
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .btn-remove:hover {
+      background: rgba(248, 113, 113, 0.1);
+    }
+
+    /* CONVERSION OPTIONS */
+    .options-section {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .option-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 8px;
+    }
+
+    .select-input, .text-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #091222;
+      color: #fff;
+      outline: none;
+    }
+
+    .select-input {
+      cursor: pointer;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary);
+    }
+
+    .pages-custom-box {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .input-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* RESULT AREA */
+    .result-section {
+      display: none;
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 16px;
+      background: rgba(52, 211, 153, 0.06);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      text-align: center;
+    }
+
+    .result-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--success);
+      margin-bottom: 12px;
+    }
+
+    .result-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.22);
+      transition: transform 0.18s ease;
+    }
+
+    .btn-download:hover {
+      transform: translateY(-2px);
+    }
+
+    /* ACTION BUTTON */
+    .btn-submit {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.18);
+      transition: transform 0.18s ease, background 0.18s ease;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, #7073f5, #4b8ff4);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* SPINNER */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* MESSAGE */
+    .message {
+      display: none;
+      margin-top: 20px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .message.error {
+      display: block;
+      border: 1px solid rgba(248, 113, 113, 0.25);
+      background: rgba(248, 113, 113, 0.08);
+      color: #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      background: rgba(52, 211, 153, 0.08);
+      color: #a7f3d0;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.10);
+      padding: 22px 16px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-inner">
+        <a href="./all-tools.html" class="brand" aria-label="MR PDF Tools Home">
+          <img src="/assets/images/logo.png" alt="MR PDF Tools" class="site-logo" width="180" height="50">
+        </a>
+
+        <div class="header-right">
+          <a href="./all-tools.html" class="home-link">All Tools</a>
+          <div class="free-label">100% FREE</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN TOOL CONTENT -->
+    <main>
+      <div class="tool-header">
+        <span class="tool-badge">🖼️ PDF TO IMAGE</span>
+        <h1>PDF to Image Converter</h1>
+        <p>Ekstrak dan ubah halaman PDF menjadi berkas gambar (PNG / JPEG) berkualitas tinggi.</p>
+      </div>
+
+      <div class="tool-card">
+        <!-- DROPZONE -->
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone-icon">🖼️</div>
+          <h3>Pilih atau seret file PDF di sini</h3>
+          <p>Maksimal ukuran file 20MB</p>
+          <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+        </div>
+
+        <!-- FILE PREVIEW -->
+        <div class="file-info" id="fileInfo">
+          <div class="file-details">
+            <span class="file-icon">📄</span>
+            <div>
+              <div class="file-name" id="fileName">document.pdf</div>
+              <div class="file-size" id="fileSize">0 KB</div>
+            </div>
+          </div>
+          <button type="button" class="btn-remove" id="btnRemove">Ganti File</button>
+        </div>
+
+        <!-- OPTIONS SECTION -->
+        <div class="options-section" id="optionsSection">
+          <div class="options-grid">
+            <div class="option-group">
+              <label for="imageFormat">Format Gambar Output</label>
+              <select id="imageFormat" class="select-input">
+                <option value="png">PNG (Kualitas Terbaik & Transparan)</option>
+                <option value="jpeg">JPEG (Ukuran File Lebih Kecil)</option>
+              </select>
+            </div>
+            <div class="option-group">
+              <label for="imageDpi">Kualitas / Resolusi (DPI)</label>
+              <select id="imageDpi" class="select-input">
+                <option value="150" selected>150 DPI (Standar / Cepat)</option>
+                <option value="300">300 DPI (Sangat Tajam / Cetak)</option>
+                <option value="96">96 DPI (Web / Ringan)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- OPSI PILIHAN HALAMAN -->
+          <div class="option-group">
+            <label for="pageOption">Halaman yang Ingin Diubah</label>
+            <select id="pageOption" class="select-input">
+              <option value="all" selected>Semua Halaman</option>
+              <option value="custom">Pilih Halaman Tertentu</option>
+            </select>
+          </div>
+
+          <div class="pages-custom-box" id="pagesCustomBox">
+            <input type="text" id="pagesInput" class="text-input" placeholder="Contoh: 1, 3, 5-8">
+            <div class="input-hint">Gunakan koma untuk halaman terpisah atau tanda hubung untuk rentang (misal: 1, 3-5, 8)</div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTON -->
+        <button type="button" class="btn-submit" id="btnConvert" disabled>
+          <span class="spinner" id="btnSpinner"></span>
+          <span id="btnText">Konversi ke Gambar Sekarang</span>
+        </button>
+
+        <!-- RESULT & DOWNLOAD BUTTON SECTION -->
+        <div class="result-section" id="resultSection">
+          <div class="result-title">🎉 Konversi Berhasil!</div>
+          <div class="result-desc">Gambar hasil konversi PDF Anda telah siap diunduh.</div>
+          <a href="#" class="btn-download" id="btnDownload" download>
+            ⬇️ Unduh Gambar
+          </a>
+        </div>
+
+        <!-- NOTIFICATION BOX -->
+        <div class="message" id="message"></div>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      © 2026 MR PDF Tools. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const dropzone = document.getElementById("dropzone");
+      const fileInput = document.getElementById("fileInput");
+      const fileInfo = document.getElementById("fileInfo");
+      const fileName = document.getElementById("fileName");
+      const fileSize = document.getElementById("fileSize");
+      const btnRemove = document.getElementById("btnRemove");
+      const optionsSection = document.getElementById("optionsSection");
+      const imageFormat = document.getElementById("imageFormat");
+      const imageDpi = document.getElementById("imageDpi");
+      const pageOption = document.getElementById("pageOption");
+      const pagesCustomBox = document.getElementById("pagesCustomBox");
+      const pagesInput = document.getElementById("pagesInput");
+      const btnConvert = document.getElementById("btnConvert");
+      const btnText = document.getElementById("btnText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const resultSection = document.getElementById("resultSection");
+      const btnDownload = document.getElementById("btnDownload");
+      const message = document.getElementById("message");
+
+      let selectedFile = null;
+      let downloadUrl = null;
+
+      // Toggle input halaman custom
+      pageOption.addEventListener("change", () => {
+        if (pageOption.value === "custom") {
+          pagesCustomBox.style.display = "block";
+        } else {
+          pagesCustomBox.style.display = "none";
+        }
+      });
+
+      dropzone.addEventListener("click", () => fileInput.click());
+
+      dropzone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+
+      dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+
+      dropzone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropzone.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) handleFile(e.target.files[0]);
+      });
+
+      function handleFile(file) {
+        if (file.type !== "application/pdf") {
+          showMessage("Hanya file berformat PDF yang diperbolehkan.", "error");
+          return;
+        }
+
+        selectedFile = file;
+        fileName.textContent = file.name;
+        const sizeKB = (file.size / 1024).toFixed(1);
+        fileSize.textContent = sizeKB > 1024 ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : sizeKB + " KB";
+
+        dropzone.style.display = "none";
+        fileInfo.style.display = "flex";
+        optionsSection.style.display = "block";
+        btnConvert.style.display = "flex";
+        btnConvert.disabled = false;
+        resultSection.style.display = "none";
+        hideMessage();
+      }
+
+      btnRemove.addEventListener("click", () => {
+        selectedFile = null;
+        fileInput.value = "";
+        dropzone.style.display = "block";
+        fileInfo.style.display = "none";
+        optionsSection.style.display = "none";
+        resultSection.style.display = "none";
+        btnConvert.disabled = true;
+        if (downloadUrl) {
+          URL.revokeObjectURL(downloadUrl);
+          downloadUrl = null;
+        }
+        hideMessage();
+      });
+
+      btnConvert.addEventListener("click", async () => {
+        if (!selectedFile) return;
+
+        if (pageOption.value === "custom" && !pagesInput.value.trim()) {
+          showMessage("Silakan isi nomor halaman yang ingin diubah.", "error");
+          return;
+        }
+
+        btnConvert.disabled = true;
+        btnSpinner.style.display = "inline-block";
+        btnText.textContent = "Mengonversi Halaman...";
+        showMessage("Sedang mengubah halaman PDF menjadi gambar, mohon tunggu...", "success");
+        resultSection.style.display = "none";
+
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("format", imageFormat.value);
+        formData.append("dpi", imageDpi.value);
+        formData.append("pages_option", pageOption.value);
+        if (pageOption.value === "custom") {
+          formData.append("pages", pagesInput.value.trim());
+        }
+
+        try {
+          const response = await fetch("http://127.0.0.1:8000/api/pdf-to-image", {
+            method: "POST",
+            body: formData
+          });
+
+          if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.detail || errData.message || "Gagal mengonversi PDF ke Gambar.");
+          }
+
+          const blob = await response.blob();
+          const contentType = response.headers.get("content-type") || "";
+
+          // Tentukan ekstensi download (ZIP jika multi-halaman/semua halaman, atau langsung file gambar jika single page)
+          let extension = ".zip";
+          if (contentType.includes("image/png")) extension = ".png";
+          else if (contentType.includes("image/jpeg")) extension = ".jpg";
+
+          const outputFilename = selectedFile.name.replace(/\.pdf$/i, `_images${extension}`);
+
+          if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+          downloadUrl = URL.createObjectURL(blob);
+          btnDownload.href = downloadUrl;
+          btnDownload.download = outputFilename;
+
+          resultSection.style.display = "block";
+          btnConvert.style.display = "none";
+          hideMessage();
+        } catch (err) {
+          showMessage(err.message || "Terjadi kesalahan saat mengonversi file.", "error");
+          btnConvert.disabled = false;
+        } finally {
+          btnSpinner.style.display = "none";
+          btnText.textContent = "Konversi ke Gambar Sekarang";
+        }
+      });
+
+      function showMessage(text, type) {
+        message.textContent = text;
+        message.className = `message ${type}`;
+        message.style.display = "block";
+      }
+
+      function hideMessage() {
+        message.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>

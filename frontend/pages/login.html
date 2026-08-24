@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login | MR Compress PDF</title>
+  <meta name="description" content="Sign in to your MR Compress PDF account and manage your PDF tools, processing history, and plan.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="/pages/login.html">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #070d18;
+      --panel: #0e1728;
+      --panel-2: #111c30;
+      --border: #263650;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-2: #3b82f6;
+      --danger: #f87171;
+      --success: #34d399;
+      --radius: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+      background: rgba(7, 13, 24, 0.82);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(100% - 32px, var(--max));
+      min-height: 76px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .site-logo {
+      display: block;
+      width: 180px;
+      height: auto;
+      max-height: 60px;
+      object-fit: contain;
+    }
+
+    .back-link {
+      color: #cbd5e1;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 9px 12px;
+      border-radius: 10px;
+    }
+
+    .back-link:hover {
+      background: rgba(148, 163, 184, 0.10);
+      color: #fff;
+    }
+
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 70px 16px 90px;
+    }
+
+    .login-layout {
+      width: min(100%, 980px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .intro,
+    .login-card {
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(10, 18, 32, 0.96));
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    }
+
+    .intro {
+      padding: 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: max-content;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.20);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 18px 0 12px;
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .intro p {
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0;
+    }
+
+    .benefits {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 13px;
+    }
+
+    .benefits li {
+      display: flex;
+      gap: 10px;
+      color: #dbe4f0;
+      font-size: 14px;
+    }
+
+    .check {
+      color: #60a5fa;
+      font-weight: 900;
+    }
+
+    .login-card {
+      padding: 34px;
+    }
+
+    .login-card h2 {
+      margin: 0 0 6px;
+      font-size: 27px;
+    }
+
+    .subtitle {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Google Button Styling */
+    .btn-google {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #091222;
+      color: #fff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.18s ease;
+    }
+
+    .btn-google:hover {
+      background: #111c30;
+      border-color: #64748b;
+      transform: translateY(-1px);
+    }
+
+    .btn-google svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 14px;
+      background: #091222;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    input:focus {
+      border-color: #64748b;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: #94a3b8;
+      padding: 7px;
+    }
+
+    .password-toggle:hover {
+      color: #fff;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 2px 0 20px;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    .remember input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+    }
+
+    .forgot {
+      color: #93c5fd;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 16px;
+      background: #111a2c;
+      color: #e2e8f0;
+      font-weight: 800;
+      transition: 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #405272;
+      background: #162239;
+    }
+
+    .btn-primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(59, 130, 246, 0.18);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #7073f5, #4b8ff4);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: rgba(148, 163, 184, 0.14);
+    }
+
+    .signup {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .signup a {
+      color: #93c5fd;
+      font-weight: 800;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      background: rgba(52, 211, 153, 0.08);
+      color: #a7f3d0;
+    }
+
+    .message.error {
+      border-color: rgba(248, 113, 113, 0.25);
+      background: rgba(248, 113, 113, 0.08);
+      color: #fecaca;
+    }
+
+    footer {
+      border-top: 1px solid rgba(148, 163, 184, 0.10);
+      padding: 22px 16px;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(165, 180, 252, 0.65);
+      outline-offset: 3px;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 9px);
+      transform: translate(-50%, 4px);
+      width: max-content;
+      max-width: 260px;
+      padding: 8px 11px;
+      border: 1px solid #334155;
+      border-radius: 9px;
+      background: #020617;
+      color: #f8fafc;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 600;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 50;
+      transition: 0.15s ease;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 760px) {
+      .login-layout {
+        grid-template-columns: 1fr;
+      }
+      .intro {
+        padding: 32px;
+      }
+      .login-card {
+        padding: 28px;
+      }
+      h1 {
+        font-size: 35px;
+      }
+      .site-logo {
+        width: 145px;
+        max-height: 50px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav {
+        min-height: 66px;
+      }
+      main {
+        padding: 42px 12px 60px;
+      }
+      .intro {
+        padding: 25px;
+      }
+      .login-card {
+        padding: 22px;
+      }
+      h1 {
+        font-size: 31px;
+      }
+      .row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <div class="nav">
+        <a href="/" class="brand-logo" aria-label="MR Compress PDF — Home" data-tooltip="MR Compress PDF Home">
+          <img src="/assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="180" height="60">
+        </a>
+
+        <a class="back-link" href="/" aria-label="Return to the MR Compress PDF home page" data-tooltip="Back to Home">
+          ← Home
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <div class="login-layout">
+
+        <section class="intro" aria-labelledby="loginIntroTitle">
+          <span class="eyebrow">MR Compress PDF</span>
+          <h1 id="loginIntroTitle">Welcome back.</h1>
+          <p>
+            Sign in to manage your account, access your dashboard,
+            and use account-based PDF features.
+          </p>
+
+          <ul class="benefits">
+            <li><span class="check">✓</span><span>Manage your account and plan</span></li>
+            <li><span class="check">✓</span><span>Access your processing dashboard</span></li>
+            <li><span class="check">✓</span><span>Manage future document history features</span></li>
+            <li><span class="check">✓</span><span>Upgrade to PRO or VIP when available</span></li>
+          </ul>
+        </section>
+
+        <section class="login-card" aria-labelledby="loginTitle">
+          <h2 id="loginTitle">Sign in</h2>
+          <p class="subtitle">Enter your account details to continue.</p>
+
+          <button id="googleBtn" type="button" class="btn-google" aria-label="Sign in with Google" data-tooltip="Sign in with Google">
+            <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.3 9 5 12 5z"/>
+              <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+              <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 10.8 0 12.5s.7 2.8 1.9 5.2l3.7-2.9z"/>
+              <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.3-6.4-5.2L1.9 16C3.7 19.7 7.5 22.3 12 23z"/>
+            </svg>
+            Sign in with Google
+          </button>
+
+          <div class="divider"><span>OR</span></div>
+
+          <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
+
+          <form id="loginForm" novalidate>
+            <div class="field">
+              <label for="email">Email address</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+                <button class="password-toggle" id="passwordToggle" type="button" aria-label="Show password" data-tooltip="Show or hide password">Show</button>
+              </div>
+            </div>
+
+            <div class="row">
+              <label class="remember">
+                <input type="checkbox" name="remember">
+                <span>Remember me</span>
+              </label>
+
+              <a class="forgot" href="/pages/forgot-password.html" aria-label="Reset your password" data-tooltip="Reset Password">
+                Forgot password?
+              </a>
+            </div>
+
+            <button class="btn btn-primary" type="submit" aria-label="Sign in to your account" data-tooltip="Sign In">
+              Sign In
+            </button>
+          </form>
+
+          <p class="signup" style="margin-top: 22px;">
+            Don't have an account?
+            <a href="/pages/register.html" aria-label="Create a new MR Compress PDF account" data-tooltip="Create Account">
+              Create an account
+            </a>
+          </p>
+        </section>
+
+      </div>
+    </main>
+
+    <footer>
+      © 2026 MR Compress PDF. All rights reserved.
+    </footer>
+
+  </div>
+
+  <script>
+    (() => {
+      const password = document.getElementById('password');
+      const toggle = document.getElementById('passwordToggle');
+
+      // Show / Hide password
+      if (password && toggle) {
+        toggle.addEventListener('click', () => {
+          const visible = password.type === 'text';
+
+          password.type = visible ? 'password' : 'text';
+          toggle.textContent = visible ? 'Show' : 'Hide';
+
+          toggle.setAttribute(
+            'aria-label',
+            visible ? 'Show password' : 'Hide password'
+          );
+        });
+      }
+
+      const form = document.getElementById('loginForm');
+      const message = document.getElementById('loginMessage');
+      const googleBtn = document.getElementById('googleBtn');
+
+      if (!form || !message) return;
+
+      function showMessage(text, type = '') {
+        message.className = type ? `message ${type}` : 'message';
+        message.textContent = text;
+        message.style.display = 'block';
+      }
+
+      // Handler untuk tombol Sign in dengan Google
+      if (googleBtn) {
+        googleBtn.addEventListener('click', () => {
+          window.location.href = 'http://127.0.0.1:8000/api/auth/google';
+        });
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const passwordValue = document.getElementById('password').value;
+
+        if (!email || !passwordValue) {
+          showMessage(
+            'Please enter your email address and password.',
+            'error'
+          );
+          return;
+        }
+
+        const submitButton = form.querySelector('button[type="submit"]');
+
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = 'Signing in...';
+        }
+
+        showMessage('Signing in...');
+
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              password: passwordValue
+            })
+          });
+
+          let result = {};
+
+          try {
+            result = await response.json();
+          } catch {
+            result = {};
+          }
+
+          if (!response.ok) {
+            // Email belum diverifikasi
+            if (response.status === 403) {
+              showMessage(
+                result.detail || 'Email belum diverifikasi.',
+                'error'
+              );
+
+              setTimeout(() => {
+                window.location.href =
+                  '/pages/verify-email.html?email=' +
+                  encodeURIComponent(email);
+              }, 1200);
+
+              return;
+            }
+
+            showMessage(
+              result.detail || 'Email atau password salah.',
+              'error'
+            );
+
+            return;
+          }
+
+          // Simpan informasi user untuk dashboard
+          localStorage.setItem('user_id', String(result.user_id));
+          localStorage.setItem('user_name', result.name || '');
+          localStorage.setItem('user_email', result.email || email);
+          localStorage.setItem('is_logged_in', 'true');
+
+          showMessage('Login berhasil. Mengarahkan ke dashboard...');
+
+          setTimeout(() => {
+            window.location.href = '/pages/dashboard.html';
+          }, 500);
+
+        } catch (error) {
+          console.error('Login error:', error);
+
+          showMessage(
+            'Cannot connect to the server. Please make sure the backend is running.',
+            'error'
+          );
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Sign In';
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

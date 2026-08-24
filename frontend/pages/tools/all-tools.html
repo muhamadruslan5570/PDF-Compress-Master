@@ -1,0 +1,580 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>All PDF Tools - MR Compress PDF</title>
+  <meta name="description" content="Kumpulan PDF Tools gratis untuk mengompres, menggabungkan, dan mengonversi file PDF.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="/pages/all-tools.html">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #070d18;
+      --panel: #0e1728;
+      --panel-2: #111c30;
+      --border: #263650;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --primary: #6366f1;
+      --primary-2: #3b82f6;
+      --danger: #f87171;
+      --success: #34d399;
+      --radius: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(59, 130, 246, 0.14), transparent 28%),
+        radial-gradient(circle at 85% 85%, rgba(99, 102, 241, 0.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* =====================================================
+       HEADER & BRAND LOGO FIX
+    ===================================================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 13, 24, 0.82);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+      backdrop-filter: blur(14px);
+    }
+
+    .header-inner {
+      max-width: var(--max);
+      height: 76px;
+      margin: auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .site-logo {
+      display: block;
+      width: 180px;
+      height: auto;
+      max-height: 50px;
+      object-fit: contain;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .home-link {
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 10px;
+    }
+
+    .home-link:hover {
+      background: rgba(148, 163, 184, 0.10);
+      color: #fff;
+    }
+
+    .free-label {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+    .hero {
+      max-width: 900px;
+      margin: auto;
+      padding: 72px 24px 52px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.13);
+      border: 1px solid rgba(129, 140, 248, 0.20);
+      color: #c7d2fe;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #a5b4fc, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      max-width: 680px;
+      margin: auto;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    /* =====================================================
+       TOOLS SECTION
+    ===================================================== */
+    .tools-section {
+      max-width: var(--max);
+      margin: auto;
+      padding: 0 24px 70px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-size: 27px;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .tool-count {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* =====================================================
+       GRID & CARDS
+    ===================================================== */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .tool-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(145deg, rgba(17, 28, 48, 0.96), rgba(10, 18, 32, 0.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 27px;
+      min-height: 300px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      border-color: #405272;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .tool-card.featured {
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .popular {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(129, 140, 248, 0.25);
+      color: #c7d2fe;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .tool-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: #091222;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 27px;
+      margin-bottom: 20px;
+    }
+
+    .tool-card h3 {
+      font-size: 19px;
+      margin-bottom: 10px;
+    }
+
+    .tool-card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 24px;
+    }
+
+    .tool-button {
+      width: 100%;
+      height: 45px;
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      font-size: 14px;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.18);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .tool-button:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, #7073f5, #4b8ff4);
+    }
+
+    /* =====================================================
+       INFO SECTION
+    ===================================================== */
+    .info-section {
+      background: rgba(14, 23, 40, 0.6);
+      border-top: 1px solid rgba(148, 163, 184, 0.10);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+    }
+
+    .info-inner {
+      max-width: var(--max);
+      margin: auto;
+      padding: 52px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .info-card {
+      text-align: center;
+    }
+
+    .info-icon {
+      font-size: 27px;
+      margin-bottom: 13px;
+    }
+
+    .info-card h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .info-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+    footer {
+      padding: 30px 24px;
+      text-align: center;
+      border-top: 1px solid rgba(148, 163, 184, 0.10);
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    :focus-visible {
+      outline: 3px solid rgba(165, 180, 252, 0.65);
+      outline-offset: 3px;
+    }
+
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 9px);
+      transform: translate(-50%, 4px);
+      width: max-content;
+      max-width: 260px;
+      padding: 8px 11px;
+      border: 1px solid #334155;
+      border-radius: 99px;
+      background: #020617;
+      color: #f8fafc;
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 600;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      z-index: 50;
+      transition: 0.15s ease;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 900px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .info-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .header-inner {
+        height: 64px;
+      }
+      .site-logo {
+        width: 145px;
+        max-height: 40px;
+      }
+      .home-link {
+        display: none;
+      }
+      .hero {
+        padding-top: 50px;
+      }
+      .hero p {
+        font-size: 15px;
+      }
+      .section-header {
+        display: block;
+      }
+      .tool-count {
+        display: block;
+        margin-top: 8px;
+      }
+      .tools-grid {
+        grid-template-columns: 1fr;
+      }
+      .tool-card {
+        min-height: 280px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================================
+       HEADER
+  ========================================================= -->
+  <header>
+    <div class="header-inner">
+      <a href="./all-tools.html" class="brand" aria-label="MR PDF Tools Home" data-tooltip="MR PDF Tools Home">
+        <img src="/assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="180" height="50">
+      </a>
+
+      <div class="header-right">
+        <a href="../../index.html" class="home-link" data-tooltip="Kembali ke Beranda">
+          Home
+        </a>
+        <div class="free-label">
+          100% FREE
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       HERO
+  ========================================================= -->
+  <section class="hero">
+    <div class="hero-badge">
+      ✨ FREE PDF TOOLS
+    </div>
+
+    <h1>
+      Semua Tools PDF
+      <br>
+      <span>Dalam Satu Tempat</span>
+    </h1>
+
+    <p>
+      Gunakan berbagai tools PDF secara gratis untuk mengompres, menggabungkan, dan mengonversi dokumen dengan mudah.
+    </p>
+  </section>
+
+  <!-- =========================================================
+       TOOLS
+  ========================================================= -->
+  <section class="tools-section">
+    <div class="section-header">
+      <div>
+        <h2>Semua Tools</h2>
+        <p>Pilih tool yang ingin kamu gunakan.</p>
+      </div>
+
+      <div class="tool-count">
+        5 Free Tools
+      </div>
+    </div>
+
+    <div class="tools-grid">
+
+      <!-- COMPRESS PDF -->
+      <div class="tool-card featured">
+        <div class="popular">POPULAR</div>
+        <div class="tool-icon">🗜️</div>
+        <h3>Compress PDF</h3>
+        <p>Kurangi ukuran file PDF dengan beberapa pilihan tingkat kompresi.</p>
+        <a href="./compress-pdf.html" class="tool-button" data-tooltip="Buka Compress PDF">
+          Compress PDF →
+        </a>
+      </div>
+
+      <!-- PDF TO WORD -->
+      <div class="tool-card">
+        <div class="tool-icon">📄</div>
+        <h3>PDF to Word</h3>
+        <p>Konversi file PDF menjadi dokumen Word yang dapat diedit.</p>
+        <a href="./pdf-to-word.html" class="tool-button" data-tooltip="Buka PDF to Word">
+          PDF to Word →
+        </a>
+      </div>
+
+      <!-- MERGE PDF -->
+      <div class="tool-card">
+        <div class="tool-icon">📑</div>
+        <h3>Merge PDF</h3>
+        <p>Gabungkan beberapa file PDF menjadi satu dokumen dengan mudah.</p>
+        <a href="./merge-pdf.html" class="tool-button" data-tooltip="Buka Merge PDF">
+          Merge PDF →
+        </a>
+      </div>
+
+      <!-- WORD TO PDF -->
+      <div class="tool-card">
+        <div class="tool-icon">📝</div>
+        <h3>Word to PDF</h3>
+        <p>Ubah dokumen Word menjadi PDF dengan cepat dan praktis.</p>
+        <a href="./word-to-pdf.html" class="tool-button" data-tooltip="Buka Word to PDF">
+          Word to PDF →
+        </a>
+      </div>
+
+      <!-- PDF TO IMAGE -->
+      <div class="tool-card">
+        <div class="tool-icon">🖼️</div>
+        <h3>PDF to Image</h3>
+        <p>Ubah halaman PDF menjadi gambar yang dapat digunakan kembali.</p>
+        <a href="./pdf-to-image.html" class="tool-button" data-tooltip="Buka PDF to Image">
+          PDF to Image →
+        </a>
+      </div>
+
+      <!-- COMING SOON -->
+      <div class="tool-card">
+        <div class="tool-icon">⚡</div>
+        <h3>More Tools</h3>
+        <p>Tools PDF lainnya akan ditambahkan secara bertahap.</p>
+        <a href="./all-tools.html" class="tool-button" data-tooltip="Segera Hadir">
+          Coming Soon
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       INFO
+  ========================================================= -->
+  <section class="info-section">
+    <div class="info-inner">
+      <div class="info-card">
+        <div class="info-icon">🆓</div>
+        <h3>Gratis</h3>
+        <p>Gunakan tools yang tersedia tanpa biaya.</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🔒</div>
+        <h3>Aman</h3>
+        <p>File diproses melalui sistem backend aplikasi kita.</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">⚡</div>
+        <h3>Mudah</h3>
+        <p>Antarmuka sederhana dan mudah digunakan siapa saja.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================= -->
+  <footer>
+    <p>© 2026 MR PDF Tools — Free PDF Tools</p>
+  </footer>
+
+</body>
+</html>

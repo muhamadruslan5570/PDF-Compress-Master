@@ -1,0 +1,59 @@
+﻿{
+  "app": {
+    "name": "PDF Master",
+    "dashboard": "Dashboard",
+    "settings": "Pengaturan",
+    "profile": "Profil",
+    "history": "Riwayat",
+    "logout": "Keluar"
+  },
+
+  "navigation": {
+    "home": "Beranda",
+    "compress": "Kompres PDF",
+    "merge": "Gabungkan PDF",
+    "pdfToWord": "PDF ke Word",
+    "wordToPdf": "Word ke PDF",
+    "pdfToImage": "PDF ke Gambar",
+    "history": "Riwayat",
+    "settings": "Pengaturan"
+  },
+
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Selamat datang",
+    "statistics": "Statistik",
+    "pdfsProcessed": "PDF Diproses",
+    "storageUsed": "Penyimpanan Digunakan",
+    "aiRequests": "Permintaan AI",
+    "accountStatus": "Status Akun",
+    "recentActivity": "Aktivitas Terbaru"
+  },
+
+  "tools": {
+    "compressPdf": "Kompres PDF",
+    "mergePdf": "Gabungkan PDF",
+    "pdfToWord": "PDF ke Word",
+    "wordToPdf": "Word ke PDF",
+    "pdfToImage": "PDF ke Gambar"
+  },
+
+  "common": {
+    "upload": "Upload",
+    "download": "Download",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "save": "Simpan",
+    "close": "Tutup",
+    "processing": "Memproses...",
+    "success": "Berhasil",
+    "error": "Terjadi kesalahan",
+    "loading": "Memuat..."
+  },
+
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa",
+    "selectLanguage": "Pilih Bahasa"
+  }
+}

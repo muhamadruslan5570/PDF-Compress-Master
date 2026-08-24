@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Verify Email | MR Compress PDF</title>
+  <meta name="description" content="Verify your MR Compress PDF email address using the verification code sent to your inbox.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/images/favicon.png">
+
+  <style>
+    :root{
+      --bg:#070d18;
+      --panel:#0e1728;
+      --border:#263650;
+      --text:#f8fafc;
+      --muted:#94a3b8;
+      --primary:#6366f1;
+      --primary2:#3b82f6;
+      --success:#34d399;
+      --danger:#f87171;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 15% 15%,rgba(59,130,246,.14),transparent 28%),
+        radial-gradient(circle at 85% 85%,rgba(99,102,241,.12),transparent 30%),
+        var(--bg);
+      color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    button{cursor:pointer}
+
+    header{
+      border-bottom:1px solid rgba(148,163,184,.10);
+      background:rgba(7,13,24,.84);
+      backdrop-filter:blur(14px);
+    }
+
+    .nav{
+      width:min(100% - 32px,var(--max));
+      min-height:76px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand-logo{
+      display:inline-flex;
+      align-items:center;
+      flex-shrink:0;
+    }
+
+    .site-logo{
+      display:block;
+      width:180px;
+      height:auto;
+      max-height:60px;
+      object-fit:contain;
+    }
+
+    .back-link{
+      color:#cbd5e1;
+      font-size:14px;
+      font-weight:700;
+      padding:9px 12px;
+      border-radius:10px;
+    }
+
+    .back-link:hover{
+      background:rgba(148,163,184,.10);
+      color:#fff;
+    }
+
+    main{
+      min-height:calc(100vh - 121px);
+      display:grid;
+      place-items:center;
+      padding:60px 16px 80px;
+    }
+
+    .verify-card{
+      width:min(100%,520px);
+      padding:38px;
+      border:1px solid var(--border);
+      border-radius:24px;
+      background:linear-gradient(145deg,rgba(17,28,48,.97),rgba(10,18,32,.97));
+      box-shadow:0 24px 80px rgba(0,0,0,.30);
+      text-align:center;
+    }
+
+    .icon{
+      width:66px;
+      height:66px;
+      margin:0 auto 18px;
+      display:grid;
+      place-items:center;
+      border-radius:20px;
+      background:rgba(59,130,246,.12);
+      border:1px solid rgba(96,165,250,.20);
+      color:#93c5fd;
+      font-size:28px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size:31px;
+      line-height:1.15;
+      letter-spacing:-.035em;
+    }
+
+    .description{
+      margin:0 auto;
+      max-width:430px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .email{
+      display:block;
+      margin-top:6px;
+      color:#e0f2fe;
+      font-weight:800;
+      word-break:break-word;
+    }
+
+    .message{
+      display:none;
+      margin:22px 0 16px;
+      padding:11px 13px;
+      border-radius:11px;
+      font-size:13px;
+      line-height:1.5;
+      text-align:left;
+      border:1px solid rgba(52,211,153,.25);
+      background:rgba(52,211,153,.08);
+      color:#a7f3d0;
+    }
+
+    .message.error{
+      border-color:rgba(248,113,113,.25);
+      background:rgba(248,113,113,.08);
+      color:#fecaca;
+    }
+
+    .code-label{
+      display:block;
+      margin:27px 0 10px;
+      color:#e2e8f0;
+      font-size:13px;
+      font-weight:750;
+    }
+
+    .code-inputs{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .code-input{
+      width:58px;
+      height:66px;
+      padding:0;
+      border:1px solid var(--border);
+      border-radius:13px;
+      background:#091222;
+      color:#fff;
+      text-align:center;
+      font-size:25px;
+      font-weight:850;
+      outline:none;
+      caret-color:#93c5fd;
+    }
+
+    .code-input:focus{
+      border-color:#64748b;
+      box-shadow:0 0 0 4px rgba(99,102,241,.12);
+    }
+
+    .btn{
+      width:100%;
+      padding:13px 16px;
+      border:1px solid transparent;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--primary),var(--primary2));
+      color:#fff;
+      font-weight:850;
+      box-shadow:0 12px 28px rgba(59,130,246,.18);
+      transition:.18s ease;
+    }
+
+    .btn:hover:not(:disabled){
+      transform:translateY(-1px);
+    }
+
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .resend-area{
+      margin-top:22px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .resend-btn{
+      border:0;
+      background:transparent;
+      color:#93c5fd;
+      font-weight:800;
+      padding:4px;
+    }
+
+    .resend-btn:hover:not(:disabled){
+      text-decoration:underline;
+    }
+
+    .resend-btn:disabled{
+      color:#64748b;
+      cursor:not-allowed;
+    }
+
+    .timer{
+      margin-top:6px;
+      color:#64748b;
+      font-size:12px;
+    }
+
+    .help{
+      margin:23px 0 0;
+      padding-top:20px;
+      border-top:1px solid rgba(148,163,184,.10);
+      color:#64748b;
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .help a{
+      color:#93c5fd;
+      font-weight:750;
+    }
+
+    footer{
+      border-top:1px solid rgba(148,163,184,.10);
+      padding:22px 16px;
+      text-align:center;
+      color:#64748b;
+      font-size:12px;
+    }
+
+    [data-tooltip]{position:relative}
+
+    [data-tooltip]::after{
+      content:attr(data-tooltip);
+      position:absolute;
+      left:50%;
+      bottom:calc(100% + 9px);
+      transform:translate(-50%,4px);
+      width:max-content;
+      max-width:270px;
+      padding:8px 11px;
+      border:1px solid #334155;
+      border-radius:9px;
+      background:#020617;
+      color:#f8fafc;
+      font-size:12px;
+      line-height:1.35;
+      font-weight:600;
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      z-index:50;
+      transition:.15s ease;
+    }
+
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after{
+      opacity:1;
+      visibility:visible;
+      transform:translate(-50%,0);
+    }
+
+    :focus-visible{
+      outline:3px solid rgba(165,180,252,.65);
+      outline-offset:3px;
+    }
+
+    @media(max-width:560px){
+      .nav{min-height:66px}
+      .site-logo{width:145px;max-height:50px}
+      main{padding:40px 12px 60px}
+      .verify-card{padding:27px 18px}
+      h1{font-size:28px}
+      .code-inputs{gap:6px}
+      .code-input{
+        width:47px;
+        height:57px;
+        font-size:22px;
+        border-radius:11px;
+      }
+    }
+
+    @media(max-width:360px){
+      .code-input{
+        width:42px;
+        height:52px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <a href="/" class="brand-logo"
+       aria-label="MR Compress PDF — Home"
+       data-tooltip="MR Compress PDF Home">
+      <img src="/assets/images/logo.png"
+           alt="MR Compress PDF"
+           class="site-logo"
+           width="180"
+           height="60">
+    </a>
+
+    <a class="back-link"
+       href="/pages/login.html"
+       aria-label="Go to login page"
+       data-tooltip="Back to Login">
+      ← Login
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="verify-card" aria-labelledby="verifyTitle">
+
+    <div class="icon" aria-hidden="true">✉</div>
+
+    <h1 id="verifyTitle">Verify your email</h1>
+
+    <p class="description">
+      We sent a 6-digit verification code to:
+      <span class="email" id="userEmail">your email address</span>
+    </p>
+
+    <div id="message"
+         class="message"
+         role="status"
+         aria-live="polite"></div>
+
+    <form id="verifyForm" novalidate>
+      <label class="code-label" for="code-1">
+        Enter your verification code
+      </label>
+
+      <div class="code-inputs"
+           role="group"
+           aria-label="Six digit verification code">
+
+        <input class="code-input"
+               id="code-1"
+               inputmode="numeric"
+               autocomplete="one-time-code"
+               maxlength="1"
+               aria-label="Verification code digit 1"
+               data-index="0">
+
+        <input class="code-input"
+               id="code-2"
+               inputmode="numeric"
+               maxlength="1"
+               aria-label="Verification code digit 2"
+               data-index="1">
+
+        <input class="code-input"
+               id="code-3"
+               inputmode="numeric"
+               maxlength="1"
+               aria-label="Verification code digit 3"
+               data-index="2">
+
+        <input class="code-input"
+               id="code-4"
+               inputmode="numeric"
+               maxlength="1"
+               aria-label="Verification code digit 4"
+               data-index="3">
+
+        <input class="code-input"
+               id="code-5"
+               inputmode="numeric"
+               maxlength="1"
+               aria-label="Verification code digit 5"
+               data-index="4">
+
+        <input class="code-input"
+               id="code-6"
+               inputmode="numeric"
+               maxlength="1"
+               aria-label="Verification code digit 6"
+               data-index="5">
+      </div>
+
+      <button class="btn"
+              id="verifyButton"
+              type="submit"
+              disabled
+              aria-label="Verify email address"
+              data-tooltip="Verify Email">
+        Verify Email
+      </button>
+    </form>
+
+    <div class="resend-area">
+      Didn't receive the code?
+      <button class="resend-btn"
+              id="resendButton"
+              type="button"
+              disabled
+              aria-label="Resend verification code"
+              data-tooltip="Resend Verification Code">
+        Resend code
+      </button>
+
+      <div class="timer" id="timer">
+        You can request a new code in <strong id="seconds">60</strong>s.
+      </div>
+    </div>
+
+    <p class="help">
+      Check your spam or junk folder if the email is not in your inbox.
+      Need help?
+      <a href="/pages/contact.html">Contact us</a>.
+    </p>
+
+  </section>
+</main>
+
+<footer>
+  © 2026 MR Compress PDF. All rights reserved.
+</footer>
+
+<script>
+  (() => {
+    const inputs = [...document.querySelectorAll('.code-input')];
+    const form = document.getElementById('verifyForm');
+    const button = document.getElementById('verifyButton');
+    const message = document.getElementById('message');
+    const resendButton = document.getElementById('resendButton');
+    const secondsEl = document.getElementById('seconds');
+    const timerEl = document.getElementById('timer');
+    const emailEl = document.getElementById('userEmail');
+
+    /*
+      DEMO / FRONTEND PLACEHOLDER
+
+      The production flow will receive the email address and verification
+      state from the backend. The actual verification code must NEVER be
+      hard-coded in frontend JavaScript.
+
+      Production API flow:
+        POST /api/auth/verify-email
+        body: { email, code }
+
+      Resend:
+        POST /api/auth/resend-verification
+        body: { email }
+    */
+
+    // Temporary UI-only email display.
+    const params = new URLSearchParams(window.location.search);
+    const emailFromUrl = params.get('email');
+
+    if (emailFromUrl) {
+      emailEl.textContent = emailFromUrl;
+    } else {
+      emailEl.textContent = 'your email address';
+    }
+
+    function cleanDigit(value) {
+      return value.replace(/\D/g, '').slice(0, 1);
+    }
+
+    function updateButton() {
+      const code = inputs.map(input => input.value).join('');
+      button.disabled = code.length !== 6;
+    }
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        input.value = cleanDigit(input.value);
+
+        if (input.value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+
+        updateButton();
+        clearMessage();
+      });
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+
+        if (event.key === 'ArrowLeft' && index > 0) {
+          inputs[index - 1].focus();
+        }
+
+        if (event.key === 'ArrowRight' && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('paste', (event) => {
+        event.preventDefault();
+
+        const pasted = (event.clipboardData || window.clipboardData)
+          .getData('text')
+          .replace(/\D/g, '')
+          .slice(0, 6);
+
+        pasted.split('').forEach((digit, i) => {
+          if (inputs[i]) inputs[i].value = digit;
+        });
+
+        const nextIndex = Math.min(pasted.length, inputs.length - 1);
+        inputs[nextIndex].focus();
+        updateButton();
+        clearMessage();
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const code = inputs.map(input => input.value).join('');
+
+      if (code.length !== 6) {
+        showError('Please enter the complete 6-digit verification code.');
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Verifying...';
+
+      /*
+        DEMO ONLY:
+        This simulates a successful backend response.
+        Replace this block with a real fetch() request to the API.
+      */
+      setTimeout(() => {
+        showSuccess('Email verified successfully. Redirecting to your Free Dashboard...');
+
+        // Production:
+        // window.location.href = '/pages/dashboard.html';
+
+        setTimeout(() => {
+          window.location.href = '/pages/dashboard.html';
+        }, 900);
+      }, 700);
+    });
+
+    let countdown = 60;
+
+    function startCountdown() {
+      countdown = 60;
+      resendButton.disabled = true;
+      timerEl.style.display = 'block';
+      secondsEl.textContent = countdown;
+
+      const interval = setInterval(() => {
+        countdown -= 1;
+        secondsEl.textContent = countdown;
+
+        if (countdown <= 0) {
+          clearInterval(interval);
+          resendButton.disabled = false;
+          timerEl.innerHTML = 'You can request a new verification code now.';
+        }
+      }, 1000);
+    }
+
+    resendButton.addEventListener('click', () => {
+      /*
+        Production:
+        fetch('/api/auth/resend-verification', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ email: emailEl.textContent })
+        });
+      */
+
+      resendButton.disabled = true;
+      showSuccess('A new verification code has been requested. Please check your email.');
+
+      startCountdown();
+    });
+
+    function showSuccess(text) {
+      message.className = 'message';
+      message.textContent = text;
+      message.style.display = 'block';
+    }
+
+    function showError(text) {
+      message.className = 'message error';
+      message.textContent = text;
+      message.style.display = 'block';
+    }
+
+    function clearMessage() {
+      message.style.display = 'none';
+    }
+
+    startCountdown();
+    inputs[0].focus();
+  })();
+</script>
+
+</body>
+</html>
