@@ -116,7 +116,9 @@ async def google_callback(
 
         db.commit()
 
-    return RedirectResponse(url="http://127.0.0.1:5500/pages/dashboard.html")
+    return RedirectResponse(
+        url=f"{FRONTEND_URL}/pages/dashboard.html"
+    )
 
 password_hasher = PasswordHasher()
 
@@ -625,5 +627,6 @@ def reset_password(
     return ResetPasswordResponse(
         message="Password berhasil diubah."
     )
+
 
 
