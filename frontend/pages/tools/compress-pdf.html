@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Compress PDF Online Gratis - MR Compress PDF</title>
@@ -58,9 +59,7 @@
       font: inherit;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
+    /* HEADER */
     header {
       position: sticky;
       top: 0;
@@ -123,9 +122,7 @@
       font-weight: 800;
     }
 
-    /* =====================================================
-       MAIN TOOL CONTAINER
-    ===================================================== */
+    /* MAIN TOOL CONTAINER */
     main {
       max-width: 860px;
       margin: auto;
@@ -494,7 +491,7 @@
     <!-- MAIN TOOL CONTENT -->
     <main>
       <div class="tool-header">
-        <span class="tool-badge">ðŸ—œï¸ PDF COMPRESSOR</span>
+        <span class="tool-badge">&#128451; PDF COMPRESSOR</span>
         <h1>Compress PDF Online</h1>
         <p>Pilih tingkat kompresi sesuai target ukuran file yang Anda inginkan.</p>
       </div>
@@ -502,7 +499,7 @@
       <div class="tool-card">
         <!-- DROPZONE -->
         <div class="dropzone" id="dropzone">
-          <div class="dropzone-icon">ðŸ“„</div>
+          <div class="dropzone-icon">&#128196;</div>
           <h3>Pilih atau seret file PDF di sini</h3>
           <p>Maksimal ukuran file 20MB</p>
           <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
@@ -511,7 +508,7 @@
         <!-- FILE PREVIEW -->
         <div class="file-info" id="fileInfo">
           <div class="file-details">
-            <span class="file-icon">ðŸ“‘</span>
+            <span class="file-icon">&#128195;</span>
             <div>
               <div class="file-name" id="fileName">document.pdf</div>
               <div class="file-size" id="fileSize">0 KB</div>
@@ -525,20 +522,20 @@
           <div class="options-title">Pilih Target Ukuran Kompresi:</div>
           <div class="level-grid">
             <div class="level-card" data-level="low">
-              <div class="level-title">ðŸŸ¢ Low</div>
+              <div class="level-title">&#128994; Low</div>
               <div class="desc-text">Kualitas visual terbaik</div>
-              <div class="est-text">Target: 10 MB â€“ 5 MB</div>
+              <div class="est-text">Target: 10 MB &#8211; 5 MB</div>
             </div>
             <div class="level-card active" data-level="recommended">
               <span class="badge">REKOMENDASI</span>
-              <div class="level-title">ðŸ”µ Recommended</div>
+              <div class="level-title">&#128309; Recommended</div>
               <div class="desc-text">Standar Pendaftaran</div>
-              <div class="est-text">Target: 1 MB â€“ 500 KB</div>
+              <div class="est-text">Target: 1 MB &#8211; 500 KB</div>
             </div>
             <div class="level-card" data-level="extreme">
-              <div class="level-title">ðŸ”´ Extreme</div>
+              <div class="level-title">&#128308; Extreme</div>
               <div class="desc-text">Ukuran sangat kecil</div>
-              <div class="est-text">Target: 500 KB â€“ 100 KB</div>
+              <div class="est-text">Target: 500 KB &#8211; 100 KB</div>
             </div>
           </div>
         </div>
@@ -551,7 +548,7 @@
 
         <!-- RESULT & DOWNLOAD BUTTON SECTION -->
         <div class="result-section" id="resultSection">
-          <div class="result-title">ðŸŽ‰ Kompresi Selesai!</div>
+          <div class="result-title">&#127881; Kompresi Selesai!</div>
           <div class="stats-grid">
             <div class="stats-item">
               <div class="label">Ukuran Awal</div>
@@ -567,7 +564,7 @@
             </div>
           </div>
           <a href="#" class="btn-download" id="btnDownload" download>
-            â¬‡ï¸ Unduh File PDF
+            &#11015; Unduh File PDF
           </a>
         </div>
 
@@ -578,7 +575,7 @@
 
     <!-- FOOTER -->
     <footer>
-      Â© 2026 MR Compress PDF. All rights reserved.
+      &#169; 2026 MR Compress PDF. All rights reserved.
     </footer>
 
   </div>
@@ -692,7 +689,6 @@
 
           const blob = await response.blob();
           
-          // Ambil statistik dari header jika tersedia, atau kalkulasi langsung dari blob
           const origSize = parseInt(response.headers.get("X-Original-Size")) || selectedFile.size;
           const compSize = parseInt(response.headers.get("X-Compressed-Size")) || blob.size;
 
@@ -700,12 +696,10 @@
           const compSizeKB = (compSize / 1024).toFixed(1);
           const savedPercent = (((origSize - compSize) / origSize) * 100).toFixed(0);
 
-          // Render Statistik
           document.getElementById("statOriginal").textContent = `${origSizeKB} KB`;
           document.getElementById("statCompressed").textContent = `${compSizeKB} KB`;
           document.getElementById("statSaved").textContent = `${savedPercent > 0 ? savedPercent : 0}%`;
 
-          // Tautan Unduhan
           if (downloadUrl) URL.revokeObjectURL(downloadUrl);
           downloadUrl = URL.createObjectURL(blob);
           btnDownload.href = downloadUrl;

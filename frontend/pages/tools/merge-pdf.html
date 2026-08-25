@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Merge PDF Online Gratis - MR PDF Tools</title>
@@ -58,9 +59,7 @@
       font: inherit;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
+    /* HEADER */
     header {
       position: sticky;
       top: 0;
@@ -123,9 +122,7 @@
       font-weight: 800;
     }
 
-    /* =====================================================
-       MAIN TOOL CONTAINER
-    ===================================================== */
+    /* MAIN TOOL CONTAINER */
     main {
       max-width: 860px;
       margin: auto;
@@ -450,7 +447,7 @@
     <!-- MAIN TOOL CONTENT -->
     <main>
       <div class="tool-header">
-        <span class="tool-badge">ðŸ“‘ MERGE PDF</span>
+        <span class="tool-badge">&#128195; MERGE PDF</span>
         <h1>Merge PDF Online</h1>
         <p>Gabungkan beberapa file PDF menjadi satu dokumen tunggal secara cepat dan mudah.</p>
       </div>
@@ -458,7 +455,7 @@
       <div class="tool-card">
         <!-- DROPZONE -->
         <div class="dropzone" id="dropzone">
-          <div class="dropzone-icon">ðŸ“‘</div>
+          <div class="dropzone-icon">&#128195;</div>
           <h3>Pilih atau seret beberapa file PDF di sini</h3>
           <p>Bisa memilih lebih dari satu file sekaligus</p>
           <input type="file" id="fileInput" accept="application/pdf" multiple style="display: none;">
@@ -481,10 +478,10 @@
 
         <!-- RESULT & DOWNLOAD BUTTON SECTION -->
         <div class="result-section" id="resultSection">
-          <div class="result-title">ðŸŽ‰ Penggabungan Berhasil!</div>
+          <div class="result-title">&#127881; Penggabungan Berhasil!</div>
           <div class="result-desc">Dokumen PDF gabungan Anda telah siap untuk diunduh.</div>
           <a href="#" class="btn-download" id="btnDownload" download="merged_document.pdf">
-            â¬‡ï¸ Unduh PDF Gabungan
+            &#11015; Unduh PDF Gabungan
           </a>
         </div>
 
@@ -495,7 +492,7 @@
 
     <!-- FOOTER -->
     <footer>
-      Â© 2026 MR PDF Tools. All rights reserved.
+      &#169; 2026 MR PDF Tools. All rights reserved.
     </footer>
 
   </div>
@@ -569,16 +566,16 @@
           item.className = "file-item";
           item.innerHTML = `
             <div class="file-item-left">
-              <span class="file-item-icon">ðŸ“„</span>
+              <span class="file-item-icon">&#128196;</span>
               <div>
                 <div class="file-item-name">${file.name}</div>
                 <div class="file-item-size">${sizeText}</div>
               </div>
             </div>
             <div class="file-item-actions">
-              ${index > 0 ? `<button type="button" class="btn-icon" data-action="up" data-index="${index}">â–²</button>` : ''}
-              ${index < filesArray.length - 1 ? `<button type="button" class="btn-icon" data-action="down" data-index="${index}">â–¼</button>` : ''}
-              <button type="button" class="btn-icon delete" data-action="delete" data-index="${index}">âœ•</button>
+              ${index > 0 ? `<button type="button" class="btn-icon" data-action="up" data-index="${index}">&#9650;</button>` : ''}
+              ${index < filesArray.length - 1 ? `<button type="button" class="btn-icon" data-action="down" data-index="${index}">&#9660;</button>` : ''}
+              <button type="button" class="btn-icon delete" data-action="delete" data-index="${index}">&#10005;</button>
             </div>
           `;
           fileList.appendChild(item);

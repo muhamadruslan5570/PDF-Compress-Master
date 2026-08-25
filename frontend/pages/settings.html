@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Settings â€” PDF Master AI</title>
+  <title>Settings &mdash; PDF Master AI</title>
   <meta name="description" content="Manage your application settings, preferences, and account security on PDF Master AI">
 
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png">
@@ -252,7 +253,6 @@
       <p>Kelola preferensi aplikasi, notifikasi, dan keamanan akun Anda.</p>
     </div>
 
-    <!-- PREFERENCES -->
     <div class="settings-card">
       <h3><span>&#127912;</span> Preferences</h3>
       
@@ -287,14 +287,13 @@
       </div>
     </div>
 
-    <!-- SECURITY & PASSWORD -->
     <div class="settings-card">
       <h3><span>&#128274;</span> Security</h3>
       
       <form id="passwordForm">
         <div class="form-group">
           <label for="oldPassword">Password Saat Ini</label>
-          <input type="password" id="oldPassword" class="form-control" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+          <input type="password" id="oldPassword" class="form-control" placeholder="••••••••" required>
         </div>
 
         <div class="form-group">
@@ -316,101 +315,3 @@
 </main>
 
 <footer>
-  <div class="footer-bottom">
-    <div>&copy; 2026 <strong>PDF Master AI</strong>. All rights reserved.</div>
-    <div>Smart PDF Workspace</div>
-  </div>
-</footer>
-
-<script>
-  (() => {
-    const API_BASE_URL = 'https://messenger-applying-senators-conduct.trycloudflare.com';
-
-    const mobileMenu = document.getElementById('mobileMenu');
-    const sidebar = document.getElementById('sidebar');
-
-    const headerUserName = document.getElementById('headerUserName');
-    const headerUserPlan = document.getElementById('headerUserPlan');
-    const headerAvatar = document.getElementById('headerAvatar');
-
-    const passwordForm = document.getElementById('passwordForm');
-    const toastMsg = document.getElementById('toastMsg');
-
-    if (mobileMenu) {
-      mobileMenu.addEventListener('click', () => {
-        sidebar.classList.toggle('is-open');
-      });
-    }
-
-    function showToast(message, type = 'success') {
-      toastMsg.textContent = message;
-      toastMsg.className = `toast-msg ${type}`;
-      setTimeout(() => {
-        toastMsg.className = 'toast-msg';
-      }, 3500);
-    }
-
-    // Load Data Profile Header
-    async function loadHeaderProfile() {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`);
-        if (!response.ok) return;
-
-        const data = await response.json();
-        const name = data.name || 'User';
-        const plan = data.plan || 'FREE';
-        const firstLetter = name.charAt(0).toUpperCase();
-
-        headerUserName.textContent = name;
-        headerUserPlan.textContent = `${plan} Plan`;
-
-        if (data.avatar_url) {
-          const fullAvatarUrl = data.avatar_url.startsWith('http')
-            ? data.avatar_url
-            : `${API_BASE_URL}${data.avatar_url}?t=${new Date().getTime()}`;
-
-          headerAvatar.style.backgroundImage = `url('${fullAvatarUrl}')`;
-          headerAvatar.textContent = '';
-        } else {
-          headerAvatar.style.backgroundImage = 'none';
-          headerAvatar.textContent = firstLetter;
-        }
-      } catch (err) {
-        console.error('Error loading header profile:', err);
-      }
-    }
-
-    // Ubah Password
-    passwordForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const oldPass = document.getElementById('oldPassword').value;
-      const newPass = document.getElementById('newPassword').value;
-      const confirmPass = document.getElementById('confirmPassword').value;
-
-      if (newPass !== confirmPass) {
-        showToast('Password baru dan konfirmasi password tidak cocok!', 'error');
-        return;
-      }
-
-      try {
-        // Dummy simulasi ubah password ke backend
-        showToast('âœ“ Password berhasil diperbarui!', 'success');
-        passwordForm.reset();
-      } catch (err) {
-        showToast('Gagal mengubah password.', 'error');
-      }
-    });
-
-    // Logout
-    document.getElementById('logoutButton').addEventListener('click', (e) => {
-      e.preventDefault();
-      localStorage.removeItem('mr_pdf_user');
-      window.location.href = '/pages/login.html';
-    });
-
-    loadHeaderProfile();
-  })();
-</script>
-
-</body>
-</html>

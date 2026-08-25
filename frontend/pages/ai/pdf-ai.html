@@ -1,13 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>AI PDF Assistant â€” PDF Master AI</title>
+  <title>AI PDF Assistant &mdash; PDF Master AI</title>
   <meta name="description" content="Upload a document and let AI help you understand its contents.">
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
   <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
 
@@ -46,7 +46,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { 
       height: 100%; 
-      font-family: Arial, Helvetica, sans-serif; 
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; 
       background-color: var(--bg-primary); 
       color: var(--text-primary); 
       line-height: 1.6; 
@@ -103,6 +103,7 @@
       font-size: 13px;
       transition: background 0.2s;
       cursor: pointer;
+      white-space: nowrap;
     }
     .btn-nav:hover { background: var(--accent-hover); }
 
@@ -134,7 +135,7 @@
     }
 
     .page-title {
-      font-size: 32px;
+      font-size: clamp(24px, 4vw, 32px);
       font-weight: 800;
       margin-bottom: 8px;
       letter-spacing: -0.02em;
@@ -413,6 +414,7 @@
       font-size: 14px;
       line-height: 1.6;
       word-break: break-word;
+      overflow-wrap: break-word;
     }
 
     .message-bubble.user {
@@ -457,7 +459,7 @@
       font-size: 12px;
     }
 
-    /* OVERLAY / DISABLED STATE BEFORE ANALYSIS */
+    /* OVERLAY BEFORE ANALYSIS */
     .chat-disabled-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -571,23 +573,30 @@
 
     .footer-links a:hover { color: var(--text-primary); }
 
-    /* RESPONSIVE */
-    @media (max-width: 850px) {
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 900px) {
       .workspace-grid { grid-template-columns: 1fr; }
       .chat-panel { height: 500px; }
       .navbar { padding: 0 16px; }
       .nav-links { display: none; }
     }
+
+    @media (max-width: 600px) {
+      .main-container { padding: 24px 16px 40px; }
+      .chat-panel { height: 450px; }
+      .chat-messages { padding: 14px; }
+      .message-bubble { max-width: 90%; font-size: 13.5px; }
+      .chat-input-area { padding: 12px; }
+      .btn-send { padding: 10px 14px; }
+    }
   </style>
 
-  <!-- PDF.JS CDN UNTUK LOKAL PARSING EXTRACTION (FALLBACK CLIENT-SIDE) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
-    <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI â€” Home">
+    <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI &mdash; Home">
       <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
     </a>
 
@@ -603,73 +612,61 @@
     <a href="chat-ai.html" class="btn-nav">Coba AI Chat</a>
   </nav>
 
-  <!-- MAIN CONTAINER -->
   <main class="main-container">
 
-    <!-- HEADER PAGE -->
     <header class="page-header">
       <div class="page-badge">
-        <span>ðŸ“„ðŸ¤–</span>
+        <span>&#128196;&#129302;</span>
         <span>Document Intelligence</span>
       </div>
       <h1 class="page-title">AI PDF Assistant</h1>
       <p class="page-desc">Upload a document and let AI help you understand its contents.</p>
     </header>
 
-    <!-- WORKSPACE GRID -->
     <div class="workspace-grid">
 
-      <!-- LEFT PANEL: FILE UPLOAD -->
       <section class="panel">
-        <h2 class="panel-title"><span>ðŸ“‚</span> Unggah Berkas PDF</h2>
+        <h2 class="panel-title"><span>&#128194;</span> Unggah Berkas PDF</h2>
         
-        <!-- DROPZONE -->
         <div class="dropzone" id="dropzone">
-          <span class="dropzone-icon">ðŸ“¥</span>
-          <p class="dropzone-text">Seret & Lepas file PDF di sini atau</p>
+          <span class="dropzone-icon">&#128229;</span>
+          <p class="dropzone-text">Seret &amp; Lepas file PDF di sini atau</p>
           <button type="button" class="btn-browse" id="btnBrowse">Pilih File PDF</button>
           <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
         </div>
 
-        <!-- FILE INFO CARD -->
         <div class="file-info-card" id="fileInfoCard">
           <div class="file-info-header">
             <div class="file-details">
-              <span class="file-icon">ðŸ“„</span>
+              <span class="file-icon">&#128196;</span>
               <div style="min-width: 0;">
                 <div class="file-name" id="fileName">-</div>
                 <div class="file-size" id="fileSize">-</div>
               </div>
             </div>
-            <button class="btn-remove" id="btnRemoveFile" title="Hapus Berkas">âœ•</button>
+            <button class="btn-remove" id="btnRemoveFile" title="Hapus Berkas">&#10005;</button>
           </div>
         </div>
 
-        <!-- ANALYZE BUTTON -->
         <button class="btn-analyze" id="btnAnalyze" disabled>
           <span>Mulai Analisis PDF</span>
         </button>
 
-        <!-- STATUS BOX PDF READY -->
         <div class="pdf-status-box" id="pdfStatusBox">
-          <div class="pdf-status-title">âœ“ PDF Siap Digunakan</div>
+          <div class="pdf-status-title">&#10003; PDF Siap Digunakan</div>
           <div class="pdf-status-meta" id="pdfStatusMeta">
-            <!-- Nama, Halaman, Metode dipopulasikan lewat JS -->
-          </div>
+            </div>
         </div>
       </section>
 
-      <!-- RIGHT PANEL: AI CHAT INTERFACE -->
       <section class="chat-panel">
 
-        <!-- DISABLED OVERLAY (BEFORE ANALYSIS) -->
         <div class="chat-disabled-overlay" id="chatOverlay">
-          <div class="chat-disabled-icon">ðŸ”’</div>
+          <div class="chat-disabled-icon">&#128274;</div>
           <h3 class="chat-disabled-title">Upload PDF Terlebih Dahulu</h3>
           <p class="chat-disabled-desc">Silakan pilih dan jalankan analisis dokumen PDF untuk mulai bertanya kepada AI.</p>
         </div>
 
-        <!-- CHAT HEADER -->
         <div class="chat-header">
           <span style="font-weight: 700; font-size: 14px;">PDF Chat Assistant</span>
           <div class="chat-header-status">
@@ -678,7 +675,6 @@
           </div>
         </div>
 
-        <!-- QUICK ACTIONS -->
         <div class="quick-actions">
           <button class="btn-quick quick-action" data-prompt="Jelaskan isi buku/dokumen ini secara keseluruhan.">Explain PDF</button>
           <button class="btn-quick quick-action" data-prompt="Tolong berikan ringkasan utama dokumen ini.">Summarize PDF</button>
@@ -686,12 +682,9 @@
           <button class="btn-quick quick-action" data-prompt="Temukan informasi atau instruksi paling penting dalam dokumen ini.">Find Important Info</button>
         </div>
 
-        <!-- CHAT MESSAGES -->
         <div class="chat-messages" id="chatMessages">
-          <!-- Messages will be rendered dynamically -->
-        </div>
+          </div>
 
-        <!-- CHAT INPUT AREA -->
         <div class="chat-input-area">
           <input type="text" class="chat-input" id="chatInput" placeholder="Tanyakan sesuatu tentang PDF ini..." disabled>
           <button class="btn-send" id="btnSend" disabled>Kirim</button>
@@ -703,7 +696,6 @@
 
   </main>
 
-  <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-links">
       <a href="../dashboard.html">Dashboard</a>
@@ -719,14 +711,11 @@
     <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan.</p>
   </footer>
 
-  <!-- VANILLA JAVASCRIPT LOGIC -->
   <script>
     (() => {
-      // 1. URL BACKEND SANGAT SPESIFIK & ENDPOINT POST
       const API_URL = 'https://messenger-applying-senators-conduct.trycloudflare.com/api/ai/chat';
       const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 
-      // 2. STATE MANAGEMENT & CONVERSATION HISTORY
       let pdfState = {
         fileName: "",
         pages: 0,
@@ -735,7 +724,6 @@
         ready: false
       };
 
-      // Menyimpan riwayat percakapan dengan format: { role: "user"|"assistant", content: "..." }
       let conversationHistory = [];
 
       // DOM ELEMENTS
@@ -759,14 +747,10 @@
       const btnSend = document.getElementById('btnSend');
       const quickActionBtns = document.querySelectorAll('.quick-action');
 
-      // Setup Worker PDF.js
       if (window.pdfjsLib) {
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
       }
 
-      // -------------------------------------------------------------
-      // UPLOAD & STATUS PDF (STRUKTUR TERPISAH SIAP UNTUK EXTRACTION RAG)
-      // -------------------------------------------------------------
       btnBrowse.addEventListener('click', () => fileInput.click());
 
       fileInput.addEventListener('change', (e) => {
@@ -846,14 +830,13 @@
         btnAnalyze.innerHTML = '<span class="spinner"></span> Memproses PDF...';
 
         try {
-          // Ekstraksi teks PDF sederhana via PDF.js (Menyiapkan konteks PDF)
           const extracted = await extractPDFText(file);
           pdfState.pages = extracted.pages;
           pdfState.text = extracted.text;
           pdfState.method = extracted.method;
           pdfState.ready = true;
 
-          btnAnalyze.innerHTML = '<span>âœ“ Analisis Selesai</span>';
+          btnAnalyze.innerHTML = '<span>&#10003; Analisis Selesai</span>';
           pdfStatusMeta.innerHTML = `
             <strong>Nama:</strong> ${pdfState.fileName}<br>
             <strong>Halaman:</strong> ${pdfState.pages} Hal<br>
@@ -861,7 +844,6 @@
           `;
           pdfStatusBox.style.display = 'block';
 
-          // Aktifkan area chat
           chatOverlay.style.display = 'none';
           statusDot.classList.add('active');
           statusText.textContent = 'PDF Siap';
@@ -893,9 +875,6 @@
         };
       }
 
-      // -------------------------------------------------------------
-      // FITUR CHAT & INTEGRASI BACKEND FASTAPI
-      // -------------------------------------------------------------
       btnSend.addEventListener('click', sendMessage);
 
       chatInput.addEventListener('keypress', (e) => {
@@ -915,15 +894,11 @@
         const userMessage = chatInput.value.trim();
         if (!userMessage || btnSend.disabled) return;
 
-        // 1. Tampilkan pesan asli user di UI Chat
         renderMessage('user', userMessage);
         chatInput.value = '';
 
-        // 2. Tampilkan indikator loading AI & nonaktifkan input sementara
         showTypingIndicator();
 
-        // 3. SUSUN PROMPT: Jika ini pesan pertama setelah PDF dianalisis,
-        // lampirkan konteks isi teks PDF ke dalam prompt pesan
         let payloadMessage = userMessage;
 
         if (conversationHistory.length === 0 && pdfState.ready && pdfState.text) {
@@ -942,14 +917,11 @@ ${userMessage}
         }
 
         try {
-          // 4. Panggil API backend via fetch POST dengan payloadMessage
           const aiReply = await callChatBackendAPI(payloadMessage);
 
-          // 5. Sembunyikan loading & tampilkan balasan AI
           hideTypingIndicator();
           renderMessage('ai', formatMarkdownText(aiReply));
 
-          // 6. Simpan ke percakapan history (simpan pesan asli user agar riwayat tetap bersih)
           conversationHistory.push({ role: "user", content: userMessage });
           conversationHistory.push({ role: "assistant", content: aiReply });
 
@@ -960,7 +932,6 @@ ${userMessage}
         }
       }
 
-      // Fungsi Eksekusi Fetch POST Ke Backend FastAPI
       async function callChatBackendAPI(userMessage) {
         try {
           const response = await fetch(API_URL, {
@@ -974,14 +945,12 @@ ${userMessage}
             })
           });
 
-          // Tangani Error HTTP (4xx / 5xx)
           if (!response.ok) {
             throw new Error(`Server merespons dengan status error (${response.status}).`);
           }
 
           const data = await response.json();
 
-          // Cek response.success
           if (data && data.success && data.reply) {
             return data.reply;
           } else {
@@ -989,7 +958,6 @@ ${userMessage}
           }
 
         } catch (error) {
-          // Tangani Network Error (Failed to fetch)
           if (error.name === 'TypeError' || error.message.includes('fetch')) {
             throw new Error('Tidak dapat terhubung ke server AI. Pastikan backend PDF Master sedang berjalan.');
           }
@@ -997,9 +965,6 @@ ${userMessage}
         }
       }
 
-      // -------------------------------------------------------------
-      // UI HELPER FUNCTIONS
-      // -------------------------------------------------------------
       function renderMessage(sender, htmlContent) {
         const msgBubble = document.createElement('div');
         msgBubble.className = `message-bubble ${sender}`;
@@ -1027,7 +992,7 @@ ${userMessage}
       }
 
       function showErrorMessage(messageText) {
-        renderMessage('ai', `<span style="color: var(--danger-color);">âš ï¸ ${messageText}</span>`);
+        renderMessage('ai', `<span style="color: var(--danger-color);">&#9888; ${messageText}</span>`);
       }
 
       function formatBytes(bytes) {

@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>PDF to Image Online Gratis - MR PDF Tools</title>
@@ -58,9 +59,7 @@
       font: inherit;
     }
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
+    /* HEADER */
     header {
       position: sticky;
       top: 0;
@@ -123,9 +122,7 @@
       font-weight: 800;
     }
 
-    /* =====================================================
-       MAIN TOOL CONTAINER
-    ===================================================== */
+    /* MAIN TOOL CONTAINER */
     main {
       max-width: 860px;
       margin: auto;
@@ -440,7 +437,6 @@
 <body>
   <div class="page">
 
-    <!-- HEADER -->
     <header>
       <div class="header-inner">
         <a href="./all-tools.html" class="brand" aria-label="MR PDF Tools Home">
@@ -454,27 +450,24 @@
       </div>
     </header>
 
-    <!-- MAIN TOOL CONTENT -->
     <main>
       <div class="tool-header">
-        <span class="tool-badge">ðŸ–¼ï¸ PDF TO IMAGE</span>
+        <span class="tool-badge">&#128444; PDF TO IMAGE</span>
         <h1>PDF to Image Converter</h1>
         <p>Ekstrak dan ubah halaman PDF menjadi berkas gambar (PNG / JPEG) berkualitas tinggi.</p>
       </div>
 
       <div class="tool-card">
-        <!-- DROPZONE -->
         <div class="dropzone" id="dropzone">
-          <div class="dropzone-icon">ðŸ–¼ï¸</div>
+          <div class="dropzone-icon">&#128444;</div>
           <h3>Pilih atau seret file PDF di sini</h3>
           <p>Maksimal ukuran file 20MB</p>
           <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
         </div>
 
-        <!-- FILE PREVIEW -->
         <div class="file-info" id="fileInfo">
           <div class="file-details">
-            <span class="file-icon">ðŸ“„</span>
+            <span class="file-icon">&#128196;</span>
             <div>
               <div class="file-name" id="fileName">document.pdf</div>
               <div class="file-size" id="fileSize">0 KB</div>
@@ -483,7 +476,6 @@
           <button type="button" class="btn-remove" id="btnRemove">Ganti File</button>
         </div>
 
-        <!-- OPTIONS SECTION -->
         <div class="options-section" id="optionsSection">
           <div class="options-grid">
             <div class="option-group">
@@ -503,7 +495,6 @@
             </div>
           </div>
 
-          <!-- OPSI PILIHAN HALAMAN -->
           <div class="option-group">
             <label for="pageOption">Halaman yang Ingin Diubah</label>
             <select id="pageOption" class="select-input">
@@ -518,29 +509,25 @@
           </div>
         </div>
 
-        <!-- ACTION BUTTON -->
         <button type="button" class="btn-submit" id="btnConvert" disabled>
           <span class="spinner" id="btnSpinner"></span>
           <span id="btnText">Konversi ke Gambar Sekarang</span>
         </button>
 
-        <!-- RESULT & DOWNLOAD BUTTON SECTION -->
         <div class="result-section" id="resultSection">
-          <div class="result-title">ðŸŽ‰ Konversi Berhasil!</div>
+          <div class="result-title">&#127881; Konversi Berhasil!</div>
           <div class="result-desc">Gambar hasil konversi PDF Anda telah siap diunduh.</div>
           <a href="#" class="btn-download" id="btnDownload" download>
-            â¬‡ï¸ Unduh Gambar
+            &#11015; Unduh Gambar
           </a>
         </div>
 
-        <!-- NOTIFICATION BOX -->
         <div class="message" id="message"></div>
       </div>
     </main>
 
-    <!-- FOOTER -->
     <footer>
-      Â© 2026 MR PDF Tools. All rights reserved.
+      &#169; 2026 MR PDF Tools. All rights reserved.
     </footer>
 
   </div>
@@ -669,7 +656,6 @@
           const blob = await response.blob();
           const contentType = response.headers.get("content-type") || "";
 
-          // Tentukan ekstensi download (ZIP jika multi-halaman/semua halaman, atau langsung file gambar jika single page)
           let extension = ".zip";
           if (contentType.includes("image/png")) extension = ".png";
           else if (contentType.includes("image/jpeg")) extension = ".jpg";

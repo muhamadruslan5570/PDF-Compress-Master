@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>History & Activities â€” PDF Master AI</title>
+  <title>History &amp; Activities &mdash; PDF Master AI</title>
   <meta name="description" content="Riwayat aktivitas pemrosesan dokumen dan penggunaan AI di PDF Master AI">
 
   <!-- FAVICON -->
@@ -668,7 +669,7 @@
 <header class="dashboard-header">
   <div class="header-left">
     <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">&#9776;</button>
-    <a href="/pages/dashboard.html" class="brand-logo" aria-label="PDF Master AI â€” Home">
+    <a href="/pages/dashboard.html" class="brand-logo" aria-label="PDF Master AI - Home">
       <img src="../assets/images/logo.png" alt="PDF Master AI" class="site-logo" width="150" height="50">
     </a>
   </div>
@@ -814,17 +815,17 @@
       sidebarOverlay.addEventListener('click', closeSidebar);
     }
 
-    // Map Icon Berdasarkan Jenis Aktivitas
+    // Map Icon Berdasarkan Jenis Aktivitas (Menggunakan Entity Unicode Aman)
     function getActivityIcon(type) {
       const typeLower = (type || '').toLowerCase();
-      if (typeLower.includes('word')) return 'ðŸ“„';
-      if (typeLower.includes('merge')) return 'ðŸ“‘';
-      if (typeLower.includes('compress')) return 'ðŸ—œï¸';
-      if (typeLower.includes('image')) return 'ðŸ–¼ï¸';
-      if (typeLower.includes('ppt')) return 'ðŸ“Š';
-      if (typeLower.includes('excel')) return 'ðŸ“ˆ';
-      if (typeLower.includes('ai')) return 'ðŸ¤–';
-      return 'ðŸ“„';
+      if (typeLower.includes('word')) return '&#128196;';
+      if (typeLower.includes('merge')) return '&#128193;';
+      if (typeLower.includes('compress')) return '&#128451;';
+      if (typeLower.includes('image')) return '&#128444;';
+      if (typeLower.includes('ppt')) return '&#128202;';
+      if (typeLower.includes('excel')) return '&#128200;';
+      if (typeLower.includes('ai')) return '&#129302;';
+      return '&#128194;';
     }
 
     // Format Tanggal yang Ramah
@@ -895,7 +896,7 @@
     function showEmptyState() {
       historyContainer.innerHTML = `
         <div class="state-box">
-          <span class="state-icon">ðŸ“‚</span>
+          <span class="state-icon">&#128194;</span>
           <h3>Belum ada aktivitas</h3>
           <p>Aktivitas pemrosesan dokumen dan penggunaan AI Anda akan muncul di sini.</p>
           <a href="/pages/tools/all-tools.html" class="btn-action-primary">Mulai Menggunakan Tools</a>
@@ -909,7 +910,7 @@
     function showError() {
       historyContainer.innerHTML = `
         <div class="state-box">
-          <span class="state-icon">âš ï¸</span>
+          <span class="state-icon">&#9888;</span>
           <h3>Tidak dapat memuat riwayat</h3>
           <p>Pastikan server backend sedang berjalan dan coba lagi.</p>
           <button class="btn-action-primary" id="btnRetry">Coba Lagi</button>
@@ -954,16 +955,16 @@
 
         // Map status
         let statusClass = 'success';
-        let statusIcon = 'âœ“';
+        let statusIcon = '&#10003;';
         let statusText = 'Berhasil';
 
         if (item.status === 'failed') {
           statusClass = 'failed';
-          statusIcon = 'âœ•';
+          statusIcon = '&#10005;';
           statusText = 'Gagal';
         } else if (item.status === 'processing') {
           statusClass = 'processing';
-          statusIcon = 'âŸ³';
+          statusIcon = '&#8635;';
           statusText = 'Diproses';
         }
 
@@ -1004,7 +1005,7 @@
       // Update Pagination Controls
       if (totalItems > ITEMS_PER_PAGE) {
         paginationContainer.style.display = 'flex';
-        paginationInfo.textContent = `Menampilkan ${startIndex + 1}â€“${endIndex} dari ${totalItems} item`;
+        paginationInfo.textContent = `Menampilkan ${startIndex + 1}-${endIndex} dari ${totalItems} item`;
         btnPrevPage.disabled = currentPage === 1;
         btnNextPage.disabled = currentPage === totalPages;
       } else {
