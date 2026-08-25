@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>AI PDF Assistant — PDF Master AI</title>
+  <title>AI PDF Assistant â€” PDF Master AI</title>
   <meta name="description" content="Upload a document and let AI help you understand its contents.">
 
   <!-- FAVICON -->
@@ -587,7 +587,7 @@
 
   <!-- NAVBAR -->
   <nav class="navbar">
-    <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI — Home">
+    <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI â€” Home">
       <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
     </a>
 
@@ -609,7 +609,7 @@
     <!-- HEADER PAGE -->
     <header class="page-header">
       <div class="page-badge">
-        <span>📄🤖</span>
+        <span>ðŸ“„ðŸ¤–</span>
         <span>Document Intelligence</span>
       </div>
       <h1 class="page-title">AI PDF Assistant</h1>
@@ -621,11 +621,11 @@
 
       <!-- LEFT PANEL: FILE UPLOAD -->
       <section class="panel">
-        <h2 class="panel-title"><span>📂</span> Unggah Berkas PDF</h2>
+        <h2 class="panel-title"><span>ðŸ“‚</span> Unggah Berkas PDF</h2>
         
         <!-- DROPZONE -->
         <div class="dropzone" id="dropzone">
-          <span class="dropzone-icon">📥</span>
+          <span class="dropzone-icon">ðŸ“¥</span>
           <p class="dropzone-text">Seret & Lepas file PDF di sini atau</p>
           <button type="button" class="btn-browse" id="btnBrowse">Pilih File PDF</button>
           <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
@@ -635,13 +635,13 @@
         <div class="file-info-card" id="fileInfoCard">
           <div class="file-info-header">
             <div class="file-details">
-              <span class="file-icon">📄</span>
+              <span class="file-icon">ðŸ“„</span>
               <div style="min-width: 0;">
                 <div class="file-name" id="fileName">-</div>
                 <div class="file-size" id="fileSize">-</div>
               </div>
             </div>
-            <button class="btn-remove" id="btnRemoveFile" title="Hapus Berkas">✕</button>
+            <button class="btn-remove" id="btnRemoveFile" title="Hapus Berkas">âœ•</button>
           </div>
         </div>
 
@@ -652,7 +652,7 @@
 
         <!-- STATUS BOX PDF READY -->
         <div class="pdf-status-box" id="pdfStatusBox">
-          <div class="pdf-status-title">✓ PDF Siap Digunakan</div>
+          <div class="pdf-status-title">âœ“ PDF Siap Digunakan</div>
           <div class="pdf-status-meta" id="pdfStatusMeta">
             <!-- Nama, Halaman, Metode dipopulasikan lewat JS -->
           </div>
@@ -664,7 +664,7 @@
 
         <!-- DISABLED OVERLAY (BEFORE ANALYSIS) -->
         <div class="chat-disabled-overlay" id="chatOverlay">
-          <div class="chat-disabled-icon">🔒</div>
+          <div class="chat-disabled-icon">ðŸ”’</div>
           <h3 class="chat-disabled-title">Upload PDF Terlebih Dahulu</h3>
           <p class="chat-disabled-desc">Silakan pilih dan jalankan analisis dokumen PDF untuk mulai bertanya kepada AI.</p>
         </div>
@@ -723,7 +723,7 @@
   <script>
     (() => {
       // 1. URL BACKEND SANGAT SPESIFIK & ENDPOINT POST
-      const API_URL = 'http://127.0.0.1:8000/api/ai/chat';
+      const API_URL = 'https://messenger-applying-senators-conduct.trycloudflare.com/api/ai/chat';
       const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 
       // 2. STATE MANAGEMENT & CONVERSATION HISTORY
@@ -853,7 +853,7 @@
           pdfState.method = extracted.method;
           pdfState.ready = true;
 
-          btnAnalyze.innerHTML = '<span>✓ Analisis Selesai</span>';
+          btnAnalyze.innerHTML = '<span>âœ“ Analisis Selesai</span>';
           pdfStatusMeta.innerHTML = `
             <strong>Nama:</strong> ${pdfState.fileName}<br>
             <strong>Halaman:</strong> ${pdfState.pages} Hal<br>
@@ -1027,7 +1027,7 @@ ${userMessage}
       }
 
       function showErrorMessage(messageText) {
-        renderMessage('ai', `<span style="color: var(--danger-color);">⚠️ ${messageText}</span>`);
+        renderMessage('ai', `<span style="color: var(--danger-color);">âš ï¸ ${messageText}</span>`);
       }
 
       function formatBytes(bytes) {

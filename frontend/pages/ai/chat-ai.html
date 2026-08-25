@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>PDF Master AI — Smart Workspace Assistant</title>
+  <title>PDF Master AI â€” Smart Workspace Assistant</title>
   <meta name="description" content="AI Assistant powered by PDF Master AI">
 
   <!-- FAVICON FIX -->
@@ -402,7 +402,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI — Home">
+      <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI â€” Home">
         <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
       </a>
     </div>
@@ -416,10 +416,10 @@
       <div>
         <div class="section-title">Navigation</div>
         <div class="menu-list">
-          <a href="../dashboard.html" class="menu-link"><span class="menu-icon">🏠</span><span>Dashboard</span></a>
-          <a href="../tools/all-tools.html" class="menu-link"><span class="menu-icon">🗜️</span><span>PDF Tools</span></a>
-          <a href="../history.html" class="menu-link"><span class="menu-icon">⏱️</span><span>History</span></a>
-          <a href="../settings.html" class="menu-link"><span class="menu-icon">⚙️</span><span>Settings</span></a>
+          <a href="../dashboard.html" class="menu-link"><span class="menu-icon">ðŸ </span><span>Dashboard</span></a>
+          <a href="../tools/all-tools.html" class="menu-link"><span class="menu-icon">ðŸ—œï¸</span><span>PDF Tools</span></a>
+          <a href="../history.html" class="menu-link"><span class="menu-icon">â±ï¸</span><span>History</span></a>
+          <a href="../settings.html" class="menu-link"><span class="menu-icon">âš™ï¸</span><span>Settings</span></a>
         </div>
       </div>
     </div>
@@ -441,7 +441,7 @@
     <!-- HEADER -->
     <header class="chat-header">
       <div class="header-left">
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Open Sidebar">☰</button>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Open Sidebar">â˜°</button>
         <div class="chat-title-box">
           <h2>PDF Master AI</h2>
           <div class="chat-status-badge">
@@ -463,25 +463,25 @@
         
         <!-- WELCOME SCREEN (Shown when empty) -->
         <div class="welcome-screen" id="welcomeScreen">
-          <div class="welcome-icon">🤖</div>
+          <div class="welcome-icon">ðŸ¤–</div>
           <h1>How can I help you today?</h1>
           <p>Ask questions, analyze documents, summarize PDFs, or get instant help with your productivity tasks.</p>
 
           <div class="suggestion-grid">
             <div class="suggestion-card" data-prompt="Jelaskan secara singkat apa saja fitur utama dari PDF Master AI.">
-              <h3>📄 Fitur PDF Master AI</h3>
+              <h3>ðŸ“„ Fitur PDF Master AI</h3>
               <p>Tanyakan ringkasan fitur utama aplikasi ini</p>
             </div>
             <div class="suggestion-card" data-prompt="Bagaimana cara mengompres dokumen PDF dengan efisien?">
-              <h3>💡 Kompres PDF</h3>
+              <h3>ðŸ’¡ Kompres PDF</h3>
               <p>Tips dan panduan mengecilkan ukuran PDF</p>
             </div>
             <div class="suggestion-card" data-prompt="Buatkan draf email profesional untuk pengiriman dokumen.">
-              <h3>✉️ Draf Email</h3>
+              <h3>âœ‰ï¸ Draf Email</h3>
               <p>Bantu buatkan draf pesan formal</p>
             </div>
             <div class="suggestion-card" data-prompt="Bantu saya memecahkan masalah produktivitas kerja harian.">
-              <h3>🚀 Bantuan Umum</h3>
+              <h3>ðŸš€ Bantuan Umum</h3>
               <p>Solusi produktivitas dan pengerjaan tugas</p>
             </div>
           </div>
@@ -496,23 +496,23 @@
         
         <!-- PREVIEW CHIP FILE YANG DIPILIH -->
         <div class="file-preview-area" id="filePreviewArea">
-          <span class="file-icon">📄</span>
+          <span class="file-icon">ðŸ“„</span>
           <div class="file-info">
             <span class="file-name" id="fileNameText">document.pdf</span>
             <span class="file-size" id="fileSizeText">0 KB</span>
           </div>
-          <button class="btn-remove-file" id="btnRemoveFile" title="Hapus Lampiran">✕</button>
+          <button class="btn-remove-file" id="btnRemoveFile" title="Hapus Lampiran">âœ•</button>
         </div>
 
         <div class="composer-input-row">
           <!-- INPUT FILE TERSEMBUNYI -->
           <input type="file" id="fileInput" accept=".pdf,.txt,.docx" style="display: none;">
-          <button class="btn-attach" id="btnAttach" title="Lampirkan Dokumen PDF">📎</button>
+          <button class="btn-attach" id="btnAttach" title="Lampirkan Dokumen PDF">ðŸ“Ž</button>
           
           <textarea id="chatInput" class="chat-textarea" placeholder="Tanyakan sesuatu atau unggah PDF..." rows="1"></textarea>
           
           <div class="composer-actions">
-            <button class="btn-send" id="btnSend" aria-label="Send Message">➤</button>
+            <button class="btn-send" id="btnSend" aria-label="Send Message">âž¤</button>
           </div>
         </div>
       </div>
@@ -529,7 +529,7 @@
     }
 
     // 1. CONFIGURATION
-    const API_BASE_URL = "http://127.0.0.1:8000";
+    const API_BASE_URL = "https://messenger-applying-senators-conduct.trycloudflare.com";
 
     // 2. CONVERSATION STATE & SELECTED FILE
     let conversationHistory = [];
@@ -740,7 +740,7 @@
           avatar.textContent = currentUserProfile.name.charAt(0).toUpperCase();
         }
       } else {
-        avatar.textContent = '🤖';
+        avatar.textContent = 'ðŸ¤–';
       }
 
       const wrapper = document.createElement('div');
@@ -748,7 +748,7 @@
 
       const meta = document.createElement('div');
       meta.className = 'msg-meta';
-      meta.innerHTML = `<span>${sender === 'user' ? currentUserProfile.name : 'PDF Master AI'}</span> • <span>${time}</span>`;
+      meta.innerHTML = `<span>${sender === 'user' ? currentUserProfile.name : 'PDF Master AI'}</span> â€¢ <span>${time}</span>`;
 
       const bubble = document.createElement('div');
       bubble.className = 'msg-bubble';
@@ -780,9 +780,9 @@
       row.id = 'typingRow';
 
       row.innerHTML = `
-        <div class="msg-avatar">🤖</div>
+        <div class="msg-avatar">ðŸ¤–</div>
         <div class="msg-content-wrapper">
-          <div class="msg-meta"><span>PDF Master AI</span> • <span>Sedang menganalisis...</span></div>
+          <div class="msg-meta"><span>PDF Master AI</span> â€¢ <span>Sedang menganalisis...</span></div>
           <div class="msg-bubble">
             <div class="typing-indicator">
               <div class="typing-dot"></div>
@@ -844,7 +844,7 @@
       // Jika ada file yang dilampirkan, ekstrak kontennya
       if (selectedFile) {
         showTypingIndicator();
-        displayMessage = `📎 [Dokumen: ${selectedFile.name}]\n` + (userMessage || "Tolong rangkum isi dokumen ini.");
+        displayMessage = `ðŸ“Ž [Dokumen: ${selectedFile.name}]\n` + (userMessage || "Tolong rangkum isi dokumen ini.");
         
         let extractedText = "";
         if (selectedFile.type === "application/pdf" || selectedFile.name.endsWith(".pdf")) {

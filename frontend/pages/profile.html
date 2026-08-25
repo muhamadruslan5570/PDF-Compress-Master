@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>My Profile — PDF Master AI</title>
+  <title>My Profile â€” PDF Master AI</title>
   <meta name="description" content="Manage your personal profile and account settings on PDF Master AI">
 
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png">
@@ -341,7 +341,7 @@
 <script>
   (() => {
     // URL Backend FastAPI
-    const API_BASE_URL = 'http://127.0.0.1:8000';
+    const API_BASE_URL = 'https://messenger-applying-senators-conduct.trycloudflare.com';
 
     const mobileMenu = document.getElementById('mobileMenu');
     const sidebar = document.getElementById('sidebar');
@@ -476,7 +476,7 @@
 
         const updatedData = await response.json();
         renderUI(updatedData);
-        showToast('✓ Perubahan profil berhasil disimpan!', 'success');
+        showToast('âœ“ Perubahan profil berhasil disimpan!', 'success');
       } catch (error) {
         console.error('Error updating profile:', error);
         showToast(error.message || 'Gagal menyimpan profil.', 'error');
@@ -513,7 +513,7 @@
 
         const result = await response.json();
         renderAvatar(result.avatar_url, inputName.value);
-        showToast('✓ Foto avatar berhasil diperbarui!', 'success');
+        showToast('âœ“ Foto avatar berhasil diperbarui!', 'success');
       } catch (error) {
         console.error('Error uploading avatar:', error);
         showToast(error.message || 'Gagal mengunggah foto avatar.', 'error');
@@ -537,7 +537,7 @@
         }
 
         renderAvatar(null, inputName.value);
-        showToast('✓ Foto avatar berhasil dihapus.', 'success');
+        showToast('âœ“ Foto avatar berhasil dihapus.', 'success');
       } catch (error) {
         console.error('Error deleting avatar:', error);
         showToast(error.message || 'Gagal menghapus foto avatar.', 'error');
