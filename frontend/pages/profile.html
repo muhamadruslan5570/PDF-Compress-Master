@@ -434,10 +434,18 @@
       renderAvatar(data.avatar_url, name);
     }
 
+    const userId = localStorage.getItem("user_id");
+
+    if (!userId) {
+      console.error("User ID tidak ditemukan.");
+      showToast("Sesi pengguna tidak ditemukan. Silakan login kembali.", "error");
+      return;
+    }
+
     // 1. GET /api/profile
     async function loadProfile() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`);
+        const response = await fetch(`${API_BASE_URL}/api/profile/?user_id=${encodeURIComponent(userId)}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -462,7 +470,7 @@
       };
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+        const response = await fetch(`${API_BASE_URL}/api/profile/?user_id=${encodeURIComponent(userId)}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -503,7 +511,7 @@
 
       try {
         showToast('Mengunggah gambar avatar...', 'success');
-        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/`, {
+        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/?user_id=${encodeURIComponent(userId)}`, {
           method: 'POST',
           body: formData
         });
@@ -529,7 +537,7 @@
       if (!confirm('Apakah Anda yakin ingin menghapus foto avatar ini?')) return;
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/`, {
+        const response = await fetch(`${API_BASE_URL}/api/profile/avatar/?user_id=${encodeURIComponent(userId)}`, {
           method: 'DELETE'
         });
 
@@ -560,3 +568,5 @@
 
 </body>
 </html>
+
+
