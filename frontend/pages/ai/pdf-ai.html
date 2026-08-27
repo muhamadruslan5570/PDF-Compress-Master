@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -432,12 +432,10 @@
       border-bottom-left-radius: 2px;
     }
 
-    /* MARKDOWN STYLES IN CHAT */
-    .message-bubble.ai h1, .message-bubble.ai h2, .message-bubble.ai h3 {
-      font-size: 15px;
-      font-weight: 700;
-      margin: 8px 0 4px 0;
+    /* FORMAT TEXT DALAM CHAT (TANPA HASHTAG ####) */
+    .message-bubble.ai strong {
       color: var(--text-primary);
+      font-weight: 700;
     }
     .message-bubble.ai ul, .message-bubble.ai ol {
       margin: 6px 0 6px 20px;
@@ -592,6 +590,7 @@
   </style>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="../../js/api-config.js"></script>
 </head>
 <body>
 
@@ -654,8 +653,7 @@
 
         <div class="pdf-status-box" id="pdfStatusBox">
           <div class="pdf-status-title">&#10003; PDF Siap Digunakan</div>
-          <div class="pdf-status-meta" id="pdfStatusMeta">
-            </div>
+          <div class="pdf-status-meta" id="pdfStatusMeta"></div>
         </div>
       </section>
 
@@ -682,8 +680,7 @@
           <button class="btn-quick quick-action" data-prompt="Temukan informasi atau instruksi paling penting dalam dokumen ini.">Find Important Info</button>
         </div>
 
-        <div class="chat-messages" id="chatMessages">
-          </div>
+        <div class="chat-messages" id="chatMessages"></div>
 
         <div class="chat-input-area">
           <input type="text" class="chat-input" id="chatInput" placeholder="Tanyakan sesuatu tentang PDF ini..." disabled>
@@ -713,10 +710,12 @@
 
   <script>
     (() => {
-      const API_URL = 'https://interval-governing-boxes-learn.trycloudflare.com/api/ai/chat';
-      const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
+      const UPLOAD_API_URL = `${API_BASE_URL}/api/pdf/upload`;
+      const CHAT_API_URL = `${API_BASE_URL}/api/pdf/chat`;
+      const MAX_FILE_SIZE = 25 * 1024 * 1024;
 
       let pdfState = {
+        documentId: "",
         fileName: "",
         pages: 0,
         text: "",
@@ -726,7 +725,6 @@
 
       let conversationHistory = [];
 
-      // DOM ELEMENTS
       const dropzone = document.getElementById('dropzone');
       const btnBrowse = document.getElementById('btnBrowse');
       const fileInput = document.getElementById('fileInput');
@@ -751,7 +749,12 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
       }
 
-      btnBrowse.addEventListener('click', () => fileInput.click());
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      btnBrowse.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
 
       fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
@@ -804,7 +807,14 @@
       btnRemoveFile.addEventListener('click', resetPDFState);
 
       function resetPDFState() {
-        pdfState = { fileName: "", pages: 0, text: "", method: "", ready: false };
+        pdfState = {
+          documentId: "",
+          fileName: "",
+          pages: 0,
+          text: "",
+          method: "",
+          ready: false
+        };
         conversationHistory = [];
         fileInput.value = '';
 
@@ -830,6 +840,27 @@
         btnAnalyze.innerHTML = '<span class="spinner"></span> Memproses PDF...';
 
         try {
+          const uploadData = new FormData();
+          uploadData.append('file', file);
+
+          const uploadResponse = await fetch(UPLOAD_API_URL, {
+            method: 'POST',
+            body: uploadData
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error(`Gagal mengunggah PDF ke server (Status ${uploadResponse.status}).`);
+          }
+
+          const uploadResult = await uploadResponse.json();
+          
+          const docId = uploadResult.document_id || uploadResult.documentId || uploadResult.id;
+          if (!docId) {
+            throw new Error('Respon server upload tidak memberikan document_id yang valid.');
+          }
+
+          pdfState.documentId = String(docId).trim();
+
           const extracted = await extractPDFText(file);
           pdfState.pages = extracted.pages;
           pdfState.text = extracted.text;
@@ -850,10 +881,10 @@
           chatInput.disabled = false;
           btnSend.disabled = false;
 
-          renderMessage('ai', `Halo! Dokumen **${pdfState.fileName}** (${pdfState.pages} halaman) telah siap. Ada yang bisa saya bantu tentang dokumen ini?`);
+          renderMessage('ai', `Halo! Dokumen <strong>${pdfState.fileName}</strong> (${pdfState.pages} halaman) telah siap. Ada yang bisa saya bantu tentang dokumen ini?`);
         } catch (error) {
-          console.error('Ekstraksi PDF Gagal:', error);
-          showErrorMessage('Gagal memproses dokumen PDF. Pastikan file tidak rusak.');
+          console.error('Proses PDF Gagal:', error);
+          showErrorMessage(error.message || 'Gagal memproses dokumen PDF. Pastikan file tidak rusak.');
           btnAnalyze.disabled = false;
           btnAnalyze.innerHTML = '<span>Coba Analisis Lagi</span>';
         }
@@ -894,30 +925,18 @@
         const userMessage = chatInput.value.trim();
         if (!userMessage || btnSend.disabled) return;
 
+        if (!pdfState.documentId || !pdfState.ready) {
+          showErrorMessage('Dokumen PDF belum siap atau document_id hilang. Silakan unggah ulang PDF.');
+          return;
+        }
+
         renderMessage('user', userMessage);
         chatInput.value = '';
 
         showTypingIndicator();
 
-        let payloadMessage = userMessage;
-
-        if (conversationHistory.length === 0 && pdfState.ready && pdfState.text) {
-          payloadMessage = `[KONTEKS DOKUMEN PDF DILAMPIRKAN]
-Nama File: ${pdfState.fileName}
-Jumlah Halaman: ${pdfState.pages}
-
-ISI TEKS DOKUMEN:
-${pdfState.text}
-
-----------------------------------------
-PERTANYAAN/INSTRUKSI PENGGUNA:
-${userMessage}
-
-(Petunjuk untuk AI: Jawablah pertanyaan di atas berdasarkan konteks teks PDF yang telah dilampirkan di atas. Jika jawaban tidak ada dalam teks PDF, sampaikan dengan sopan bahwa informasi tersebut tidak ditemukan dalam dokumen).`;
-        }
-
         try {
-          const aiReply = await callChatBackendAPI(payloadMessage);
+          const aiReply = await callChatBackendAPI(userMessage);
 
           hideTypingIndicator();
           renderMessage('ai', formatMarkdownText(aiReply));
@@ -933,26 +952,40 @@ ${userMessage}
       }
 
       async function callChatBackendAPI(userMessage) {
+        const cleanConversation = conversationHistory.map(item => ({
+          role: String(item.role || "user"),
+          content: String(item.content || "")
+        }));
+
+        const payload = {
+          document_id: String(pdfState.documentId).trim(),
+          message: String(userMessage).trim(),
+          conversation: cleanConversation
+        };
+
         try {
-          const response = await fetch(API_URL, {
+          const response = await fetch(CHAT_API_URL, {
             method: "POST",
             headers: {
               "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-              message: userMessage,
-              conversation: conversationHistory
-            })
+            body: JSON.stringify(payload)
           });
 
           if (!response.ok) {
+            const errorJson = await response.json().catch(() => null);
+            console.error("Detail Error Backend (HTTP 422/500):", errorJson);
+
+            if (response.status === 422) {
+              throw new Error('Validasi data gagal (HTTP 422). Format pesan atau ID Dokumen tidak sesuai.');
+            }
             throw new Error(`Server merespons dengan status error (${response.status}).`);
           }
 
           const data = await response.json();
 
-          if (data && data.success && data.reply) {
-            return data.reply;
+          if (data && (data.success || data.reply)) {
+            return data.reply || data.message || data.response || "Menerima balasan dari AI.";
           } else {
             throw new Error('Respon dari server tidak valid atau gagal diproses.');
           }
@@ -1003,12 +1036,13 @@ ${userMessage}
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
       }
 
+      // FORMAT MARKDOWN TANPA SIMBOL HASHTAG HASIL PERBAIKAN
       function formatMarkdownText(text) {
         if (!text) return '';
         return text
-          .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-          .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-          .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+          .replace(/^### (.*$)/gim, '<strong>$1</strong>')
+          .replace(/^## (.*$)/gim, '<strong>$1</strong>')
+          .replace(/^# (.*$)/gim, '<strong>$1</strong>')
           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
           .replace(/\*(.*?)\*/g, '<em>$1</em>')
           .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -1021,3 +1055,4 @@ ${userMessage}
   </script>
 </body>
 </html>
+

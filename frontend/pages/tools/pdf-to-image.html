@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -432,6 +432,7 @@
       }
     }
   </style>
+<script src="../../js/api-config.js"></script>
 </head>
 
 <body>
@@ -643,7 +644,7 @@
         }
 
         try {
-          const response = await fetch("https://interval-governing-boxes-learn.trycloudflare.com/api/pdf-to-image", {
+          const response = await fetch("${API_BASE_URL}/api/pdf-to-image", {
             method: "POST",
             body: formData
           });

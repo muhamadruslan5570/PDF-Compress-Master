@@ -1,4 +1,4 @@
-﻿from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
@@ -32,6 +32,11 @@ router = APIRouter(
 # ============================================================
 
 load_dotenv()
+
+FRONTEND_URL = os.getenv(
+    "FRONTEND_URL",
+    "http://127.0.0.1:5500"
+).rstrip("/")
 
 oauth = OAuth()
 
@@ -116,8 +121,16 @@ async def google_callback(
 
         db.commit()
 
+    redirect_url = f"{FRONTEND_URL}/pages/dashboard.html"
+
+    print("GOOGLE LOGIN BERHASIL")
+    print("USER:", user.email)
+    print("FRONTEND_URL:", FRONTEND_URL)
+    print("REDIRECT:", redirect_url)
+
     return RedirectResponse(
-        url=f"{FRONTEND_URL}/pages/dashboard.html"
+        url=redirect_url,
+        status_code=302
     )
 
 password_hasher = PasswordHasher()

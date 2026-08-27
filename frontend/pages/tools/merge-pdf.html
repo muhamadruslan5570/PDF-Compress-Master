@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -425,6 +425,7 @@
       font-size: 12px;
     }
   </style>
+<script src="../../js/api-config.js"></script>
 </head>
 
 <body>
@@ -626,7 +627,7 @@
         });
 
         try {
-          const response = await fetch("https://interval-governing-boxes-learn.trycloudflare.com/api/merge-pdf", {
+          const response = await fetch("${API_BASE_URL}/api/merge-pdf", {
             method: "POST",
             body: formData
           });

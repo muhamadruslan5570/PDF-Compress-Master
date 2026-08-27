@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -469,6 +469,7 @@
       }
     }
   </style>
+<script src="../../js/api-config.js"></script>
 </head>
 
 <body>
@@ -677,7 +678,7 @@
         formData.append("level", compressionLevel);
 
         try {
-          const response = await fetch("https://interval-governing-boxes-learn.trycloudflare.com/api/compress-pdf", {
+          const response = await fetch("${API_BASE_URL}/api/compress-pdf", {
             method: "POST",
             body: formData
           });

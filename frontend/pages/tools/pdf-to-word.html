@@ -376,6 +376,7 @@
       font-size: 12px;
     }
   </style>
+<script src="../../js/api-config.js"></script>
 </head>
 
 <body>
@@ -534,7 +535,7 @@
         formData.append("file", selectedFile);
 
         try {
-          const response = await fetch("https://interval-governing-boxes-learn.trycloudflare.com/api/pdf-to-word", {
+          const response = await fetch("${API_BASE_URL}/api/pdf-to-word", {
             method: "POST",
             body: formData
           });

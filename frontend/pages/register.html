@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -377,6 +377,7 @@
       .site-logo{width:145px;max-height:50px}
     }
   </style>
+<script src="../js/api-config.js"></script>
 </head>
 
 <body>
@@ -548,7 +549,7 @@
     const googleBtn = document.getElementById('googleBtn');
 
     // URL backend
-    const API_URL = 'https://interval-governing-boxes-learn.trycloudflare.com';
+    const API_URL = API_BASE_URL;
 
     function setupToggle(buttonId, inputId) {
       const button = document.getElementById(buttonId);

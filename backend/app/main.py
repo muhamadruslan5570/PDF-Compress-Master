@@ -13,6 +13,7 @@ from app.api.pdf_to_image import router as pdf_to_image_router
 from app.api.profile import router as profile_router
 from app.api.history import router as history_router
 from app.api.ai import router as ai_router
+from app.api.history_chat_ai import router as history_chat_ai_router
 
 app = FastAPI(
     title="MR Compress PDF API",
@@ -30,6 +31,7 @@ app.include_router(pdf_to_image_router)
 app.include_router(profile_router)
 app.include_router(history_router)
 app.include_router(ai_router)
+app.include_router(history_chat_ai_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,6 +64,7 @@ def root():
         "status": "online",
         "service": "MR Compress PDF API"
     }
+
 
 
 

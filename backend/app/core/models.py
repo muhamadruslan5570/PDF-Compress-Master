@@ -1,4 +1,4 @@
-﻿from sqlalchemy import Boolean, Column, DateTime, Integer, String
+﻿from sqlalchemy import Boolean, Column, DateTime, Integer, String, ForeignKey
 from datetime import datetime, timezone
 
 from app.core.database import Base
@@ -21,11 +21,9 @@ class User(Base):
     verification_token_hash = Column(String(255), nullable=True)
     verification_expires_at = Column(DateTime, nullable=True)
 
-    # Reset password lama
     reset_token_hash = Column(String(255), nullable=True)
     reset_expires_at = Column(DateTime, nullable=True)
 
-    # Reset password menggunakan kode 6 digit
     reset_code_hash = Column(String(255), nullable=True)
     reset_code_expires_at = Column(DateTime, nullable=True)
 
@@ -36,3 +34,39 @@ class User(Base):
     )
 
     last_login = Column(DateTime, nullable=True)
+
+
+class ChatAIHistory(Base):
+    __tablename__ = "chat_ai_histories"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True
+    )
+
+    session_id = Column(
+        String(100),
+        nullable=True,
+        index=True
+    )
+
+    user_message = Column(
+        String,
+        nullable=False
+    )
+
+    ai_reply = Column(
+        String,
+        nullable=False
+    )
+
+    created_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        nullable=False,
+        index=True
+    )
