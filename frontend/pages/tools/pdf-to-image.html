@@ -644,7 +644,7 @@
         }
 
         try {
-          const response = await fetch("${API_BASE_URL}/api/pdf-to-image", {
+          const response = await fetch(`${API_BASE_URL}/api/pdf-to-image`, {
             method: "POST",
             body: formData
           });
@@ -693,3 +693,4 @@
   </script>
 </body>
 </html>
+

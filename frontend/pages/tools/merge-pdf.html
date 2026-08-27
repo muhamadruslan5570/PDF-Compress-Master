@@ -627,7 +627,7 @@
         });
 
         try {
-          const response = await fetch("${API_BASE_URL}/api/merge-pdf", {
+          const response = await fetch(`${API_BASE_URL}/api/merge-pdf`, {
             method: "POST",
             body: formData
           });
@@ -668,3 +668,4 @@
   </script>
 </body>
 </html>
+

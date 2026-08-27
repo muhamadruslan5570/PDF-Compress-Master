@@ -538,7 +538,7 @@
         formData.append("file", selectedFile);
 
         try {
-          const response = await fetch("${API_BASE_URL}/api/word-to-pdf", {
+          const response = await fetch(`${API_BASE_URL}/api/word-to-pdf`, {
             method: "POST",
             body: formData
           });
@@ -581,3 +581,4 @@
   </script>
 </body>
 </html>
+
