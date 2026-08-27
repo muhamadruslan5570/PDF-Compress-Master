@@ -41,6 +41,7 @@ app.add_middleware(
         "http://127.0.0.1:8000",
         "http://localhost:8000",
         "https://pdf-compress-master.pages.dev",
+        "https://mr-tool-ai.netlify.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -64,6 +65,8 @@ def root():
         "status": "online",
         "service": "MR Compress PDF API"
     }
+
+
 
 
 

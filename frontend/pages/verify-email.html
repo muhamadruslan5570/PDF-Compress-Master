@@ -323,6 +323,7 @@
       }
     }
   </style>
+  <script src="/js/api-config.js"></script>
 </head>
 
 <body>
@@ -468,23 +469,6 @@
     const timerEl = document.getElementById('timer');
     const emailEl = document.getElementById('userEmail');
 
-    /*
-      DEMO / FRONTEND PLACEHOLDER
-
-      The production flow will receive the email address and verification
-      state from the backend. The actual verification code must NEVER be
-      hard-coded in frontend JavaScript.
-
-      Production API flow:
-        POST /api/auth/verify-email
-        body: { email, code }
-
-      Resend:
-        POST /api/auth/resend-verification
-        body: { email }
-    */
-
-    // Temporary UI-only email display.
     const params = new URLSearchParams(window.location.search);
     const emailFromUrl = params.get('email');
 
@@ -548,12 +532,18 @@
       });
     });
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const code = inputs.map(input => input.value).join('');
+      const email = new URLSearchParams(window.location.search).get('email');
 
-      if (code.length !== 6) {
+      if (!email) {
+        showError('Email tidak ditemukan. Silakan daftar kembali.');
+        return;
+      }
+
+      if (code.length !== 6 || !/^\d{6}$/.test(code)) {
         showError('Please enter the complete 6-digit verification code.');
         return;
       }
@@ -561,21 +551,50 @@
       button.disabled = true;
       button.textContent = 'Verifying...';
 
-      /*
-        DEMO ONLY:
-        This simulates a successful backend response.
-        Replace this block with a real fetch() request to the API.
-      */
-      setTimeout(() => {
-        showSuccess('Email verified successfully. Redirecting to your Free Dashboard...');
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/auth/verify-email`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email,
+              code: code
+            })
+          }
+        );
 
-        // Production:
-        // window.location.href = '/pages/dashboard.html';
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail || 'Verification failed.'
+          );
+        }
+
+        showSuccess(
+          data.message ||
+          'Email verified successfully. Redirecting...'
+        );
 
         setTimeout(() => {
-          window.location.href = '/pages/dashboard.html';
-        }, 900);
-      }, 700);
+          window.location.href = '/pages/login.html';
+        }, 1200);
+
+      } catch (error) {
+        console.error('Verification error:', error);
+
+        showError(
+          error.message ||
+          'Failed to connect to the server.'
+        );
+
+        button.disabled = false;
+        button.textContent = 'Verify Email';
+      }
     });
 
     let countdown = 60;
@@ -598,20 +617,37 @@
       }, 1000);
     }
 
-    resendButton.addEventListener('click', () => {
-      /*
-        Production:
-        fetch('/api/auth/resend-verification', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ email: emailEl.textContent })
-        });
-      */
+    resendButton.addEventListener('click', async () => {
+      const email = new URLSearchParams(window.location.search).get('email');
+      if (!email) {
+        showError('Email tidak ditemukan.');
+        return;
+      }
 
       resendButton.disabled = true;
-      showSuccess('A new verification code has been requested. Please check your email.');
 
-      startCountdown();
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/resend-verification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || 'Failed to resend code.');
+        }
+
+        showSuccess(data.message || 'A new verification code has been sent.');
+        startCountdown();
+      } catch (err) {
+        showError(err.message || 'Failed to resend code.');
+        resendButton.disabled = false;
+      }
     });
 
     function showSuccess(text) {

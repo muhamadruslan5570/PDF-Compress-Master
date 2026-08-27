@@ -110,3 +110,5 @@ desktop.ini
 *.local
 *.local.*
 "@ | Set-Content ".gitignore" -Encoding UTF8
+# Local Netlify folder
+.netlify

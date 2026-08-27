@@ -1,14 +1,42 @@
 ﻿import os
 import smtplib
+from pathlib import Path
 from email.message import EmailMessage
 from dotenv import load_dotenv
 
-load_dotenv()
+# ============================================================
+# LOAD .ENV SECARA ABSOLUTE
+# ============================================================
 
-SMTP_HOST = os.getenv("SMTP_HOST")
+BASE_DIR = Path(__file__).resolve().parents[2]
+ENV_FILE = BASE_DIR / ".env"
+
+load_dotenv(ENV_FILE, override=True)
+
+SMTP_HOST = os.getenv("SMTP_HOST", "").strip()
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USERNAME = os.getenv("SMTP_USERNAME")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
+SMTP_USERNAME = os.getenv("SMTP_USERNAME", "").strip()
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "").strip()
+
+
+def _send_email(message: EmailMessage):
+    if not SMTP_HOST:
+        raise RuntimeError(
+            f"SMTP_HOST belum dikonfigurasi. ENV: {ENV_FILE}"
+        )
+
+    if not SMTP_USERNAME:
+        raise RuntimeError("SMTP_USERNAME belum dikonfigurasi.")
+
+    if not SMTP_PASSWORD:
+        raise RuntimeError("SMTP_PASSWORD belum dikonfigurasi.")
+
+    with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=30) as server:
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.send_message(message)
 
 
 def send_verification_email(
@@ -23,8 +51,7 @@ def send_verification_email(
     message["To"] = recipient_email
 
     message.set_content(
-        f"""
-Halo {recipient_name},
+        f"""Halo {recipient_name},
 
 Terima kasih telah membuat akun di MR Compress PDF.
 
@@ -43,10 +70,8 @@ MR Compress PDF
 """
     )
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(message)
+    _send_email(message)
+
 
 def send_reset_password_email(
     recipient_email: str,
@@ -60,8 +85,7 @@ def send_reset_password_email(
     message["To"] = recipient_email
 
     message.set_content(
-        f"""
-Halo {recipient_name},
+        f"""Halo {recipient_name},
 
 Kami menerima permintaan untuk mengatur ulang password akun MR Compress PDF Anda.
 
@@ -78,10 +102,7 @@ MR Compress PDF
 """
     )
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(message)
+    _send_email(message)
 
 
 def send_reset_code_email(
@@ -96,8 +117,7 @@ def send_reset_code_email(
     message["To"] = recipient_email
 
     message.set_content(
-        f"""
-Halo {recipient_name},
+        f"""Halo {recipient_name},
 
 Kami menerima permintaan untuk mengatur ulang password akun MR Compress PDF Anda.
 
@@ -107,7 +127,7 @@ Kode Reset Password Anda:
 
 Masukkan kode tersebut pada halaman Reset Password.
 
-Kode ini berlaku selama 1 jam.
+Kode ini berlaku selama 10 menit.
 
 Jika Anda tidak meminta reset password, abaikan email ini.
 
@@ -116,7 +136,4 @@ MR Compress PDF
 """
     )
 
-    with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-        server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(message)
+    _send_email(message)

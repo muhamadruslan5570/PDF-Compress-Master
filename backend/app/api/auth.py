@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request
+﻿from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.orm import Session
@@ -304,9 +304,65 @@ def verify_email(
 
 
 # ============================================================
-# LOGIN
+# RESEND VERIFICATION EMAIL
 # ============================================================
 
+class ResendVerificationRequest(BaseModel):
+    email: EmailStr
+
+
+class ResendVerificationResponse(BaseModel):
+    message: str
+
+
+@router.post(
+    "/resend-verification",
+    response_model=ResendVerificationResponse
+)
+def resend_verification(
+    data: ResendVerificationRequest,
+    db: Session = Depends(get_db)
+):
+    email = data.email.lower().strip()
+
+    user = (
+        db.query(User)
+        .filter(User.email == email)
+        .first()
+    )
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="Email tidak ditemukan."
+        )
+
+    if user.is_verified:
+        return ResendVerificationResponse(
+            message="Email sudah diverifikasi."
+        )
+
+    (
+        verification_code,
+        verification_code_hash,
+        verification_expires_at
+    ) = create_verification_token()
+
+    user.verification_token_hash = verification_code_hash
+    user.verification_expires_at = verification_expires_at
+
+    db.commit()
+    db.refresh(user)
+
+    send_verification_email(
+        recipient_email=user.email,
+        recipient_name=user.name,
+        verification_code=verification_code
+    )
+
+    return ResendVerificationResponse(
+        message="Kode verifikasi baru telah dikirim ke email Anda."
+    )
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
@@ -640,6 +696,10 @@ def reset_password(
     return ResetPasswordResponse(
         message="Password berhasil diubah."
     )
+
+
+
+
 
 
 
