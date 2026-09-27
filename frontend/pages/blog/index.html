@@ -1,742 +1,1284 @@
 ﻿<!DOCTYPE html>
-<html lang="id" data-theme="dark">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Encoding" content="IE=edge">
 
-  <title>Blogspot Magazine &mdash; PDF Master AI</title>
-  <meta name="description" content="Pusat informasi, artikel, dan tutorial seputar pengolahan PDF dan AI.">
+  <!-- SEO PRIMARY METADATA -->
+  <title>Blog Mr Tools AI â€” Informasi & Tutorial Praktis Pekerjaan Digital</title>
+  <meta name="description" content="Pusat panduan, artikel teknologi, AI, bisnis, produktivitas, dan pemrograman dari Mr Tools AI untuk membantu efisiensi pekerjaan dan aktivitas harian Anda.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="Mr Tools AI">
+  <meta name="keywords" content="Mr Tools AI, blog teknologi, tutorial AI, produktivitas digital, pemrograman, bisnis online, panduan dokumen">
+
+  <!-- CANONICAL URL PLACEHOLDER -->
+  <link rel="canonical" href="https://mrtools.ai/pages/blog/">
+
+  <!-- OPEN GRAPH / FACEBOOK -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mrtools.ai/pages/blog/">
+  <meta property="og:title" content="Blog Mr Tools AI â€” Panduan & Informasi Pekerjaan Digital">
+  <meta property="og:description" content="Temukan artikel praktis seputar teknologi, artificial intelligence, produktivitas, dan solusi digital terkini di Mr Tools AI.">
+  <meta property="og:image" content="../../assets/images/logo.png">
+  <meta property="og:locale" content="id_ID">
+  <meta property="og:site_name" content="Mr Tools AI">
+
+  <!-- TWITTER CARD -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://mrtools.ai/pages/blog/">
+  <meta name="twitter:title" content="Blog Mr Tools AI â€” Panduan & Informasi Pekerjaan Digital">
+  <meta name="twitter:description" content="Temukan artikel praktis seputar teknologi, AI, produktivitas, dan solusi digital di Mr Tools AI.">
+  <meta name="twitter:image" content="../../assets/images/logo.png">
 
   <!-- FAVICON -->
   <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
   <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
 
+  <!-- SCHEMA.ORG JSON-LD FOR WEBSITE & SEARCHACTION -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://mrtools.ai/#website",
+        "url": "https://mrtools.ai/",
+        "name": "Mr Tools AI",
+        "description": "Smart AI & Document Workspace",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Mr Tools AI",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://mrtools.ai/assets/images/logo.png"
+          }
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://mrtools.ai/pages/blog/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Blog",
+        "@id": "https://mrtools.ai/pages/blog/#blog",
+        "url": "https://mrtools.ai/pages/blog/",
+        "name": "Blog Mr Tools AI",
+        "description": "Informasi, Tutorial, dan Artikel Seputar Teknologi, AI, dan Produktivitas Pekerjaan",
+        "isPartOf": {
+          "@id": "https://mrtools.ai/#website"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- CONFIG BASE URL BACKEND -->
+  <script src="../../js/api-config.js"></script>
+
   <style>
+    /* STYLE IDENTIK DENGAN PROYEK MR TOOLS AI */
     :root {
-      /* Background Warna Asli (Dipertahankan) */
-      --bg-primary: #07111f;
-      --bg-secondary: #0c1424;
-      --bg-tertiary: #111c2e;
-      --bg-surface: #162338;
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
 
-      --border-color: #1e293b;
-      --border-hover: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
 
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
 
-      --accent-color: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-light: rgba(59, 130, 246, 0.12);
-
-      --sidebar-width: 280px;
-      --header-height: 65px;
-      --radius-sm: 8px;
-      --radius-md: 14px;
-      --radius-lg: 24px;
-      --radius-pill: 999px;
-
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --header-height: 72px;
+      --radius: 14px;
+      --max: 1200px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background-color: var(--bg-primary); color: var(--text-primary); overflow: hidden; line-height: 1.6; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; color: inherit; border: none; outline: none; background: transparent; }
-    button { cursor: pointer; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-    .app-container { display: flex; width: 100vw; height: 100vh; position: relative; }
-
-    /* SIDEBAR UTAMA APLIKASI */
-    .sidebar {
-      width: var(--sidebar-width);
-      background-color: var(--bg-secondary);
-      border-right: 1px solid var(--border-color);
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      z-index: 100;
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      flex-shrink: 0;
-      padding: 12px 14px;
     }
 
-    .sidebar-header {
-      padding: 8px 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, opacity 0.2s ease;
     }
 
-    .brand-logo { display: inline-flex; align-items: center; }
-    .site-logo { display: block; width: 140px; height: auto; max-height: 42px; object-fit: contain; }
-
-    .btn-new-chat {
-      margin-bottom: 20px;
-      padding: 12px 20px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      border-radius: var(--radius-pill);
-      font-weight: 600;
-      font-size: 13.5px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
-      width: fit-content;
-      box-shadow: var(--shadow-sm);
-    }
-    .btn-new-chat:hover { 
-      background: var(--bg-tertiary); 
-      border-color: var(--accent-color); 
-      color: var(--accent-color); 
-      transform: translateY(-1px);
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 3px;
     }
 
-    .sidebar-content { 
-      flex: 1; 
-      overflow-y: auto; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 16px; 
+    button, input, select {
+      font: inherit;
     }
 
-    .section-title { 
-      font-size: 11px; 
-      letter-spacing: 0.05em; 
-      color: var(--text-muted); 
-      font-weight: 700; 
-      padding: 0 12px; 
-      margin-bottom: 4px; 
-    }
-
-    .menu-list { display: flex; flex-direction: column; gap: 2px; }
-    
-    .menu-link {
-      padding: 10px 16px;
-      border-radius: var(--radius-pill);
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: all 0.2s ease;
-      font-weight: 500;
-    }
-    .menu-link:hover, .menu-link.active { 
-      background: var(--bg-tertiary); 
-      color: var(--text-primary); 
-    }
-    .menu-link.active {
-      font-weight: 700;
-      color: var(--accent-color);
-    }
-    .menu-icon { 
-      width: 20px; 
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-    }
-
-    .sidebar-footer {
-      padding-top: 12px;
-      border-top: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .user-profile { 
-      display: flex; 
-      align-items: center; 
-      gap: 12px; 
-      min-width: 0; 
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: var(--radius-pill);
-      transition: background 0.2s;
-    }
-    .user-profile:hover { background: var(--bg-tertiary); }
-
-    .user-avatar { 
-      width: 34px; height: 34px; 
-      border-radius: 50%; 
-      background: var(--accent-color); 
-      color: #fff; font-weight: 700; 
-      display: flex; align-items: center; justify-content: center; 
-      font-size: 13px; flex-shrink: 0;
-      background-size: cover; background-position: center; overflow: hidden;
-    }
-    .user-meta { min-width: 0; flex: 1; }
-    .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .user-plan { font-size: 11px; color: var(--text-muted); }
-
-    /* MAIN WRAPPER */
-    .main-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; background: var(--bg-primary); min-width: 0; }
-
-    /* HEADER */
-    .chat-header {
-      height: var(--header-height);
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(7, 17, 31, 0.75);
-      backdrop-filter: blur(12px);
-      z-index: 10;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
-    .mobile-toggle { display: none; width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--border-color); background: var(--bg-tertiary); align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-
-    .chat-title-box { min-width: 0; }
-    .chat-title-box h2 { font-size: 16px; font-weight: 700; background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    /* BLOGSPOT LAYOUT STRUCTURE */
-    .blogspot-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 28px 24px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .blogspot-layout {
-      width: min(100%, 1100px);
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 28px;
-    }
-
-    /* BLOG HEADER / BLOGSPOT HERO */
-    .blogspot-header-banner {
-      grid-column: 1 / -1;
-      border-bottom: 2px solid var(--border-color);
-      padding-bottom: 16px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .blogspot-header-banner h1 {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-    }
-    .blogspot-header-banner p {
-      font-size: 13.5px;
-      color: var(--text-secondary);
-    }
-
-    /* MAIN FEED ARTICLES (LEFT COLUMN) */
-    .main-feed {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .blogspot-post-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 20px;
-      display: flex;
-      gap: 20px;
-      transition: all 0.2s ease;
+    button {
       cursor: pointer;
     }
-    .blogspot-post-card:hover {
-      border-color: var(--accent-color);
-      background: var(--bg-surface);
-      box-shadow: var(--shadow-md);
+
+    .container {
+      width: min(100% - 40px, var(--max));
+      margin: 0 auto;
     }
 
-    .post-thumb {
-      width: 200px;
-      height: 130px;
-      border-radius: var(--radius-sm);
-      background-size: cover;
-      background-position: center;
-      background-color: var(--bg-tertiary);
-      flex-shrink: 0;
-    }
-
-    .post-details {
+    /* HEADER / NAVBAR */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      flex: 1;
-      min-width: 0;
+      align-items: center;
+      background: rgba(7, 17, 31, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
     }
 
-    .post-category-tag {
+    .header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100% - 40px, var(--max));
+      margin: 0 auto;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .blog-tag {
       font-size: 11px;
       font-weight: 700;
-      color: var(--accent-color);
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
-    .post-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.35;
-      margin: 4px 0 6px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .post-snippet {
-      font-size: 13px;
-      color: var(--text-secondary);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 8px;
-    }
-
-    .post-meta-footer {
-      font-size: 11.5px;
-      color: var(--text-muted);
+    .nav-links {
       display: flex;
       align-items: center;
-      gap: 12px;
-    }
-
-    /* BLOGSPOT SIDEBAR WIDGETS (RIGHT COLUMN) */
-    .blogspot-sidebar-widgets {
-      display: flex;
-      flex-direction: column;
       gap: 24px;
+      list-style: none;
     }
 
-    .widget-box {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 18px;
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--muted);
     }
 
-    .widget-title {
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-primary);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
-      border-bottom: 2px solid var(--accent-color);
+    .nav-link:hover, .nav-link.active {
+      color: var(--text);
     }
 
-    /* SEARCH WIDGET */
-    .search-widget-input {
-      width: 100%;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-hover);
-      border-radius: var(--radius-pill);
-      padding: 9px 16px;
-      font-size: 13px;
-      color: var(--text-primary);
-    }
-    .search-widget-input:focus {
-      border-color: var(--accent-color);
-    }
-
-    /* POPULAR POSTS WIDGET */
-    .popular-posts-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .popular-item {
+    .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
-      cursor: pointer;
-    }
-    .popular-item:hover .popular-title { color: var(--accent-color); }
-
-    .popular-num {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text-muted);
-      width: 24px;
-      text-align: center;
+      gap: 16px;
     }
 
-    .popular-info {
+    .auth-buttons {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
-      min-width: 0;
+      align-items: center;
+      gap: 10px;
     }
 
-    .popular-title {
+    .btn-secondary-sm {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
       font-size: 13px;
       font-weight: 600;
-      color: var(--text-primary);
+    }
+
+    .btn-secondary-sm:hover {
+      border-color: var(--border-light);
+      background: var(--surface-3);
+    }
+
+    .btn-primary-sm {
+      padding: 8px 14px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .btn-primary-sm:hover {
+      background: var(--primary-hover);
+    }
+
+    /* USER PROFILE MENU DENGAN PERSAMAAN CHAT AI */
+    .user-menu {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px 5px 5px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 110px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: color 0.2s;
     }
 
-    .popular-date {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* CATEGORY LABELS WIDGET */
-    .labels-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .label-chip {
-      font-size: 11.5px;
-      padding: 5px 12px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-pill);
-      color: var(--text-secondary);
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .label-chip:hover, .label-chip.active {
-      background: var(--accent-light);
-      border-color: var(--accent-color);
-      color: var(--accent-color);
-    }
-
-    .sidebar-overlay {
+    .mobile-menu-btn {
       display: none;
-      position: fixed; inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      z-index: 90; backdrop-filter: blur(2px);
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 20px;
     }
 
-    /* RESPONSIVE MEDIA QUERIES */
-    @media (max-width: 960px) {
-      .blogspot-layout { grid-template-columns: 1fr; }
+    /* MAIN CONTENT WRAPPER */
+    main {
+      margin-top: var(--header-height);
+      flex: 1;
     }
 
-    @media (max-width: 820px) {
-      .sidebar { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
-      .sidebar.is-open { transform: translateX(0); }
-      .sidebar-overlay.is-open { display: block; }
-      .mobile-toggle { display: flex; }
-      .blogspot-body { padding: 18px 14px; }
-      .chat-header { padding: 0 16px; }
+    /* HERO SECTION */
+    .hero-section {
+      padding: 60px 0 40px;
+      background: linear-gradient(180deg, rgba(59, 130, 246, 0.08) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
     }
 
-    @media (max-width: 540px) {
-      .blogspot-post-card { flex-direction: column; }
-      .post-thumb { width: 100%; height: 160px; }
+    .hero-content {
+      max-width: 780px;
+      margin: 0 auto;
     }
-  </style>
-<script src="../../js/api-config.js"></script>
-</head>
-<body>
 
-<div class="app-container">
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
 
-  <!-- OVERLAY MOBILE -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+    }
 
-  <!-- SIDEBAR UTAMA APLIKASI -->
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI &mdash; Home">
-        <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
-      </a>
-    </div>
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
 
-    <a href="../ai/chat-ai.html" class="btn-new-chat">
-      <span style="font-size:18px;">+</span>
-      <span>Chat Baru</span>
-    </a>
+    .hero-desc {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
 
-    <div class="sidebar-content">
-      <div>
-        <div class="section-title">Menu Utama</div>
-        <div class="menu-list">
-          <a href="../dashboard.html" class="menu-link"><span class="menu-icon">&#127968;</span><span>Dashboard</span></a>
-          <a href="../tools/all-tools.html" class="menu-link"><span class="menu-icon">&#128194;</span><span>PDF Tools</span></a>
-          <a href="/pages/ai/history-chat-ai.html" class="menu-link"><span class="menu-icon">&#9200;</span><span>Riwayat Chat AI</span></a>
-          <a href="index.html" class="menu-link active"><span class="menu-icon">&#128240;</span><span>Blog & Tips</span></a>
-          <a href="../settings.html" class="menu-link"><span class="menu-icon">&#9881;</span><span>Pengaturan</span></a>
-        </div>
-      </div>
-    </div>
+    .search-form {
+      display: flex;
+      align-items: center;
+      max-width: 580px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
 
-    <div class="sidebar-footer">
-      <div class="user-profile">
-        <div class="user-avatar" id="sidebarAvatar">U</div>
-        <div class="user-meta">
-          <div class="user-name" id="sidebarUserName">User</div>
-          <div class="user-plan" id="sidebarUserPlan">FREE Plan</div>
-        </div>
-      </div>
-    </div>
-  </aside>
+    .search-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
 
-  <!-- MAIN WRAPPER -->
-  <main class="main-wrapper">
+    .search-input::placeholder {
+      color: var(--muted-2);
+    }
 
-    <!-- HEADER -->
-    <header class="chat-header">
-      <div class="header-left">
-        <button class="mobile-toggle" id="mobileToggle" aria-label="Open Sidebar">&#9776;</button>
-        <div class="chat-title-box">
-          <h2>PDF Master AI Blog</h2>
-        </div>
-      </div>
-    </header>
+    .search-btn {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
 
-    <!-- BLOGSPOT BODY CONTAINER -->
-    <section class="blogspot-body">
-      <div class="blogspot-layout">
+    .search-btn:hover {
+      background: var(--primary-hover);
+    }
 
-        <!-- HEADER BANNER BLOGSPOT -->
-        <div class="blogspot-header-banner">
-          <div>
-            <h1>PDF Master Journal</h1>
-            <p>Berita, tutorial lengkap, dan kabar seputar kecerdasan buatan.</p>
-          </div>
-        </div>
+    /* GENERAL SECTION STYLES */
+    .section-padding {
+      padding: 50px 0;
+    }
 
-        <!-- LEFT COLUMN: MAIN POSTS FEED -->
-        <main class="main-feed" id="mainFeed">
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
 
-          <!-- POST 1 -->
-          <article class="blogspot-post-card" data-category="PDF Compression" onclick="alert('Membuka artikel...')">
-            <div class="post-thumb" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80');"></div>
-            <div class="post-details">
-              <div>
-                <span class="post-category-tag">PDF Compression</span>
-                <h2 class="post-title">Teknik Terbaik Kompres PDF Besar Tanpa Kehilangan Resolusi Teks</h2>
-                <p class="post-snippet">Mengompres file PDF dokumen seringkali membuat teks menjadi buram. Ketahui cara mengatasinya secara efisien di sini.</p>
-              </div>
-              <div class="post-meta-footer">
-                <span>Diposting oleh Admin</span>
-                <span>&bull;</span>
-                <span>25 Agustus 2026</span>
-              </div>
-            </div>
-          </article>
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 6px;
+    }
 
-          <!-- POST 2 -->
-          <article class="blogspot-post-card" data-category="Tips AI" onclick="alert('Membuka artikel...')">
-            <div class="post-thumb" style="background-image: url('https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&w=500&q=80');"></div>
-            <div class="post-details">
-              <div>
-                <span class="post-category-tag">Tips AI</span>
-                <h2 class="post-title">Cara Praktis Mengekstrak Data dari Dokumen Laporan Keuangan 50 Halaman</h2>
-                <p class="post-snippet">Gunakan fitur kecerdasan buatan PDF Master AI untuk merangkum serta mencari insight angka dalam seketika.</p>
-              </div>
-              <div class="post-meta-footer">
-                <span>Diposting oleh AI Team</span>
-                <span>&bull;</span>
-                <span>23 Agustus 2026</span>
-              </div>
-            </div>
-          </article>
+    .section-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
 
-          <!-- POST 3 -->
-          <article class="blogspot-post-card" data-category="Tutorial" onclick="alert('Membuka artikel...')">
-            <div class="post-thumb" style="background-image: url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=500&q=80');"></div>
-            <div class="post-details">
-              <div>
-                <span class="post-category-tag">Tutorial</span>
-                <h2 class="post-title">Panduan Lengkap Menggabungkan Banyak File PDF Menjadi Satu Dokumen Rapi</h2>
-                <p class="post-snippet">Langkah demi langkah menyatukan file terpisah tanpa mengacaukan urutan halaman dan format font asli.</p>
-              </div>
-              <div class="post-meta-footer">
-                <span>Diposting oleh Support</span>
-                <span>&bull;</span>
-                <span>20 Agustus 2026</span>
-              </div>
-            </div>
-          </article>
+    .view-all-link {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
-        </main>
+    .view-all-link:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
 
-        <!-- RIGHT COLUMN: BLOGSPOT SIDEBAR WIDGETS -->
-        <aside class="blogspot-sidebar-widgets">
+    /* GRID & CARDS */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
 
-          <!-- WIDGET SEARCH -->
-          <div class="widget-box">
-            <div class="widget-title">Cari Artikel</div>
-            <input type="text" id="widgetSearchInput" class="search-widget-input" placeholder="Ketik kata kunci...">
-          </div>
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
 
-          <!-- WIDGET POPULAR POSTS -->
-          <div class="widget-box">
-            <div class="widget-title">Artikel Populer</div>
-            <div class="popular-posts-list">
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-light);
+    }
 
-              <div class="popular-item" onclick="alert('Membuka artikel populer 1...')">
-                <div class="popular-num">1</div>
-                <div class="popular-info">
-                  <div class="popular-title">Kompres PDF Gratis 100% Aman</div>
-                  <div class="popular-date">18 Agustus 2026</div>
-                </div>
-              </div>
+    .card-image-wrap {
+      width: 100%;
+      height: 180px;
+      background: var(--surface-3);
+      position: relative;
+      overflow: hidden;
+    }
 
-              <div class="popular-item" onclick="alert('Membuka artikel populer 2...')">
-                <div class="popular-num">2</div>
-                <div class="popular-info">
-                  <div class="popular-title">Cara Mengunci PDF Dengan Password</div>
-                  <div class="popular-date">15 Agustus 2026</div>
-                </div>
-              </div>
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-              <div class="popular-item" onclick="alert('Membuka artikel populer 3...')">
-                <div class="popular-num">3</div>
-                <div class="popular-info">
-                  <div class="popular-title">Prompt AI Efektif Untuk Analisis Dokumen</div>
-                  <div class="popular-date">10 Agustus 2026</div>
-                </div>
-              </div>
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(7, 17, 31, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-light);
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 99px;
+      text-transform: uppercase;
+    }
 
-            </div>
-          </div>
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
 
-          <!-- WIDGET LABELS / CATEGORIES -->
-          <div class="widget-box">
-            <div class="widget-title">Kategori Artikel</div>
-            <div class="labels-list" id="labelsList">
-              <span class="label-chip active" data-cat="all">Semua</span>
-              <span class="label-chip" data-cat="PDF Compression">PDF Compression</span>
-              <span class="label-chip" data-cat="Tips AI">Tips AI</span>
-              <span class="label-chip" data-cat="Tutorial">Tutorial</span>
-            </div>
-          </div>
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.4;
 
-        </aside>
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-      </div>
-    </section>
+    .card-title a:hover {
+      color: var(--primary);
+    }
 
-  </main>
-</div>
+    .card-excerpt {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+      flex: 1;
 
-<script>
-  (() => {
-    
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-    const mobileToggle = document.getElementById('mobileToggle');
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      font-size: 11px;
+      color: var(--muted-2);
+    }
 
-    const sidebarAvatar = document.getElementById('sidebarAvatar');
-    const sidebarUserName = document.getElementById('sidebarUserName');
-    const sidebarUserPlan = document.getElementById('sidebarUserPlan');
+    .card-link {
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 12px;
+    }
 
-    const widgetSearchInput = document.getElementById('widgetSearchInput');
-    const postCards = document.querySelectorAll('.blogspot-post-card');
-    const labelChips = document.querySelectorAll('.label-chip');
+    /* FEATURED ARTICLE LAYOUT */
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
 
-    // LOAD PROFILE USER & FOTO PROFIL
-    async function loadUserProfile() {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`);
-        if (!response.ok) return;
+    .featured-image-wrap {
+      min-height: 320px;
+      background: var(--surface-3);
+      position: relative;
+    }
 
-        const data = await response.json();
-        const name = data.name || 'User';
-        const plan = data.plan || 'FREE';
-        const firstLetter = name.charAt(0).toUpperCase();
+    .featured-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        if (sidebarUserName) sidebarUserName.textContent = name;
-        if (sidebarUserPlan) sidebarUserPlan.textContent = `${plan} Plan`;
+    .featured-body {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        if (data.avatar_url) {
-          const fullAvatarUrl = data.avatar_url.startsWith('http')
-            ? data.avatar_url
-            : `${API_BASE_URL}${data.avatar_url}?t=${new Date().getTime()}`;
+    .featured-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin: 12px 0;
+      line-height: 1.3;
+    }
 
-          if (sidebarAvatar) {
-            sidebarAvatar.style.backgroundImage = `url('${fullAvatarUrl}')`;
-            sidebarAvatar.textContent = '';
-          }
-        } else {
-          if (sidebarAvatar) {
-            sidebarAvatar.style.backgroundImage = 'none';
-            sidebarAvatar.textContent = firstLetter;
-          }
-        }
-      } catch (err) {
-        console.warn('Gagal memuat profil:', err);
+    .featured-excerpt {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    /* CATEGORIES GRID */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .category-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-card:hover {
+      background: var(--surface-2);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .category-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .category-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* POPULAR ARTICLES (COMPACT ROW DESIGN) */
+    .popular-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .popular-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+
+    .popular-card:hover {
+      border-color: var(--border-light);
+    }
+
+    .popular-thumb {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      background: var(--surface-3);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .popular-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .popular-category {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .popular-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin: 4px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* AI CTA SECTION */
+    .ai-cta-card {
+      background: linear-gradient(135deg, var(--surface-2) 0%, #162338 100%);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .ai-cta-text h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .ai-cta-text p {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 600px;
+    }
+
+    .btn-ai-cta {
+      padding: 12px 24px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+
+    .btn-ai-cta:hover {
+      background: var(--primary-hover);
+    }
+
+    /* NEWSLETTER SECTION */
+    .newsletter-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 10px;
+      max-width: 480px;
+      margin: 20px auto 0;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      padding: 10px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .newsletter-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* FOOTER */
+    .site-footer {
+      background: #0c1424;
+      border-top: 1px solid var(--border);
+      padding-top: 50px;
+      margin-top: 50px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr);
+      gap: 30px;
+      padding-bottom: 40px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+      max-width: 280px;
+    }
+
+    .footer-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted-2);
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 1024px) {
+      .blog-grid { grid-template-columns: repeat(2, 1fr); }
+      .category-grid { grid-template-columns: repeat(4, 1fr); }
+      .footer-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links, .auth-buttons { display: none; }
+      .mobile-menu-btn { display: flex; }
+      
+      .hero-title { font-size: 26px; }
+      .featured-card { grid-template-columns: 1fr; }
+      .featured-image-wrap { height: 200px; min-height: auto; }
+      .category-grid { grid-template-columns: repeat(2, 1fr); }
+      .popular-grid { grid-template-columns: 1fr; }
+      
+      .ai-cta-card {
+        flex-direction: column;
+        text-align: center;
+        align-items: stretch;
+      }
+      
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
       }
     }
 
-    // TOGGLE MOBILE SIDEBAR
-    function toggleSidebar() {
-      sidebar.classList.toggle('is-open');
-      sidebarOverlay.classList.toggle('is-open');
+    @media (max-width: 480px) {
+      .container {
+        width: min(100% - 24px, var(--max));
+      }
+
+      .hero-title {
+        font-size: 23px;
+        line-height: 1.25;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .blog-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .card-image-wrap {
+        height: 190px;
+      }
+
+      .card-title {
+        font-size: 18px;
+      }
+
+      .card-excerpt {
+        font-size: 14px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
     }
-    if (mobileToggle) mobileToggle.addEventListener('click', toggleSidebar);
-    if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+  </style>
+    <script src="/js/auth-nav.js"></script>
+</head>
 
-    // WIDGET SEARCH FILTER LOGIC
-    if (widgetSearchInput) {
-      widgetSearchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
+<body>
 
-        postCards.forEach(card => {
-          const title = card.querySelector('.post-title').textContent.toLowerCase();
-          const snippet = card.querySelector('.post-snippet').textContent.toLowerCase();
-          const category = card.querySelector('.post-category-tag').textContent.toLowerCase();
+  <!-- HEADER / NAVBAR PUBLIK -->
+  <header class="site-header" role="banner">
+    <div class="header-container">
+      <a href="/pages/blog/index.html" class="brand-logo" aria-label="Mr Tools AI Blog Homepage">
+        <img src="../../assets/images/logo.png" alt="Mr Tools AI Logo" class="site-logo" width="140" height="45">
+        <span class="blog-tag">BLOG</span>
+      </a>
 
-          if (title.includes(query) || snippet.includes(query) || category.includes(query)) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
+      <nav aria-label="Navigasi Utama">
+        <ul class="nav-links">
+          <li><a href="/pages/blog/index.html" class="nav-link active">Beranda</a></li>
+          <li><a href="#kategori" class="nav-link">Kategori</a></li>
+          <li><a href="/pages/ai/chat-ai.html" class="nav-link">Chat AI</a></li>
+          <li><a href="/pages/tools/all-tools.html" class="nav-link">Tools</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <!-- PENGUNJUNG BELUM LOGIN -->
+        <div class="auth-buttons" id="authButtons">
+          <a href="/pages/login.html" class="btn-secondary-sm">Masuk</a>
+          <a href="/pages/register.html" class="btn-primary-sm">Daftar</a>
+        </div>
+
+        <!-- PENGUNJUNG SUDAH LOGIN (DENGAN PATTERN SAMA SEPERTI CHAT AI) -->
+        <div class="user-menu" id="userMenu" aria-label="Profil Pengguna">
+          <div class="avatar" id="headerAvatar" aria-hidden="true">U</div>
+          <div class="user-info">
+            <span class="user-name" id="headerUserName">User</span>
+          </div>
+        </div>
+
+        <button class="mobile-menu-btn" aria-label="Buka Menu Mobile" onclick="toggleMobileNav()">&#9776;</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT PUBLIK -->
+  <main id="main-content" role="main">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section" aria-labelledby="hero-heading">
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-dot" aria-hidden="true"></span>
+          <span>Pusat Panduan & Informasi Digital</span>
+        </div>
+        <h1 id="hero-heading" class="hero-title">Informasi yang Membantu Pekerjaan Anda</h1>
+        <p class="hero-desc">
+          Temukan berbagai panduan praktis, tutorial dokumen, wawasan AI, tips produktivitas, serta pembaruan teknologi untuk mendukung efisiensi harian Anda.
+        </p>
+
+        <!-- SEARCH BAR FORM -->
+        <form class="search-form" action="/pages/blog/index.html" method="GET" role="search">
+          <input type="search" name="q" id="blog-search-input" class="search-input" placeholder="ðŸ” Cari artikel, tutorial, atau topik..." aria-label="Cari artikel blog">
+          <button type="submit" class="search-btn">Cari</button>
+        </form>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <!-- ARTIKEL UNGGULAN SECTION -->
+      <section class="section-padding" aria-labelledby="featured-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="featured-heading" class="section-title">Artikel Unggulan</h2>
+            <p class="section-desc">Pilihan artikel utama dan rekomendasi penting minggu ini.</p>
+          </div>
+        </div>
+
+        <div id="featured-article-container">
+        </div>
+      </section>
+
+      <!-- JELAJAHI KATEGORI SECTION -->
+      <section id="kategori" class="section-padding" aria-labelledby="category-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="category-heading" class="section-title">Jelajahi Kategori</h2>
+            <p class="section-desc">Pilih topik sesuai dengan kebutuhan dan minat Anda.</p>
+          </div>
+        </div>
+
+        <div class="category-grid">
+          <a href="/pages/blog/index.html?category=teknologi" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128187;</div>
+            <span class="category-name">Teknologi</span>
+          </a>
+          <a href="/pages/blog/index.html?category=ai" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#10024;</div>
+            <span class="category-name">AI</span>
+          </a>
+          <a href="/pages/blog/index.html?category=pendidikan" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#127891;</div>
+            <span class="category-name">Pendidikan</span>
+          </a>
+          <a href="/pages/blog/index.html?category=bisnis" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128200;</div>
+            <span class="category-name">Bisnis</span>
+          </a>
+          <a href="/pages/blog/index.html?category=produktivitas" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#9889;</div>
+            <span class="category-name">Produktivitas</span>
+          </a>
+          <a href="/pages/blog/index.html?category=kreatif" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#127912;</div>
+            <span class="category-name">Kreatif</span>
+          </a>
+          <a href="/pages/blog/index.html?category=programming" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128400;</div>
+            <span class="category-name">Programming</span>
+          </a>
+          <a href="/pages/blog/index.html?category=administrasi" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128196;</div>
+            <span class="category-name">Administrasi</span>
+          </a>
+          <a href="/pages/blog/index.html?category=karier" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128188;</div>
+            <span class="category-name">Karier</span>
+          </a>
+          <a href="/pages/blog/index.html?category=tutorial" class="category-card">
+            <div class="category-icon" aria-hidden="true">&#128099;</div>
+            <span class="category-name">Tutorial</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- ARTIKEL TERBARU SECTION -->
+      <section class="section-padding" aria-labelledby="latest-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="latest-heading" class="section-title">Artikel Terbaru</h2>
+            <p class="section-desc">Publikasi dan pembaruan materi paling gres.</p>
+          </div>
+        </div>
+
+        <div class="blog-grid" id="latest-articles-container">
+      </div>
+      </section>
+
+      <!-- ARTIKEL POPULER SECTION -->
+      <section class="section-padding" aria-labelledby="popular-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="popular-heading" class="section-title">Artikel Populer</h2>
+            <p class="section-desc">Paling sering dibaca oleh pengunjung lain.</p>
+          </div>
+        </div>
+
+        <div class="popular-grid" id="popular-articles-container">
+        </div>
+      </section>
+
+      <!-- PILIHAN EDITOR SECTION -->
+      <section class="section-padding" aria-labelledby="editor-heading">
+        <div class="section-header">
+          <div>
+            <h2 id="editor-heading" class="section-title">Pilihan Editor</h2>
+            <p class="section-desc">Rekomendasi kurasi khusus dari tim redaksi.</p>
+          </div>
+        </div>
+
+        <div class="blog-grid" id="editor-articles-container">
+        </div>
+      </section>
+
+      <!-- AI ASSISTANT CTA SECTION -->
+      <section class="section-padding" aria-label="Bantuan Mr Tools AI">
+        <div class="ai-cta-card">
+          <div class="ai-cta-text">
+            <h2>Temukan Jawaban dengan Mr Tools AI</h2>
+            <p>Masih belum menemukan informasi yang Anda cari? Tanyakan kepada Mr Tools AI dan dapatkan bantuan untuk memahami berbagai topik dan pekerjaan secara instan.</p>
+          </div>
+          <a href="/pages/ai/chat-ai.html" class="btn-ai-cta">
+            <span>&#10024;</span> Tanya Mr Tools AI
+          </a>
+        </div>
+      </section>
+
+      <!-- NEWSLETTER SECTION -->
+      <section class="section-padding" aria-labelledby="newsletter-heading">
+        <div class="newsletter-card">
+          <h2 id="newsletter-heading" style="font-size: 20px; color: #fff; margin-bottom: 8px;">Dapatkan Informasi Terbaru</h2>
+          <p style="font-size: 13px; color: var(--muted);">Berlangganan newsletter kami untuk mendapatkan rangkuman artikel dan panduan digital terkini langsung ke email Anda.</p>
+          
+          <form class="newsletter-form" onsubmit="handleSubscribe(event)">
+            <input type="email" class="newsletter-input" placeholder="Masukkan alamat email Anda..." required aria-label="Email untuk berlangganan newsletter">
+            <button type="submit" class="btn-primary-sm" style="padding: 10px 20px;">Subscribe</button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER LENGKAP & PROFESIONAL -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        
+        <!-- BRAND INFO -->
+        <div class="footer-brand">
+          <a href="/pages/blog/index.html">
+            <img src="../../assets/images/logo.png" alt="Mr Tools AI Logo" width="130" height="40" loading="lazy">
+          </a>
+          <p>Pusat informasi, panduan praktis, dan alat bantu digital berbasis AI untuk meningkatkan produktivitas harian Anda.</p>
+        </div>
+
+        <!-- JELAJAHI -->
+        <div>
+          <h3 class="footer-title">Jelajahi</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/blog/index.html">Beranda</a></li>
+            <li><a href="#latest-heading">Artikel Terbaru</a></li>
+            <li><a href="#popular-heading">Artikel Populer</a></li>
+            <li><a href="#kategori">Kategori</a></li>
+          </ul>
+        </div>
+
+        <!-- KATEGORI -->
+        <div>
+          <h3 class="footer-title">Kategori</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/blog/index.html?category=teknologi">Teknologi</a></li>
+            <li><a href="/pages/blog/index.html?category=ai">AI</a></li>
+            <li><a href="/pages/blog/index.html?category=pendidikan">Pendidikan</a></li>
+            <li><a href="/pages/blog/index.html?category=bisnis">Bisnis</a></li>
+            <li><a href="/pages/blog/index.html?category=produktivitas">Produktivitas</a></li>
+            <li><a href="/pages/blog/index.html?category=programming">Programming</a></li>
+          </ul>
+        </div>
+
+        <!-- MR TOOLS AI WORKSPACE -->
+        <div>
+          <h3 class="footer-title">Mr Tools AI</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/ai/chat-ai.html">Chat AI</a></li>
+            <li><a href="/pages/ai/tools.html">AI Tools</a></li>
+            <li><a href="/pages/tools/all-tools.html">Semua Tools</a></li>
+          </ul>
+        </div>
+
+        <!-- INFORMASI & LEGAL -->
+        <div>
+          <h3 class="footer-title">Informasi</h3>
+          <ul class="footer-links">
+            <li><a href="/pages/about.html">Tentang Kami</a></li>
+            <li><a href="/pages/contact.html">Kontak</a></li>
+            <li><a href="/legal/privacy.html">Kebijakan Privasi</a></li>
+            <li><a href="/legal/terms.html">Ketentuan Layanan</a></li>
+            <li><a href="/legal/disclaimer.html">Disclaimer</a></li>
+            <li><a href="/legal/cookies.html">Kebijakan Cookie</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- COPYRIGHT -->
+      <div class="footer-bottom">
+        <p>&copy; 2026 Mr Tools AI. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- INTEGRASI API & SCRIPT INTERAKTIF -->
+  <script>
+    // 1. INTEGRASI DATA PROFIL USER DARI API PROFIL REAL
+    async function loadUserProfile() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+          method: 'GET',
+          credentials: 'include'
         });
+
+        if (response.ok) {
+          const data = await response.json();
+          const authButtons = document.getElementById('authButtons');
+          const userMenu = document.getElementById('userMenu');
+          const headerName = document.getElementById('headerUserName');
+          const headerAvatar = document.getElementById('headerAvatar');
+
+          if (authButtons) authButtons.style.display = 'none';
+          if (userMenu) userMenu.style.display = 'flex';
+
+          const name = data.name || data.email || 'User';
+          if (headerName) headerName.textContent = name;
+
+          if (data.avatar_url && headerAvatar) {
+            const fullAvatarUrl = data.avatar_url.startsWith('http')
+              ? data.avatar_url
+              : `${API_BASE_URL}${data.avatar_url}`;
+            headerAvatar.style.backgroundImage = `url('${fullAvatarUrl}')`;
+            headerAvatar.textContent = '';
+          } else if (headerAvatar) {
+            headerAvatar.textContent = name.charAt(0).toUpperCase();
+          }
+        }
+      } catch (err) {
+        // Mode Tamu / Pengunjung Publik (Abaikan jika gagal fetch/unauthenticated)
+        console.log('Mode pengunjung publik:', err);
+      }
+    }
+
+    // 2. FETCH ARTIKEL BLOG DARI ENDPOINT BACKEND (DENGAN FALLBACK JIKA API BELUM TERSEDIA)
+    async function loadBlogArticles() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/blog/posts?limit=20`, {
+          method: 'GET'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const articles = Array.isArray(data) ? data : (data.posts || []);
+          
+          // FILTER HANYA ARTIKEL DENGAN STATUS PUBLISHED
+          const publishedArticles = articles.filter(art => !art.status || art.status.toLowerCase() === 'published');
+
+          if (publishedArticles.length > 0) {
+            renderArticlesUI(publishedArticles);
+          }
+        }
+      } catch (err) {
+        console.log('Menggunakan data sampel/fallback publik.');
+      }
+    }
+
+    // FUNGSI MENGAMBIL DAN MENAMPILKAN DATA DINAMIS JIKA API SUDAH AKTIF
+    function renderArticlesUI(articles) {
+      const latestContainer = document.getElementById('latest-articles-container');
+      if (!latestContainer) return;
+
+      latestContainer.innerHTML = '';
+      articles.forEach(art => {
+        const cardHTML = `
+          <article class="card">
+            <div class="card-image-wrap">
+              <span class="card-badge">${art.category || 'UMUM'}</span>
+              <img src="${(art.featured_image ? `${API_BASE_URL}${art.featured_image}` : '../../assets/images/logo.png')}" alt="${art.title}" class="card-image" loading="lazy">
+            </div>
+            <div class="card-body">
+              <h3 class="card-title"><a href="/pages/blog/detail.html?slug=${art.slug || art.id}">${art.title}</a></h3>
+              <p class="card-excerpt">${art.excerpt || art.summary || ''}</p>
+              <div class="card-footer">
+                <time datetime="${art.created_at}">${art.created_at || 'Terbaru'}</time>
+                <a href="/pages/blog/detail.html?slug=${art.slug || art.id}" class="card-link">Baca Selengkapnya</a>
+              </div>
+            </div>
+          </article>
+        `;
+        latestContainer.insertAdjacentHTML('beforeend', cardHTML);
       });
     }
 
-    // CATEGORY LABEL FILTER LOGIC
-    labelChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        labelChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
+    // TODO: NEWSLETTER INTEGRATION WITH BACKEND
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Terima kasih telah berlangganan newsletter Mr Tools AI!');
+    }
 
-        const selectedCat = chip.getAttribute('data-cat');
+    // MOBILE MENU TOGGLE
+    function toggleMobileNav() {
+      const nav = document.querySelector('.nav-links');
+      if (nav) {
+        nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        nav.style.flexDirection = 'column';
+        nav.style.position = 'absolute';
+        nav.style.top = 'var(--header-height)';
+        nav.style.left = '0';
+        nav.style.right = '0';
+        nav.style.background = 'var(--surface)';
+        nav.style.padding = '20px';
+        nav.style.borderBottom = '1px solid var(--border)';
+      }
+    }
 
-        postCards.forEach(card => {
-          const cardCat = card.getAttribute('data-category');
-          if (selectedCat === 'all' || cardCat === selectedCat) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
+    // INISIALISASI
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfile();
+      loadBlogArticles();
     });
-
-    // JALANKAN PROFIL USER SAAT HALAMAN DIMUAT
-    loadUserProfile();
-
-  })();
-</script>
+  </script>
 </body>
 </html>
+
+
+
+
+
+
+
+

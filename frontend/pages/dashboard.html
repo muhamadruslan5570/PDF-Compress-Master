@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Dashboard â€” PDF Master AI</title>
+  <title>Dashboard — PDF Master AI</title>
   <meta name="description" content="PDF Master AI dashboard for PDF tools, AI, blog, and account management">
 
   <!-- FAVICON FIX (Jalur Relatif) -->
@@ -116,8 +116,9 @@
       object-fit: contain;
     }
 
+    /* MENU HAMBURGER (AKTIF UNTUK DESKTOP & MOBILE) */
     .mobile-menu {
-      display: none;
+      display: flex;
       width: 42px;
       height: 42px;
       align-items: center;
@@ -128,6 +129,12 @@
       background: var(--surface-2);
       color: var(--text);
       font-size: 21px;
+      transition: .2s ease;
+    }
+
+    .mobile-menu:hover {
+      background: var(--surface-3);
+      border-color: var(--primary);
     }
 
     .header-right {
@@ -177,7 +184,6 @@
       background: var(--surface-2);
     }
 
-    /* CSS FIX FOR AVATAR IMAGE SUPPORT */
     .avatar {
       width: 34px;
       height: 34px;
@@ -213,7 +219,7 @@
       font-size: 11px;
     }
 
-    /* SIDEBAR */
+    /* SIDEBAR (TERSEMBUNYI SECARA DEFAULT PADA SEMUA UKURAN LAYAR) */
     .sidebar {
       position: fixed;
       top: var(--header-height);
@@ -229,6 +235,14 @@
 
       overflow-y: auto;
       z-index: 900;
+
+      transform: translateX(-100%);
+      transition: transform .25s ease;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+    }
+
+    .sidebar.is-open {
+      transform: translateX(0);
     }
 
     .sidebar-section {
@@ -305,9 +319,24 @@
       background: rgba(239, 68, 68, .08);
     }
 
-    /* MAIN */
+    .sidebar-overlay {
+      display: none;
+
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.is-open {
+      display: block;
+    }
+
+    /* MAIN CONTAINER (PENUH TANPA MARGIN SIDEBAR) */
     .dashboard-main {
-      margin-left: var(--sidebar-width);
+      margin-left: 0;
       padding-top: var(--header-height);
       min-height: 100vh;
     }
@@ -454,6 +483,121 @@
 
     .view-all:hover {
       color: #93c5fd;
+    }
+
+    /* RECENT HISTORY STYLES */
+    .dashboard-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dashboard-history-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: .2s ease;
+    }
+
+    .dashboard-history-item:hover {
+      border-color: var(--border-light);
+      background: var(--surface-2);
+    }
+
+    .dash-history-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .dash-history-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .dash-history-info {
+      min-width: 0;
+    }
+
+    .dash-history-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dash-history-filename {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dash-history-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .dash-history-time {
+      font-size: 11px;
+      color: var(--muted-2);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .status-badge.success {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      color: #86efac;
+    }
+
+    .status-badge.failed {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    .status-badge.processing {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fde047;
+    }
+
+    .dash-history-empty {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
     }
 
     .tools-grid {
@@ -683,7 +827,6 @@
       gap: 15px;
     }
 
-    /* CSS FIX FOR PROFILE CARD AVATAR */
     .profile-avatar {
       width: 58px;
       height: 58px;
@@ -739,7 +882,7 @@
     }
 
     footer {
-      margin-left: var(--sidebar-width);
+      margin-left: 0;
       margin-top: 0;
 
       background: #0c1424;
@@ -803,16 +946,6 @@
       color: #cbd5e1;
     }
 
-    .sidebar-overlay {
-      display: none;
-
-      position: fixed;
-      inset: 0;
-      z-index: 850;
-
-      background: rgba(0, 0, 0, .55);
-    }
-
     @media (max-width: 1200px) {
       .tools-grid { grid-template-columns: repeat(3, 1fr); }
       .footer-grid { grid-template-columns: repeat(3, 1fr); }
@@ -827,14 +960,19 @@
     }
 
     @media (max-width: 820px) {
-      .mobile-menu { display: flex; }
-      .sidebar { transform: translateX(-100%); transition: transform .25s ease; }
-      .sidebar.is-open { transform: translateX(0); }
-      .sidebar-overlay.is-open { display: block; }
-      .dashboard-main { margin-left: 0; }
-      footer { margin-left: 0; }
       .user-info { display: none; }
       .dashboard-content { width: min(100% - 30px, var(--max)); }
+
+      .dashboard-history-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .dash-history-right {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+      }
     }
 
     @media (max-width: 650px) {
@@ -854,6 +992,7 @@
     }
   </style>
 <script src="../js/api-config.js"></script>
+    <script src="/js/auth-nav.js"></script>
 </head>
 
 <body>
@@ -862,7 +1001,7 @@
   <div class="header-left">
     <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">&#9776;</button>
 
-    <a href="/" class="brand-logo" aria-label="PDF Master AI â€” Home">
+    <a href="/" class="brand-logo" aria-label="PDF Master AI — Home">
       <img src="../assets/images/logo.png" 
            alt="PDF Master AI" 
            class="site-logo" 
@@ -892,7 +1031,8 @@
     <div class="sidebar-title">Workspace</div>
     <a href="#overview" class="sidebar-link active"><span class="sidebar-icon">&#8962;</span><span>Overview</span></a>
     <a href="/pages/tools/all-tools.html" class="sidebar-link"><span class="sidebar-icon">&#128190;</span><span>All Tools</span></a>
-    <a href="#pdf-tools" class="sidebar-link"><span class="sidebar-icon">&#128196;</span><span>PDF Tools</span></a>
+    <a href="/pages/chat-mr-ai/index.html" class="sidebar-link vip-link"><span class="sidebar-icon">&#129504;</span><span>VIP · All Chat AI</span></a>
+    <a href="/pages/ai/tools.html" class="sidebar-link vip-link"><span class="sidebar-icon">&#129520;</span><span>VIP · All AI Tools</span></a>
     <a href="#ai" class="sidebar-link"><span class="sidebar-icon">&#10024;</span><span>AI Tools</span><span class="sidebar-badge">AI</span></a>
     <a href="/pages/history.html" class="sidebar-link"><span class="sidebar-icon">&#128340;</span><span>History</span></a>
     <a href="#blog" class="sidebar-link"><span class="sidebar-icon">&#128240;</span><span>Technology Blog</span></a>
@@ -959,13 +1099,28 @@
       </div>
     </section>
 
+    <!-- RECENT HISTORY SECTION -->
+    <section class="section" id="recent-history">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Recent Activity</h2>
+          <p class="section-description">Aktivitas dokumen dan AI terbaru Anda.</p>
+        </div>
+        <a href="/pages/history.html" class="view-all">View all history &rarr;</a>
+      </div>
+
+      <div id="recentHistoryContainer">
+        <div class="dash-history-empty">Memuat aktivitas terbaru...</div>
+      </div>
+    </section>
+
     <section class="section" id="pdf-tools">
       <div class="section-header">
         <div>
           <h2 class="section-title">PDF Tools</h2>
           <p class="section-description">Quickly access your most important PDF tools.</p>
         </div>
-        <a href="/pages/tools/all-tools.html" class="view-all">View all â†’</a>
+        <a href="/pages/tools/all-tools.html" class="view-all">View all &rarr;</a>
       </div>
 
       <div class="tools-grid">
@@ -998,7 +1153,7 @@
             <h3>AI PDF Assistant</h3>
             <p>Upload a document and let AI help you understand its contents.</p>
           </a>
-          <a href="/pages/ai/tools.html" class="ai-small-card">
+          <a href="/pages/ai/tools.html" class="ai-small-card vip-link">
             <h3>AI Tools</h3>
             <p>Explore useful AI-powered tools and productivity features.</p>
           </a>
@@ -1014,34 +1169,10 @@
         </div>
         <a href="/pages/blog/index.html" class="view-all">View blog &rarr;</a>
       </div>
-
-      <div class="blog-grid">
-        <article class="blog-card">
-          <div class="blog-image">AI & Technology</div>
-          <div class="blog-body">
-            <div class="blog-category">AI</div>
-            <h3>Understanding AI and How It Can Improve Productivity</h3>
-            <p>Practical information about using artificial intelligence in everyday digital work.</p>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-image">Software & Apps</div>
-          <div class="blog-body">
-            <div class="blog-category">Software</div>
-            <h3>Useful Software Tools for Modern Digital Work</h3>
-            <p>Discover software and applications that can make your workflow simpler and more efficient.</p>
-          </div>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-image">Programming</div>
-          <div class="blog-body">
-            <div class="blog-category">Programming</div>
-            <h3>Getting Started With Web Development</h3>
-            <p>Practical programming guides for building modern web applications.</p>
-          </div>
-        </article>
+      <div class="blog-grid" id="dashboardBlogGrid">
+        <div class="blog-loading">
+          Memuat artikel terbaru...
+        </div>
       </div>
     </section>
 
@@ -1083,7 +1214,7 @@
 <footer>
   <div class="container footer-grid">
     <div class="footer-brand">
-      <a href="/" class="brand-logo" aria-label="PDF Master AI â€” Home">
+      <a href="/" class="brand-logo" aria-label="PDF Master AI — Home">
         <img src="../assets/images/logo.png" 
              alt="PDF Master AI" 
              class="site-logo" 
@@ -1132,14 +1263,69 @@
   </div>
 
   <div class="container footer-bottom">
-    <div>&copy; 2026 <strong>PDF Master AI</strong>. All rights reserved.</div>
-    <div>Smart PDF Workspace &middot; Powered by AI</div>
+    <div>&copy; 2026 <strong>PDF Master AI</strong>. Copyright.</div>
+    <div>Developer&middot;by Muhamad Ruslan,S.Pd.Gr</div>
   </div>
 </footer>
 
 <script>
-  (() => {
-    
+  // 0. FUNGSI VERIFIKASI SESSION LOGIN BACKEND
+  async function checkLoginSession() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+        method: 'GET',
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        window.location.replace('/index.html');
+        return null;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Gagal mengecek session login:', error);
+      window.location.replace('/index.html');
+      return null;
+    }
+  }
+
+  // Helper Icon Aktivitas
+  function getActivityIcon(type) {
+    const typeLower = (type || '').toLowerCase();
+    if (typeLower.includes('word')) return '&#128196;';
+    if (typeLower.includes('merge')) return '&#128193;';
+    if (typeLower.includes('compress')) return '&#128451;';
+    if (typeLower.includes('image')) return '&#128444;';
+    if (typeLower.includes('ai')) return '&#129302;';
+    return '&#128194;';
+  }
+
+  // Helper Format Tanggal
+  function formatDate(dateString) {
+    if (!dateString) return 'Waktu tidak diketahui';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return dateString;
+      return new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(date);
+    } catch (e) {
+      return dateString;
+    }
+  }
+
+  (async () => {
+    // Verifikasi session terlebih dahulu
+    const user = await checkLoginSession();
+
+    if (!user) {
+      return;
+    }
 
     const mobileMenu = document.getElementById('mobileMenu');
     const sidebar = document.getElementById('sidebar');
@@ -1165,21 +1351,21 @@
 
     document.querySelectorAll('.sidebar-link').forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth <= 820) {
-          closeSidebar();
-        }
+        closeSidebar();
       });
     });
 
     // 1. AMBIL DATA PROFIL DARI BACKEND FASTAPI
     async function loadDashboardProfile() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`);
+        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+          credentials: 'include'
+        });
         if (!response.ok) return;
 
         const data = await response.json();
-        const name = data.name || 'User';
-        const email = data.email || 'user@example.com';
+        const name = data.name || user.name || 'User';
+        const email = data.email || user.email || 'user@example.com';
         const plan = data.plan || 'FREE';
         const firstLetter = name.charAt(0).toUpperCase();
 
@@ -1199,7 +1385,6 @@
         if (headerPlan) headerPlan.textContent = plan + ' Plan';
         if (currentPlan) currentPlan.textContent = plan;
 
-        // Render foto profile/avatar jika tersedia di backend
         if (data.avatar_url) {
           const fullAvatarUrl = data.avatar_url.startsWith('http')
             ? data.avatar_url
@@ -1231,7 +1416,9 @@
     // 2. AMBIL DATA STATISTIK DASHBOARD DARI ENDPOINT /api/history/stats
     async function loadDashboardStats() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/history/stats`);
+        const response = await fetch(`${API_BASE_URL}/api/history/stats`, {
+          credentials: 'include'
+        });
 
         if (!response.ok) {
           throw new Error('Gagal mengambil statistik');
@@ -1266,12 +1453,108 @@
       }
     }
 
+    // 3. AMBIL DATA RIWAYAT RECENT DARI ENDPOINT /api/history
+    async function loadRecentHistory() {
+      const container = document.getElementById('recentHistoryContainer');
+      if (!container) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/history`, {
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error('Gagal memuat riwayat terbaru');
+        }
+
+        const data = await response.json();
+        const historyList = Array.isArray(data) ? data : (data.history || []);
+
+        if (historyList.length === 0) {
+          container.innerHTML = `
+            <div class="dash-history-empty">
+              Belum ada aktivitas dokumen atau AI.
+            </div>
+          `;
+          return;
+        }
+
+        // Tampilkan 5 aktivitas paling baru
+        const recentItems = historyList.slice(0, 5);
+        const listWrapper = document.createElement('div');
+        listWrapper.className = 'dashboard-history-list';
+
+        recentItems.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'dashboard-history-item';
+
+          const icon = getActivityIcon(item.type || item.title);
+          const title = item.title || item.type || 'Pemrosesan Dokumen';
+          const filename = item.filename || 'Tanpa nama file';
+          const dateText = formatDate(item.created_at);
+
+          let statusClass = 'success';
+          let statusIcon = '&#10003;';
+          let statusText = 'Berhasil';
+
+          if (item.status === 'failed') {
+            statusClass = 'failed';
+            statusIcon = '&#10005;';
+            statusText = 'Gagal';
+          } else if (item.status === 'processing') {
+            statusClass = 'processing';
+            statusIcon = '&#8635;';
+            statusText = 'Diproses';
+          }
+
+          itemDiv.innerHTML = `
+            <div class="dash-history-left">
+              <div class="dash-history-icon">${icon}</div>
+              <div class="dash-history-info">
+                <div class="dash-history-title"></div>
+                <div class="dash-history-filename"></div>
+              </div>
+            </div>
+            <div class="dash-history-right">
+              <span class="dash-history-time"></span>
+              <span class="status-badge ${statusClass}">
+                <span>${statusIcon}</span>
+                <span>${statusText}</span>
+              </span>
+            </div>
+          `;
+
+          // Sanitasi input dari XSS
+          itemDiv.querySelector('.dash-history-title').textContent = title;
+          itemDiv.querySelector('.dash-history-filename').textContent = filename;
+          itemDiv.querySelector('.dash-history-time').textContent = dateText;
+
+          listWrapper.appendChild(itemDiv);
+        });
+
+        container.innerHTML = '';
+        container.appendChild(listWrapper);
+
+      } catch (error) {
+        console.error('Error loading recent history:', error);
+        container.innerHTML = `
+          <div class="dash-history-empty">
+            Tidak dapat memuat aktivitas terbaru.
+          </div>
+        `;
+      }
+    }
+
     const logoutButton = document.getElementById('logoutButton');
     if (logoutButton) {
       logoutButton.addEventListener('click', (event) => {
         event.preventDefault();
         localStorage.removeItem('mr_pdf_user');
-        window.location.href = '/pages/login.html';
+        localStorage.removeItem('is_logged_in');
+        localStorage.removeItem('user_id');
+        localStorage.removeItem('user_name');
+        localStorage.removeItem('user_email');
+        window.location.replace('/index.html');
       });
     }
 
@@ -1283,13 +1566,133 @@
       });
     });
 
-    // PANGGANG KEDUA FUNGSI SAAT HALAMAN DIMUAT
+    // 4. AMBIL ARTIKEL BLOG TERBARU DARI BACKEND
+    async function loadDashboardBlog() {
+      const container = document.getElementById('dashboardBlogGrid');
+      if (!container) return;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/blog/posts`);
+
+        if (!response.ok) {
+          throw new Error('Gagal memuat artikel blog');
+        }
+
+        const data = await response.json();
+        const posts = Array.isArray(data) ? data : (data.posts || []);
+
+        container.innerHTML = '';
+
+        if (!posts.length) {
+          const empty = document.createElement('div');
+          empty.className = 'blog-loading';
+          empty.textContent = 'Belum ada artikel yang dipublikasikan.';
+          container.appendChild(empty);
+          return;
+        }
+
+        posts.slice(0, 3).forEach(post => {
+          const article = document.createElement('article');
+          article.className = 'blog-card';
+          article.style.cursor = 'pointer';
+
+          article.addEventListener('click', () => {
+            if (post.slug) {
+              window.location.href =
+                `/pages/blog/detail.html?slug=${encodeURIComponent(post.slug)}`;
+            }
+          });
+
+          const imageBox = document.createElement('div');
+          imageBox.className = 'blog-image';
+
+          if (post.featured_image) {
+            const image = document.createElement('img');
+
+            image.src = post.featured_image.startsWith('http')
+              ? post.featured_image
+              : `${API_BASE_URL}${post.featured_image}`;
+
+            image.alt = post.title || 'Blog image';
+            image.loading = 'lazy';
+            image.style.width = '100%';
+            image.style.height = '100%';
+            image.style.objectFit = 'cover';
+
+            imageBox.appendChild(image);
+          } else {
+            imageBox.textContent = post.category || 'Technology Blog';
+          }
+
+          const body = document.createElement('div');
+          body.className = 'blog-body';
+
+          const category = document.createElement('div');
+          category.className = 'blog-category';
+          category.textContent = post.category || 'Technology';
+
+          const title = document.createElement('h3');
+          title.textContent = post.title || 'Untitled Article';
+
+          const excerpt = document.createElement('p');
+          excerpt.textContent =
+            post.excerpt || post.meta_description || 'Read this article for more information.';
+
+          body.appendChild(category);
+          body.appendChild(title);
+          body.appendChild(excerpt);
+
+          article.appendChild(imageBox);
+          article.appendChild(body);
+
+          container.appendChild(article);
+        });
+
+      } catch (error) {
+        console.error('Error loading dashboard blog:', error);
+
+        container.innerHTML = '';
+
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'blog-loading';
+        errorMessage.textContent = 'Artikel blog gagal dimuat.';
+        container.appendChild(errorMessage);
+      }
+    }
+    // Panggil seluruh API pendukung setelah session diverifikasi
     loadDashboardProfile();
     loadDashboardStats();
+    loadRecentHistory();
+    loadDashboardBlog();
   })();
+document.querySelectorAll(".vip-link").forEach(link => {
+  link.addEventListener("click", async e => {
+    e.preventDefault();
+    try {
+      const r=await fetch(`${API_BASE_URL}/api/auth/me`,{credentials:"include",cache:"no-store"});
+      const u=await r.json();
+      const plan=String(u.plan||"").toUpperCase();
+      const role=String(u.role||"").toLowerCase();
+      if(plan==="PRO"||role==="developer"||role==="ai_admin") window.location.href=link.href;
+      else window.location.href="/pages/pricing.html";
+    } catch { alert("Gagal memeriksa akses."); }
+  });
+});
 </script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 

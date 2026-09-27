@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -8,8 +8,12 @@
   <title>AI Tools Hub &mdash; PDF Master AI</title>
   <meta name="description" content="Pusat alat berbasis AI untuk produktivitas, pembuatan teks, dan pengolahan dokumen PDF.">
 
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
-  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+  <!-- BRANDING GLOBAL (Naik 3 tingkat dari frontend/pages/ai/) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../../js/api-config.js"></script>
 
   <style>
     :root {
@@ -56,7 +60,7 @@
     a { color: inherit; text-decoration: none; }
     button, input { font: inherit; color: inherit; border: none; outline: none; }
 
-    /* NAVBAR */
+    /* NAVBAR GLOBAL */
     .navbar {
       height: var(--header-height);
       padding: 0 32px;
@@ -149,7 +153,7 @@
       margin: 0 auto;
     }
 
-    /* CONTROLS SECTION (SEARCH & FILTER) */
+    /* CONTROLS SECTION */
     .controls-wrapper {
       display: flex;
       flex-direction: column;
@@ -283,12 +287,6 @@
       border: 1px solid rgba(34, 197, 94, 0.3);
     }
 
-    .status-badge.coming-soon {
-      background: rgba(245, 158, 11, 0.12);
-      color: var(--warning-color);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-
     .tool-title {
       font-size: 17px;
       font-weight: 700;
@@ -329,24 +327,14 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-    }
-
-    .btn-use.ready {
       background: var(--accent-light);
       color: var(--accent-color);
       border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
-    .btn-use.ready:hover {
+    .btn-use:hover {
       background: var(--accent-color);
       color: #ffffff;
-    }
-
-    .btn-use.coming-soon {
-      background: var(--bg-tertiary);
-      color: var(--text-muted);
-      border: 1px solid var(--border-color);
-      cursor: not-allowed;
     }
 
     /* EMPTY STATE */
@@ -377,66 +365,7 @@
       color: var(--text-muted);
     }
 
-    /* MODAL NOTICE FOR COMING SOON */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(7, 17, 31, 0.85);
-      backdrop-filter: blur(4px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-      padding: 24px;
-    }
-
-    .modal-content {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 28px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .modal-icon {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .modal-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .modal-desc {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    .btn-modal-close {
-      width: 100%;
-      padding: 10px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      color: var(--text-primary);
-      transition: background 0.2s;
-    }
-
-    .btn-modal-close:hover {
-      background: var(--border-color);
-    }
-
-    /* FOOTER */
+    /* FOOTER GLOBAL */
     .footer {
       border-top: 1px solid var(--border-color);
       background: var(--bg-secondary);
@@ -468,9 +397,10 @@
 </head>
 <body>
 
+  <!-- NAVBAR GLOBAL (Posisi: pages/ai/tools.html) -->
   <nav class="navbar">
     <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI &mdash; Home">
-      <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+      <img src="../../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
     </a>
 
     <ul class="nav-links">
@@ -485,6 +415,7 @@
     <a href="chat-ai.html" class="btn-nav">Coba AI Chat</a>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="main-container">
 
     <header class="page-header">
@@ -510,8 +441,10 @@
       </div>
     </div>
 
+    <!-- GRID CARDS ALAT AI -->
     <div class="tools-grid" id="toolsGrid"></div>
 
+    <!-- EMPTY STATE -->
     <div class="empty-state" id="emptyState">
       <div class="empty-icon">&#128269;</div>
       <h3 class="empty-title">Alat Tidak Ditemukan</h3>
@@ -520,33 +453,26 @@
 
   </main>
 
-  <!-- MODAL NOTIFIKASI COMING SOON -->
-  <div class="modal-overlay" id="noticeModal">
-    <div class="modal-content">
-      <div class="modal-icon">&#128679;</div>
-      <h3 class="modal-title" id="modalToolTitle">Fitur Dalam Pengembangan</h3>
-      <p class="modal-desc" id="modalToolDesc">Alat AI ini belum memiliki integrasi backend aktif. Nantikan pembaruan versi berikutnya!</p>
-      <button class="btn-modal-close" id="btnModalClose">Tutup</button>
-    </div>
-  </div>
-
+  <!-- FOOTER GLOBAL -->
   <footer class="footer">
     <div class="footer-links">
       <a href="../dashboard.html">Dashboard</a>
-      <a href="../tools/all-tools.html">Tools</a>
+      <a href="../tools/all-tools.html">PDF Tools</a>
       <a href="chat-ai.html">AI Chat</a>
       <a href="pdf-ai.html">PDF AI</a>
       <a href="tools.html">AI Tools Hub</a>
-      <a href="../about.html">About</a>
+      <a href="../about.html">About Us</a>
       <a href="../faq.html">FAQ</a>
-      <a href="../../legal/privacy.html">Privacy</a>
+      <a href="../contact.html">Contact</a>
+      <a href="../../../legal/privacy.html">Privacy Policy</a>
+      <a href="../../../legal/terms.html">Terms of Service</a>
     </div>
-    <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan.</p>
+    <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan, S.Pd.</p>
   </footer>
 
   <script>
     (() => {
-      // KONFIGURASI PUSAT AI TOOLS (STRUKTUR SIAP UNTUK INTEGRASI FASTAPI BACKEND)
+      // KONFIGURASI ROUTE DENGAN PREFIKS SUB-FOLDER tools-ai/
       const tools = [
         // KATEGORI PDF & DOKUMEN
         {
@@ -557,8 +483,7 @@
           categoryLabel: "PDF & Dokumen",
           icon: "&#128196;",
           status: "ready",
-          route: "pdf-ai.html",
-          endpoint: "/api/ai/pdf/summarize"
+          route: "tools-ai/pdf-summarizer.html"
         },
         {
           id: "pdf-analyzer",
@@ -568,8 +493,7 @@
           categoryLabel: "PDF & Dokumen",
           icon: "&#128202;",
           status: "ready",
-          route: "pdf-ai.html",
-          endpoint: "/api/ai/pdf/analyze"
+          route: "tools-ai/pdf-analyzer.html"
         },
         {
           id: "pdf-question-answer",
@@ -579,8 +503,7 @@
           categoryLabel: "PDF & Dokumen",
           icon: "&#128172;",
           status: "ready",
-          route: "pdf-ai.html",
-          endpoint: "/api/ai/pdf/chat"
+          route: "pdf-ai.html" // Backend lama (se-folder di pages/ai/)
         },
         {
           id: "pdf-translator",
@@ -589,9 +512,8 @@
           category: "pdf",
           categoryLabel: "PDF & Dokumen",
           icon: "&#127758;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/pdf/translate"
+          status: "ready",
+          route: "tools-ai/pdf-translator.html"
         },
         {
           id: "document-extractor",
@@ -600,9 +522,8 @@
           category: "pdf",
           categoryLabel: "PDF & Dokumen",
           icon: "&#128269;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/pdf/extract"
+          status: "ready",
+          route: "tools-ai/document-extractor.html"
         },
 
         // KATEGORI WRITING
@@ -614,8 +535,7 @@
           categoryLabel: "Writing",
           icon: "&#9997;",
           status: "ready",
-          route: "chat-ai.html",
-          endpoint: "/api/ai/write"
+          route: "tools-ai/ai-writer.html"
         },
         {
           id: "ai-rewriter",
@@ -624,9 +544,8 @@
           category: "writing",
           categoryLabel: "Writing",
           icon: "&#128045;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/rewrite"
+          status: "ready",
+          route: "tools-ai/ai-rewriter.html"
         },
         {
           id: "ai-paraphraser",
@@ -635,9 +554,8 @@
           category: "writing",
           categoryLabel: "Writing",
           icon: "&#128177;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/paraphrase"
+          status: "ready",
+          route: "tools-ai/ai-paraphraser.html"
         },
         {
           id: "grammar-checker",
@@ -646,9 +564,8 @@
           category: "writing",
           categoryLabel: "Writing",
           icon: "&#10004;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/grammar-check"
+          status: "ready",
+          route: "tools-ai/grammar-checker.html"
         },
         {
           id: "text-summarizer",
@@ -657,9 +574,8 @@
           category: "writing",
           categoryLabel: "Writing",
           icon: "&#128221;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/text-summarize"
+          status: "ready",
+          route: "tools-ai/text-summarizer.html"
         },
 
         // KATEGORI PRODUCTIVITY
@@ -670,9 +586,8 @@
           category: "productivity",
           categoryLabel: "Productivity",
           icon: "&#128231;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/email-generate"
+          status: "ready",
+          route: "tools-ai/email-generator.html"
         },
         {
           id: "note-generator",
@@ -681,9 +596,8 @@
           category: "productivity",
           categoryLabel: "Productivity",
           icon: "&#128204;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/note-generate"
+          status: "ready",
+          route: "tools-ai/note-generator.html"
         },
         {
           id: "study-assistant",
@@ -692,9 +606,8 @@
           category: "productivity",
           categoryLabel: "Productivity",
           icon: "&#127891;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/study-assist"
+          status: "ready",
+          route: "tools-ai/study-assistant.html"
         },
         {
           id: "quiz-generator",
@@ -703,9 +616,8 @@
           category: "productivity",
           categoryLabel: "Productivity",
           icon: "&#9998;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/quiz-generate"
+          status: "ready",
+          route: "tools-ai/quiz-generator.html"
         },
         {
           id: "question-generator",
@@ -714,13 +626,12 @@
           category: "productivity",
           categoryLabel: "Productivity",
           icon: "&#10067;",
-          status: "coming-soon",
-          route: null,
-          endpoint: "/api/ai/question-generate"
+          status: "ready",
+          route: "tools-ai/question-generator.html"
         }
       ];
 
-      // STATE RENDER FRONTEND
+      // STATE FRONTEND
       let activeCategory = 'all';
       let searchQuery = '';
 
@@ -729,10 +640,6 @@
       const searchInput = document.getElementById('searchInput');
       const filterBtns = document.querySelectorAll('.filter-btn');
       const emptyState = document.getElementById('emptyState');
-      const noticeModal = document.getElementById('noticeModal');
-      const modalToolTitle = document.getElementById('modalToolTitle');
-      const modalToolDesc = document.getElementById('modalToolDesc');
-      const btnModalClose = document.getElementById('btnModalClose');
 
       // FUNGSI RENDER TOOL CARDS
       function renderTools() {
@@ -753,12 +660,6 @@
         emptyState.style.display = 'none';
 
         filteredTools.forEach(tool => {
-          const isReady = tool.status === 'ready';
-          const badgeClass = isReady ? 'ready' : 'coming-soon';
-          const badgeText = isReady ? 'Ready' : 'Coming Soon';
-          const btnClass = isReady ? 'ready' : 'coming-soon';
-          const btnText = isReady ? 'Gunakan &rarr;' : 'Segera Hadir';
-
           const card = document.createElement('div');
           card.className = 'tool-card';
           card.setAttribute('data-id', tool.id);
@@ -767,15 +668,15 @@
             <div>
               <div class="tool-card-header">
                 <div class="tool-icon-wrapper">${tool.icon}</div>
-                <span class="status-badge ${badgeClass}">${badgeText}</span>
+                <span class="status-badge ready">Ready</span>
               </div>
               <h3 class="tool-title">${tool.name}</h3>
               <p class="tool-desc">${tool.description}</p>
             </div>
             <div class="tool-card-footer">
               <span class="tool-category-label">${tool.categoryLabel}</span>
-              <button class="btn-use ${btnClass}" data-id="${tool.id}">
-                ${btnText}
+              <button class="btn-use ready" data-id="${tool.id}">
+                Gunakan &rarr;
               </button>
             </div>
           `;
@@ -786,7 +687,7 @@
         attachCardEvents();
       }
 
-      // MANAJEMEN EVENT NAVIGASI DAN MODAL
+      // NAVIGASI LANGSUNG KE RUTE TARGET
       function attachCardEvents() {
         const useButtons = document.querySelectorAll('.btn-use');
         useButtons.forEach(btn => {
@@ -794,32 +695,12 @@
             const toolId = e.currentTarget.getAttribute('data-id');
             const targetTool = tools.find(t => t.id === toolId);
 
-            if (!targetTool) return;
-
-            if (targetTool.status === 'ready' && targetTool.route) {
+            if (targetTool && targetTool.route) {
               window.location.href = targetTool.route;
-            } else {
-              showComingSoonModal(targetTool.name, targetTool.description);
             }
           });
         });
       }
-
-      function showComingSoonModal(title, desc) {
-        modalToolTitle.textContent = `${title}`;
-        modalToolDesc.textContent = `Alat "${title}" sedang dalam tahap penyiapan integrasi backend AI. ${desc}`;
-        noticeModal.style.display = 'flex';
-      }
-
-      btnModalClose.addEventListener('click', () => {
-        noticeModal.style.display = 'none';
-      });
-
-      noticeModal.addEventListener('click', (e) => {
-        if (e.target === noticeModal) {
-          noticeModal.style.display = 'none';
-        }
-      });
 
       // EVENT LISTENER SEARCH & FILTER
       searchInput.addEventListener('input', (e) => {
@@ -839,6 +720,8 @@
       // RENDER AWAL
       renderTools();
     })();
-  </script>
+  (async()=>{try{const r=await fetch(`${API_BASE_URL}/api/auth/me`,{credentials:"include",cache:"no-store"});const u=await r.json();const p=String(u.plan||"").toUpperCase(),role=String(u.role||"").toLowerCase();if(p!=="PRO"&&role!=="developer"&&role!=="ai_admin")location.replace("/pages/pricing.html")}catch{location.replace("/pages/pricing.html")}})();
+</script>
 </body>
 </html>
+

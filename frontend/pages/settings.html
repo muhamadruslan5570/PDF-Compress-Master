@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -199,6 +199,9 @@
       .dashboard-main, footer { margin-left: 0; }
     }
   </style>
+<script src="../js/api-config.js"></script>
+<script src="../assets/js/i18n/i18n.js"></script>
+    <script src="/js/auth-nav.js"></script>
 </head>
 
 <body>
@@ -258,10 +261,9 @@
       
       <div class="form-group">
         <label for="selectLanguage">Bahasa Aplikasi</label>
-        <select id="selectLanguage" class="form-control">
-          <option value="id">Bahasa Indonesia</option>
-          <option value="en">English (US)</option>
-        </select>
+        <select id="selectLanguage" class="form-control" data-language-selector>
+  <option value="">Loading languages...</option>
+</select>
       </div>
 
       <div class="switch-row">
@@ -285,6 +287,11 @@
           <span class="slider"></span>
         </label>
       </div>
+
+      <button type="button" class="btn-save" id="btnSavePreferences">
+        Save Preferences
+      </button>
+      <div class="toast-msg" id="preferencesToast"></div>
     </div>
 
     <div class="settings-card">
@@ -293,17 +300,18 @@
       <form id="passwordForm">
         <div class="form-group">
           <label for="oldPassword">Password Saat Ini</label>
-          <input type="password" id="oldPassword" class="form-control" placeholder="••••••••" required>
+          <input type="password" id="oldPassword" class="form-control" required>
         </div>
 
         <div class="form-group">
           <label for="newPassword">Password Baru</label>
-          <input type="password" id="newPassword" class="form-control" placeholder="Minimal 8 karakter" minlength="8" required>
+          <input type="password" id="newPassword" class="form-control" minlength="8" required>
+          <small class="form-hint">Minimal 8 karakter</small>
         </div>
 
         <div class="form-group">
           <label for="confirmPassword">Konfirmasi Password Baru</label>
-          <input type="password" id="confirmPassword" class="form-control" placeholder="Ulangi password baru" required>
+          <input type="password" id="confirmPassword" class="form-control" required>
         </div>
 
         <button type="submit" class="btn-save" id="btnChangePassword">Ubah Password</button>
@@ -315,3 +323,377 @@
 </main>
 
 <footer>
+  <div class="footer-bottom">
+    <div>&copy; 2026 <strong>PDF Master AI</strong>.Copyright.</div>
+    <div>Developer by Muhamad Ruslan,S.Pd.Gr</div>
+  </div>
+</footer>
+
+<script>
+  (() => {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const sidebar = document.getElementById('sidebar');
+
+    const headerAvatar = document.getElementById('headerAvatar');
+    const headerUserName = document.getElementById('headerUserName');
+    const headerUserPlan = document.getElementById('headerUserPlan');
+
+    const passwordForm = document.getElementById('passwordForm');
+    const oldPassword = document.getElementById('oldPassword');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const btnChangePassword = document.getElementById('btnChangePassword');
+    const toastMsg = document.getElementById('toastMsg');
+
+    if (mobileMenu) {
+      mobileMenu.addEventListener('click', () => {
+        sidebar.classList.toggle('is-open');
+      });
+    }
+
+    function showToast(message, type = 'success') {
+      toastMsg.textContent = message;
+      toastMsg.className = `toast-msg ${type}`;
+      setTimeout(() => {
+        toastMsg.className = 'toast-msg';
+      }, 4000);
+    }
+
+    function renderHeaderAvatar(avatarUrl, name) {
+      const initial = (name || 'U').charAt(0).toUpperCase();
+
+      if (avatarUrl) {
+        const fullUrl = avatarUrl.startsWith('http')
+          ? avatarUrl
+          : `${API_BASE_URL}${avatarUrl}?t=${new Date().getTime()}`;
+
+        headerAvatar.style.backgroundImage = `url('${fullUrl}')`;
+        headerAvatar.textContent = '';
+      } else {
+        headerAvatar.style.backgroundImage = 'none';
+        headerAvatar.textContent = initial;
+      }
+    }
+
+    // GET /api/profile untuk header
+    async function loadProfile() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+          credentials: 'include'
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        const name = data.name || 'User';
+        const plan = data.plan || 'FREE';
+
+        headerUserName.textContent = name;
+        headerUserPlan.textContent = `${plan} Plan`;
+
+        renderHeaderAvatar(data.avatar_url, name);
+      } catch (error) {
+        console.error('Gagal mengambil data profil untuk header:', error);
+      }
+    }
+
+    // Preferences Elements
+    const btnSavePreferences =
+      document.getElementById('btnSavePreferences');
+
+    const preferencesToast =
+      document.getElementById('preferencesToast');
+
+    const selectLanguage =
+      document.getElementById('selectLanguage');
+
+    const toggleEmailNotify =
+      document.getElementById('toggleEmailNotify');
+
+    const toggleAutoSave =
+      document.getElementById('toggleAutoSave');
+
+
+    // Load Preferences from backend
+    async function loadPreferences() {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/preferences`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Gagal memuat Preferences (${response.status}).`
+          );
+        }
+
+        const data = await response.json();
+
+        if (selectLanguage && data.language) {
+          selectLanguage.value = data.language;
+        }
+
+        if (toggleEmailNotify) {
+          toggleEmailNotify.checked =
+            data.email_notifications === true;
+        }
+
+        if (toggleAutoSave) {
+          toggleAutoSave.checked =
+            data.auto_save_history === true;
+        }
+
+        // Cache lokal sebagai fallback UI
+        if (data.language) {
+          localStorage.setItem(
+            'pdfmaster_language',
+            data.language
+          );
+        }
+
+        localStorage.setItem(
+          'pdfmaster_email_notifications',
+          data.email_notifications
+        );
+
+        localStorage.setItem(
+          'pdfmaster_auto_save_history',
+          data.auto_save_history
+        );
+
+      } catch (error) {
+        console.error(
+          'Gagal memuat Preferences:',
+          error
+        );
+
+        // Fallback ke localStorage
+        const savedLanguage =
+          localStorage.getItem('pdfmaster_language');
+
+        const savedEmailNotify =
+          localStorage.getItem(
+            'pdfmaster_email_notifications'
+          );
+
+        const savedAutoSave =
+          localStorage.getItem(
+            'pdfmaster_auto_save_history'
+          );
+
+        if (
+          selectLanguage &&
+          savedLanguage
+        ) {
+          selectLanguage.value = savedLanguage;
+        }
+
+        if (
+          toggleEmailNotify &&
+          savedEmailNotify !== null
+        ) {
+          toggleEmailNotify.checked =
+            savedEmailNotify === 'true';
+        }
+
+        if (
+          toggleAutoSave &&
+          savedAutoSave !== null
+        ) {
+          toggleAutoSave.checked =
+            savedAutoSave === 'true';
+        }
+      }
+    }
+
+
+    // Save Preferences to backend
+    if (btnSavePreferences) {
+      btnSavePreferences.addEventListener(
+        'click',
+        async () => {
+
+          if (!selectLanguage || !selectLanguage.value) {
+            if (preferencesToast) {
+              preferencesToast.textContent =
+                'Silakan pilih bahasa terlebih dahulu.';
+              preferencesToast.className =
+                'toast-msg error';
+            }
+            return;
+          }
+
+          btnSavePreferences.disabled = true;
+          btnSavePreferences.textContent =
+            'Menyimpan...';
+
+          try {
+            const payload = {
+              language: selectLanguage.value,
+              email_notifications:
+                toggleEmailNotify
+                  ? toggleEmailNotify.checked
+                  : true,
+              auto_save_history:
+                toggleAutoSave
+                  ? toggleAutoSave.checked
+                  : true
+            };
+
+            const response = await fetch(
+              `${API_BASE_URL}/api/preferences`,
+              {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+              }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(
+                data.detail ||
+                'Gagal menyimpan Preferences.'
+              );
+            }
+
+            const saved =
+              data.preferences || payload;
+
+            // Update local cache
+            localStorage.setItem(
+              'pdfmaster_language',
+              saved.language
+            );
+
+            localStorage.setItem(
+              'pdfmaster_email_notifications',
+              saved.email_notifications
+            );
+
+            localStorage.setItem(
+              'pdfmaster_auto_save_history',
+              saved.auto_save_history
+            );
+
+            if (preferencesToast) {
+              preferencesToast.textContent =
+                '✓ Preferences berhasil disimpan ke database.';
+              preferencesToast.className =
+                'toast-msg success';
+
+              setTimeout(() => {
+                preferencesToast.className =
+                  'toast-msg';
+              }, 4000);
+            }
+
+          } catch (error) {
+            console.error(
+              'Gagal menyimpan Preferences:',
+              error
+            );
+
+            if (preferencesToast) {
+              preferencesToast.textContent =
+                error.message ||
+                'Gagal menyimpan Preferences.';
+              preferencesToast.className =
+                'toast-msg error';
+            }
+
+          } finally {
+            btnSavePreferences.disabled = false;
+            btnSavePreferences.textContent =
+              'Save Preferences';
+          }
+        }
+      );
+    }
+
+
+    // Load Preferences when Settings page is ready
+    loadPreferences();
+
+
+    // Password Form Submit
+    passwordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (newPassword.value !== confirmPassword.value) {
+        showToast('Konfirmasi password baru tidak cocok.', 'error');
+        return;
+      }
+
+      btnChangePassword.disabled = true;
+      btnChangePassword.textContent = 'Menyimpan...';
+
+      const payload = {
+        old_password: oldPassword.value,
+        new_password: newPassword.value
+      };
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/change-password`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.detail || 'Gagal mengubah password.');
+        }
+
+        showToast('\u2713 Password berhasil diubah!', 'success');
+        passwordForm.reset();
+      } catch (error) {
+        console.error('Error changing password:', error);
+        showToast(error.message || 'Gagal mengubah password.', 'error');
+      } finally {
+        btnChangePassword.disabled = false;
+        btnChangePassword.textContent = 'Ubah Password';
+      }
+    });
+
+    // Logout
+    document.getElementById('logoutButton').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('mr_pdf_user');
+      window.location.replace('/index.html');
+    });
+
+    // Jalankan pertama kali
+    loadProfile();
+  })();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

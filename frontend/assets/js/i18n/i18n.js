@@ -1,8 +1,8 @@
 ﻿const I18N_CONFIG = {
     defaultLanguage: "id",
     storageKey: "pdfmaster_language",
-    languagesFile: "./languages.json",
-    localesPath: "./locales/"
+    languagesFile: "/assets/js/i18n/languages.json",
+    localesPath: "/assets/js/i18n/locales/"
 };
 
 let currentLanguage = null;
@@ -203,12 +203,101 @@ function updateLanguageSelectors() {
 }
 
 
+async function loadPreferencesLanguage() {
+
+    try {
+
+        const apiBaseUrl =
+            typeof API_BASE_URL !== "undefined"
+                ? API_BASE_URL
+                : (
+                    window.location.hostname === "localhost" ||
+                    window.location.hostname === "127.0.0.1"
+                        ? "http://127.0.0.1:8000"
+                        : ""
+                );
+
+        if (!apiBaseUrl) {
+            return null;
+        }
+
+        const response =
+            await fetch(
+                `${apiBaseUrl}/api/preferences`,
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data =
+            await response.json();
+
+        return data.language || null;
+
+    } catch (error) {
+
+        console.warn(
+            "I18N: Preferences tidak dapat dimuat.",
+            error
+        );
+
+        return null;
+    }
+}
+
+
+function populateLanguageSelectors(languages) {
+
+    document
+        .querySelectorAll("[data-language-selector]")
+        .forEach(selector => {
+
+            selector.innerHTML = "";
+
+            languages.forEach(language => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    language.code;
+
+                option.textContent =
+                    language.nativeName ||
+                    language.name ||
+                    language.code;
+
+                selector.appendChild(option);
+            });
+        });
+}
+
+
 async function initI18n() {
 
     try {
 
         const languages =
             await loadLanguages();
+
+        populateLanguageSelectors(languages);
+
+        // Prioritas bahasa:
+        // 1. Preferences dari database
+        // 2. localStorage
+        // 3. Bahasa browser
+        // 4. Bahasa default
+
+        const preferenceLanguage =
+            await loadPreferencesLanguage();
 
         const savedLanguage =
             localStorage.getItem(
@@ -225,6 +314,7 @@ async function initI18n() {
             );
 
         let language =
+            preferenceLanguage ||
             savedLanguage ||
             browserLanguage ||
             I18N_CONFIG.defaultLanguage;
@@ -282,3 +372,8 @@ document.addEventListener(
     "DOMContentLoaded",
     initI18n
 );
+
+
+
+
+

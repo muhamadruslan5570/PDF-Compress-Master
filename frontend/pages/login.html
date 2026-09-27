@@ -640,6 +640,7 @@
         try {
           const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
@@ -691,17 +692,21 @@
           showMessage('Login berhasil. Mengarahkan ke dashboard...');
 
           setTimeout(() => {
-            window.location.href = '/pages/dashboard.html';
+            if (result.role === 'developer') {
+  window.location.href = '/pages/developer/index.html';
+} else {
+  window.location.href = '/pages/dashboard.html';
+}
           }, 500);
 
         } catch (error) {
           console.error('Login error:', error);
 
           showMessage(
-            'Cannot connect to the server. Please make sure the backend is running.',
+            `Login error: ${error.message || error}`, 
             'error'
           );
-        } finally {
+
           if (submitButton) {
             submitButton.disabled = false;
             submitButton.textContent = 'Sign In';
@@ -712,4 +717,8 @@
   </script>
 </body>
 </html>
+
+
+
+
 

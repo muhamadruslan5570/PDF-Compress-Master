@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Note Generator &mdash; PDF Master AI</title>
+  <meta name="description" content="Mengubah hasil rapat, diskusi tim, atau materi mentah menjadi catatan rapi dan terstruktur menggunakan AI.">
+
+  <!-- BRANDING GLOBAL -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../../js/api-config.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #07111f;
+      --bg-secondary: #0c1424;
+      --bg-tertiary: #111c2e;
+      --bg-surface: #162338;
+      
+      --border-color: #1e293b;
+      --border-hover: #334155;
+
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59, 130, 246, 0.12);
+
+      --danger-color: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.12);
+      --success-color: #22c55e;
+      --success-light: rgba(34, 197, 94, 0.12);
+
+      --header-height: 65px;
+      --max-width: 900px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { 
+      height: 100%; 
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; 
+      background-color: var(--bg-primary); 
+      color: var(--text-primary); 
+      line-height: 1.6; 
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; color: inherit; border: none; outline: none; }
+
+    /* NAVBAR GLOBAL */
+    .navbar {
+      height: var(--header-height);
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7, 17, 31, 0.85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo { display: inline-flex; align-items: center; }
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent-color); }
+
+    .btn-nav {
+      padding: 8px 16px;
+      background: var(--accent-color);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 13px;
+      transition: background 0.2s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-nav:hover { background: var(--accent-hover); }
+
+    /* MAIN CONTAINER */
+    .main-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+    }
+
+    /* PAGE HEADER */
+    .page-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .page-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--accent-light);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 20px;
+      color: var(--accent-color);
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .page-title {
+      font-size: clamp(26px, 4vw, 34px);
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .page-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* CARD PANEL */
+    .card-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* FORM STYLES */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 130px;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .form-textarea:focus, .form-select:focus {
+      border-color: var(--accent-color);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    /* ACTION BUTTON */
+    .btn-submit {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--accent-color);
+      color: #fff;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ERROR NOTIFICATION */
+    .error-banner {
+      display: none;
+      padding: 14px 18px;
+      background: var(--danger-light);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      color: #fca5a5;
+      font-size: 14px;
+      margin-bottom: 24px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .error-banner-close {
+      background: transparent;
+      color: currentColor;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    /* LOADING PANEL */
+    .loading-panel {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* RESULT PANEL & STYLING HASIL NOTE */
+    .result-panel {
+      display: none;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .result-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 8px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+    }
+
+    .result-content {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-primary);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .result-content h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    .result-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .result-content p {
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+    }
+
+    .result-content ul {
+      margin-left: 20px;
+      margin-bottom: 18px;
+    }
+
+    .result-content li {
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .result-content strong {
+      color: var(--text-primary);
+    }
+
+    /* FOOTER GLOBAL */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 60px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .navbar { padding: 0 16px; }
+      .nav-links { display: none; }
+      .main-container { padding: 24px 16px 40px; }
+      .result-header { flex-direction: column; align-items: flex-start; }
+      .result-actions { width: 100%; }
+      .btn-action { flex: 1; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR GLOBAL -->
+  <nav class="navbar">
+    <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI &mdash; Home">
+      <img src="../../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="../dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="../tools/all-tools.html" class="nav-link">PDF Tools</a></li>
+      <li><a href="../chat-ai.html" class="nav-link">AI Assistant</a></li>
+      <li><a href="../pdf-ai.html" class="nav-link">PDF AI</a></li>
+      <li><a href="../tools.html" class="nav-link active">AI Tools Hub</a></li>
+      <li><a href="../about.html" class="nav-link">About Us</a></li>
+    </ul>
+
+    <a href="../chat-ai.html" class="btn-nav">Coba AI Chat</a>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="main-container">
+
+    <!-- PAGE HEADER -->
+    <header class="page-header">
+      <div class="page-badge">
+        <span>📝</span>
+        <span>AI Meeting &amp; Study Note Summarizer</span>
+      </div>
+      <h1 class="page-title">AI Note Generator</h1>
+      <p class="page-desc">Mengubah transkrip rapat, hasil diskusi, atau materi mentah menjadi catatan terstruktur dan poin keputusan secara instan.</p>
+    </header>
+
+    <!-- ERROR BANNER NOTIFICATION -->
+    <div class="error-banner" id="errorBanner">
+      <span id="errorMessage">Terjadi kesalahan pada server.</span>
+      <button class="error-banner-close" id="btnErrorClose">&times;</button>
+    </div>
+
+    <!-- MAIN INPUT PANEL -->
+    <section class="card-panel" id="inputPanel">
+      
+      <div class="form-group">
+        <label class="form-label" for="rawContentInput">Materi Mentah / Hasil Rapat</label>
+        <textarea class="form-textarea" id="rawContentInput" placeholder="Tempelkan transkrip rapat, catatan acak diskusi tim, atau poin-poin materi kuliah/pelatihan di sini..."></textarea>
+      </div>
+
+      <div class="settings-grid">
+        <div class="form-group">
+          <label class="form-label" for="noteFormat">Format Catatan</label>
+          <select class="form-select" id="noteFormat">
+            <option value="meeting" selected>Notulen Rapat (MoM / Minutes of Meeting)</option>
+            <option value="cornell">Cornell Note System (Catatan Pemelajaran)</option>
+            <option value="action_plan">Rencana Aksi &amp; Tugas (Action Plan)</option>
+            <option value="executive_summary">Ringkasan Eksekutif Ringkas</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="detailLevel">Kelengkapan Rincian</label>
+          <select class="form-select" id="detailLevel">
+            <option value="concise">Singkat &amp; Padat (Poin Keputusan Saja)</option>
+            <option value="standard" selected>Standar (Ringkasan &amp; Tindakan Lanjut)</option>
+            <option value="comprehensive">Komprehensif (Sangat Detail)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="languageSelect">Bahasa Catatan</label>
+          <select class="form-select" id="languageSelect">
+            <option value="id" selected>Bahasa Indonesia</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SUBMIT BUTTON -->
+      <button class="btn-submit" id="btnGenerate" disabled>
+        <span>⚡ Buat Catatan Terstruktur</span>
+      </button>
+
+    </section>
+
+    <!-- LOADING STATE PANEL -->
+    <section class="loading-panel" id="loadingPanel">
+      <div class="spinner"></div>
+      <div class="loading-text">AI sedang mengekstrak poin penting, keputusan, dan menyusun catatan rapi...</div>
+    </section>
+
+    <!-- RESULT DISPLAY PANEL -->
+    <section class="result-panel" id="resultPanel">
+      <div class="result-header">
+        <div class="result-title-group">
+          <span>📋</span>
+          <h2 class="result-title" id="resultDocTitle">Hasil Catatan AI</h2>
+        </div>
+        <div class="result-actions">
+          <button class="btn-action" id="btnCopy">
+            <span>📋</span> Salin Teks
+          </button>
+          <button class="btn-action" id="btnDownloadTxt">
+            <span>📄</span> Unduh TXT
+          </button>
+          <button class="btn-action" id="btnRegenerate">
+            <span>🔄</span> Buat Ulang
+          </button>
+        </div>
+      </div>
+
+      <div class="result-content" id="resultContent"></div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER GLOBAL -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="../dashboard.html">Dashboard</a>
+      <a href="../tools/all-tools.html">PDF Tools</a>
+      <a href="../chat-ai.html">AI Chat</a>
+      <a href="../pdf-ai.html">PDF AI</a>
+      <a href="../tools.html">AI Tools Hub</a>
+      <a href="../about.html">About Us</a>
+      <a href="../faq.html">FAQ</a>
+      <a href="../contact.html">Contact</a>
+      <a href="../../../legal/privacy.html">Privacy Policy</a>
+      <a href="../../../legal/terms.html">Terms of Service</a>
+    </div>
+    <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan.</p>
+  </footer>
+
+  <script>
+    (() => {
+      /* ==========================================================================
+         1. CONFIGURATION (Backend AI Port 8001)
+         ========================================================================== */
+      const AI_BACKEND_PORT = "8001";
+      
+      let baseHost = "http://127.0.0.1";
+      if (typeof window.API_BASE_URL !== 'undefined') {
+        baseHost = window.API_BASE_URL.replace(/:8000$/, '');
+      }
+      
+      const API_BASE_URL = `${baseHost}:${AI_BACKEND_PORT}`;
+      const ENDPOINT_NOTES = `${API_BASE_URL}/api/ai/notes`;
+
+      /* ==========================================================================
+         2. DOM ELEMENTS
+         ========================================================================== */
+      const rawContentInput = document.getElementById('rawContentInput');
+      const noteFormat = document.getElementById('noteFormat');
+      const detailLevel = document.getElementById('detailLevel');
+      const languageSelect = document.getElementById('languageSelect');
+      const btnGenerate = document.getElementById('btnGenerate');
+
+      const errorBanner = document.getElementById('errorBanner');
+      const errorMessage = document.getElementById('errorMessage');
+      const btnErrorClose = document.getElementById('btnErrorClose');
+
+      const loadingPanel = document.getElementById('loadingPanel');
+      const resultPanel = document.getElementById('resultPanel');
+      const resultContent = document.getElementById('resultContent');
+      const resultDocTitle = document.getElementById('resultDocTitle');
+
+      const btnCopy = document.getElementById('btnCopy');
+      const btnDownloadTxt = document.getElementById('btnDownloadTxt');
+      const btnRegenerate = document.getElementById('btnRegenerate');
+
+      /* ==========================================================================
+         3. VALIDATION & HANDLERS
+         ========================================================================== */
+      rawContentInput.addEventListener('input', () => {
+        btnGenerate.disabled = rawContentInput.value.trim().length === 0;
+      });
+
+      /* ==========================================================================
+         4. API SUBMISSION
+         ========================================================================== */
+      btnGenerate.addEventListener('click', generateNotes);
+      btnRegenerate.addEventListener('click', generateNotes);
+
+      async function generateNotes() {
+        const content = rawContentInput.value.trim();
+        if (!content) {
+          showError('Harap masukkan materi mentah atau hasil rapat.');
+          return;
+        }
+
+        hideError();
+        showLoading(true);
+
+        const formData = new FormData();
+        formData.append('text', content);
+        formData.append('format', noteFormat.value);
+        formData.append('detail_level', detailLevel.value);
+        formData.append('language', languageSelect.value);
+
+        try {
+          let response = await fetch(ENDPOINT_NOTES, {
+            method: 'POST',
+            body: formData
+          });
+
+          if (response.status === 404) {
+             response = await fetch(`${API_BASE_URL}/api/ai-tools/notes`, {
+                method: 'POST',
+                body: formData
+             });
+          }
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            handleHttpError(response.status, errData.detail);
+            return;
+          }
+
+          const data = await response.json();
+          showLoading(false);
+
+          if (data && (data.notes || data.result)) {
+            renderResult(data.notes || data.result);
+          } else {
+            showError('Respons backend tidak memuat hasil catatan yang valid.');
+          }
+
+        } catch (error) {
+          showLoading(false);
+          showError('Backend AI belum berjalan di http://127.0.0.1:8001 atau terjadi kesalahan koneksi server.');
+          console.error('[AI Note Generator] Error:', error);
+        }
+      }
+
+      function handleHttpError(status, detail) {
+        showLoading(false);
+        if (detail) {
+          showError(`Gagal: ${detail}`);
+        } else if (status === 404) {
+          showError('Endpoint backend AI Note Generator (/api/ai/notes) tidak ditemukan.');
+        } else {
+          showError(`Server merespons dengan kode kesalahan (HTTP ${status}).`);
+        }
+      }
+
+      /* ==========================================================================
+         5. RENDERING & PARSER TEKS (PEMBERSIH MARKDOWN & ASTERISK)
+         ========================================================================== */
+      function showLoading(isLoading) {
+        if (isLoading) {
+          loadingPanel.style.display = 'block';
+          resultPanel.style.display = 'none';
+          btnGenerate.disabled = true;
+        } else {
+          loadingPanel.style.display = 'none';
+          btnGenerate.disabled = false;
+        }
+      }
+
+      function parseAndRenderResponse(rawText) {
+        if (!rawText) return '';
+
+        let text = rawText.replace(/```html/gi, '').replace(/```/g, '').trim();
+
+        const txtArea = document.createElement('textarea');
+        txtArea.innerHTML = text;
+        text = txtArea.value;
+
+        const lines = text.split('\n');
+        let htmlOutput = '';
+        let inList = false;
+
+        lines.forEach(line => {
+          let trimmed = line.trim();
+          if (!trimmed) return;
+
+          trimmed = trimmed.replace(/<\/?h[1-6]>/gi, '').replace(/<\/?p>/gi, '');
+
+          if (/^(#{1,6}|\d+\.)\s+/.test(trimmed)) {
+            if (inList) { htmlOutput += '</ul>'; inList = false; }
+            let titleText = trimmed
+              .replace(/^(#{1,6}|\d+\.)\s+/, '')
+              .replace(/\*\*(.*?)\*\*/g, '$1')
+              .replace(/\*(.*?)\*/g, '$1')
+              .replace(/#/g, '');
+            htmlOutput += `<h3>${titleText}</h3>`;
+          } 
+          else if (/^[\*\-]\s+/.test(trimmed)) {
+            if (!inList) { htmlOutput += '<ul>'; inList = true; }
+            let itemText = trimmed.replace(/^[\*\-]\s+/, '');
+            itemText = itemText
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+              .replace(/\*/g, '')
+              .replace(/#/g, '');
+            htmlOutput += `<li>${itemText}</li>`;
+          } 
+          else {
+            if (inList) { htmlOutput += '</ul>'; inList = false; }
+            let paragraphText = trimmed
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+              .replace(/\*/g, '')
+              .replace(/#/g, '');
+            htmlOutput += `<p>${paragraphText}</p>`;
+          }
+        });
+
+        if (inList) { htmlOutput += '</ul>'; }
+
+        return htmlOutput;
+      }
+
+      function renderResult(contentText) {
+        resultDocTitle.textContent = 'Catatan Terstruktur AI';
+        resultContent.innerHTML = parseAndRenderResponse(contentText);
+        resultPanel.style.display = 'block';
+        resultPanel.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function showError(msg) {
+        errorMessage.textContent = msg;
+        errorBanner.style.display = 'flex';
+      }
+
+      function hideError() {
+        errorBanner.style.display = 'none';
+      }
+
+      btnErrorClose.addEventListener('click', hideError);
+
+      /* ==========================================================================
+         6. ACTIONS & DOWNLOAD
+         ========================================================================== */
+      btnCopy.addEventListener('click', () => {
+        const text = resultContent.innerText;
+        if (!text) return;
+
+        navigator.clipboard.writeText(text).then(() => {
+          const original = btnCopy.innerHTML;
+          btnCopy.innerHTML = '<span>✔</span> Tersalin!';
+          setTimeout(() => btnCopy.innerHTML = original, 2000);
+        });
+      });
+
+      btnDownloadTxt.addEventListener('click', () => {
+        const text = resultContent.innerText;
+        if (!text) return;
+
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Catatan_Rapat_AI_${new Date().toISOString().slice(0,10)}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      btnGenerate.disabled = true;
+
+    })();
+  </script>
+</body>
+</html>

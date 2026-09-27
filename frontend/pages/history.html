@@ -663,6 +663,7 @@
     }
   </style>
 <script src="../js/api-config.js"></script>
+    <script src="/js/auth-nav.js"></script>
 </head>
 
 <body>
@@ -763,8 +764,8 @@
 
 <footer>
   <div class="footer-bottom">
-    <div>&copy; 2026 <strong>PDF Master AI</strong>. All rights reserved.</div>
-    <div>Smart PDF Workspace</div>
+    <div>&copy; 2026 <strong>PDF Master AI</strong>. Copyright.</div>
+    <div>Developer by Muhamad Ruslan,S.Pd.Gr</div>
   </div>
 </footer>
 
@@ -851,8 +852,9 @@
     // Load Profil Header dari Backend
     async function loadHeaderProfile() {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/profile/`);
-        if (!response.ok) return;
+        const response = await fetch(`${API_BASE_URL}/api/profile/`, {
+          credentials: 'include',
+        });
 
         const data = await response.json();
         const name = data.name || 'User';
@@ -1055,7 +1057,9 @@
     async function loadHistory() {
       showLoading();
       try {
-        const response = await fetch(`${API_BASE_URL}/api/history`);
+        const response = await fetch(`${API_BASE_URL}/api/history`, {
+          credentials: 'include'
+        });
         if (!response.ok) {
           throw new Error('Gagal memuat riwayat dari server.');
         }
@@ -1075,7 +1079,8 @@
 
       try {
         const response = await fetch(`${API_BASE_URL}/api/history/${id}`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          credentials: 'include'
         });
 
         if (!response.ok) {
@@ -1097,7 +1102,8 @@
 
       try {
         const response = await fetch(`${API_BASE_URL}/api/history`, {
-          method: 'DELETE'
+          method: 'DELETE',
+          credentials: 'include'
         });
 
         if (!response.ok) {
@@ -1137,7 +1143,7 @@
     document.getElementById('logoutButton')?.addEventListener('click', (e) => {
       e.preventDefault();
       localStorage.removeItem('mr_pdf_user');
-      window.location.href = '/pages/login.html';
+      window.location.replace('/index.html');
     });
 
     // Inisialisasi
@@ -1148,4 +1154,14 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 

@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chat Mr Tools AI — PDF Master AI</title>
+  <meta name="description" content="Workspace Chat AI khusus untuk berdiskusi, menganalisis, dan membantu pekerjaan Anda.">
+
+  <!-- FAVICON FIX (Jalur Relatif Ke Folder Assets) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../../assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --sidebar-width: 280px;
+      --header-height: 72px;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden; /* Mengunci scroll window utama agar chat area yang memilikinya */
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* HEADER */
+    .dashboard-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 24px;
+
+      background: rgba(7, 17, 31, .96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .brand-divider {
+      color: var(--border-light);
+      font-size: 18px;
+      font-weight: 300;
+    }
+
+    .ai-brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(59, 130, 246, 0.12);
+      padding: 4px 10px;
+      border-radius: 99px;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .mobile-menu {
+      display: none;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 21px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ai-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface-2);
+      padding: 6px 12px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 8px 5px 5px;
+
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 100px;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .user-plan {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* SIDEBAR CHAT */
+    .chat-sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+
+      padding: 20px 14px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      z-index: 900;
+      transition: transform .25s ease;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .btn-new-chat {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .2s;
+    }
+
+    .btn-new-chat:hover {
+      background: var(--primary-hover);
+    }
+
+    .search-chat-box {
+      position: relative;
+    }
+
+    .search-chat-input {
+      width: 100%;
+      padding: 9px 12px 9px 34px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .search-chat-input:focus {
+      border-color: var(--primary);
+    }
+
+    .search-chat-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .recent-chats-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted-2);
+      letter-spacing: .08em;
+      padding: 0 4px;
+    }
+
+    .recent-chats-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      flex: 1;
+      padding-right: 4px;
+    }
+
+    .recent-chat-item {
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: .2s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-chat-item:hover,
+    .recent-chat-item.active {
+      color: #fff;
+      background: var(--surface-2);
+    }
+
+    .recent-chat-item.active {
+      border-left: 3px solid var(--primary);
+      background: rgba(59, 130, 246, .1);
+    }
+
+    .sidebar-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .sidebar-bottom-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      transition: .2s ease;
+    }
+
+    .sidebar-bottom-link:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    /* MAIN CHAT AREA */
+    .chat-main {
+      margin-left: var(--sidebar-width);
+      padding-top: var(--header-height);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      scroll-behavior: smooth;
+    }
+
+    .chat-wrapper {
+      width: min(100%, 820px);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* WELCOME SCREEN (Saat belum ada obrolan) */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin: auto 0;
+      padding: 40px 0;
+    }
+
+    .welcome-ai-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .welcome-screen h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .welcome-screen p {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+    }
+
+    .suggestions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    .suggestion-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: left;
+      font-size: 13px;
+      color: var(--text);
+      transition: .2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .suggestion-card:hover {
+      border-color: var(--primary);
+      background: var(--surface-2);
+      transform: translateY(-2px);
+    }
+
+    /* BUBBLE CHAT MESSAGES */
+    .message-row {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .message-row.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .message-row.ai .message-avatar {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--primary);
+    }
+
+    .message-row.user .message-avatar {
+      background: var(--surface-3);
+      color: var(--text);
+    }
+
+    .message-content-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 80%;
+    }
+
+    .message-row.user .message-content-group {
+      align-items: flex-end;
+    }
+
+    .message-bubble {
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+
+    .message-row.ai .message-bubble {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-top-left-radius: 4px;
+    }
+
+    .message-row.user .message-bubble {
+      background: var(--primary);
+      color: #fff;
+      border-top-right-radius: 4px;
+    }
+
+    .message-timestamp {
+      font-size: 11px;
+      color: var(--muted-2);
+      padding: 0 4px;
+    }
+
+    /* CHAT INPUT PANEL */
+    .chat-input-area {
+      padding: 16px 20px 24px;
+      background: rgba(7, 17, 31, 0.95);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+    }
+
+    .input-box-wrapper {
+      width: min(100%, 820px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transition: border-color .2s;
+    }
+
+    .input-box-wrapper:focus-within {
+      border-color: var(--primary);
+    }
+
+    .btn-attachment {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 18px;
+      padding: 8px;
+      border-radius: 8px;
+      transition: .2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-attachment:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .chat-textarea {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      max-height: 120px;
+      min-height: 24px;
+      padding: 8px 0;
+      line-height: 1.4;
+    }
+
+    .chat-textarea::placeholder {
+      color: var(--muted-2);
+    }
+
+    .btn-send-chat {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background .2s;
+      flex-shrink: 0;
+    }
+
+    .btn-send-chat:hover {
+      background: var(--primary-hover);
+    }
+
+    /* MEDIA QUERIES FOR RESPONSIVENESS */
+    @media (max-width: 820px) {
+      .mobile-menu { display: flex; }
+
+      .chat-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .chat-sidebar.is-open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay.is-open {
+        display: block;
+      }
+
+      .chat-main {
+        margin-left: 0;
+      }
+
+      .suggestions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .user-info {
+        display: none;
+      }
+
+      .brand-divider, .ai-brand-badge {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="dashboard-header">
+    <div class="header-left">
+      <button class="mobile-menu" id="mobileMenu" aria-label="Buka menu">&#9776;</button>
+
+      <a href="/pages/dashboard.html" class="brand-logo" aria-label="PDF Master AI — Home">
+        <img src="../../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+        <span class="brand-divider">|</span>
+        <span class="ai-brand-badge">&#10024; Mr Tools AI</span>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <div class="ai-status-indicator">
+        <span class="status-dot"></span>
+        <span>AI Ready</span>
+      </div>
+
+      <div class="user-menu">
+        <div class="avatar" id="headerAvatar">U</div>
+        <div class="user-info">
+          <div class="user-name" id="headerUserName">User</div>
+          <div class="user-plan" id="headerUserPlan">FREE Plan</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SIDEBAR CHAT -->
+  <aside class="chat-sidebar" id="chatSidebar">
+    <div class="sidebar-top">
+      <button class="btn-new-chat" id="btnNewChat">
+        <span>&#43;</span> New Chat
+      </button>
+
+      <div class="search-chat-box">
+        <span class="search-chat-icon">&#128099;</span>
+        <input type="text" class="search-chat-input" placeholder="Cari obrolan..." id="searchChatInput">
+      </div>
+
+      <div class="recent-chats-label">Recent Chats</div>
+
+      <div class="recent-chats-list" id="recentChatsList">
+        <div class="recent-chat-item active" data-id="1">
+          <span>&#128172;</span>
+          <span>Analisis Dokumen Ringkasan...</span>
+        </div>
+        <div class="recent-chat-item" data-id="2">
+          <span>&#128172;</span>
+          <span>Bantuan Formula Excel</span>
+        </div>
+        <div class="recent-chat-item" data-id="3">
+          <span>&#128172;</span>
+          <span>Draft Email Kerjasama</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="/pages/history.html" class="sidebar-bottom-link">
+        <span>&#128340;</span> History
+      </a>
+      <a href="/pages/settings.html" class="sidebar-bottom-link">
+        <span>&#9881;</span> Settings
+      </a>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- AREA CHAT UTAMA -->
+  <main class="chat-main">
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-wrapper" id="chatWrapper">
+
+        <!-- WELCOME SCREEN (Sapaan Awal) -->
+        <div class="welcome-screen" id="welcomeScreen">
+          <div class="welcome-ai-icon">&#10024;</div>
+          <h1>Halo! Saya Mr Tools AI.</h1>
+          <p>Ada yang bisa saya bantu hari ini?</p>
+
+          <div class="suggestions-grid">
+            <button class="suggestion-card" onclick="sendSuggestedPrompt('Tolong jelaskan cara mengompres PDF dengan efisien.')">
+              <span>💡</span>
+              <span>Jelaskan sesuatu</span>
+            </button>
+            <button class="suggestion-card" onclick="sendSuggestedPrompt('Bantu saya membuat surat lamaran kerja profesional.')">
+              <span>📝</span>
+              <span>Bantu menulis</span>
+            </button>
+            <button class="suggestion-card" onclick="sendSuggestedPrompt('Buatkan contoh kode JavaScript untuk validasi form.')">
+              <span>💻</span>
+              <span>Bantu coding</span>
+            </button>
+            <button class="suggestion-card" onclick="sendSuggestedPrompt('Rangkumkan poin penting dalam materi pembelajaran ini.')">
+              <span>📚</span>
+              <span>Bantu belajar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- LIST PESAN (Hidden default/Akan dirender via JS saat simulasi) -->
+        <div id="messagesList" style="display: flex; flex-direction: column; gap: 20px;"></div>
+
+      </div>
+    </div>
+
+    <!-- INPUT CHAT (Di Bagian Bawah) -->
+    <div class="chat-input-area">
+      <div class="input-box-wrapper">
+        <button class="btn-attachment" title="Unggah file/lampiran">&#128206;</button>
+        <textarea class="chat-textarea" id="chatInput" placeholder="Tulis pesan..." rows="1"></textarea>
+        <button class="btn-send-chat" id="btnSendChat" title="Kirim Pesan">&#10148;</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // SCRIPT UTAMA & INTERAKSI UI
+    (() => {
+      // DOM Elements
+      const mobileMenu = document.getElementById('mobileMenu');
+      const chatSidebar = document.getElementById('chatSidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      const welcomeScreen = document.getElementById('welcomeScreen');
+      const messagesList = document.getElementById('messagesList');
+      const chatInput = document.getElementById('chatInput');
+      const btnSendChat = document.getElementById('btnSendChat');
+      const btnNewChat = document.getElementById('btnNewChat');
+      const chatContainer = document.getElementById('chatContainer');
+
+      // Toggle Mobile Sidebar
+      function closeSidebar() {
+        chatSidebar.classList.remove('is-open');
+        sidebarOverlay.classList.remove('is-open');
+      }
+
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+          chatSidebar.classList.toggle('is-open');
+          sidebarOverlay.classList.toggle('is-open');
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      // Auto Resize Textarea Input
+      chatInput.addEventListener('input', () => {
+        chatInput.style.height = 'auto';
+        chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+      });
+
+      // Format Waktu Sekarang
+      function getCurrentTime() {
+        const now = new Date();
+        return now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      }
+
+      // Fungsi Tambah Bubble Pesan ke UI
+      function appendMessage(sender, text) {
+        welcomeScreen.style.display = 'none';
+
+        const row = document.createElement('div');
+        row.className = `message-row ${sender}`;
+
+        const isAi = sender === 'ai';
+        const avatarText = isAi ? '✨' : 'U';
+
+        row.innerHTML = `
+          <div class="message-avatar">${avatarText}</div>
+          <div class="message-content-group">
+            <div class="message-bubble"></div>
+            <div class="message-timestamp">${getCurrentTime()}</div>
+          </div>
+        `;
+
+        // Sanitasi teks bebas XSS
+        row.querySelector('.message-bubble').textContent = text;
+        messagesList.appendChild(row);
+
+        // Auto Scroll Ke Bawah
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      // Simulasi Pengiriman Pesan
+      function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        // Render Pesan User
+        appendMessage('user', text);
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+
+        // Simulasi Balasan AI Singkat (Untuk Pratinjau Tampilan)
+        setTimeout(() => {
+          appendMessage('ai', 'Ini adalah tampilan balasan simulasi dari Mr Tools AI. Integrasi backend & API siap dihubungkan.');
+        }, 800);
+      }
+
+      // Handler Tombol Kirim & Enter Key
+      btnSendChat.addEventListener('click', handleSendMessage);
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSendMessage();
+        }
+      });
+
+      // Handler New Chat (Reset Tampilan Ke Welcome Screen)
+      btnNewChat.addEventListener('click', () => {
+        messagesList.innerHTML = '';
+        welcomeScreen.style.display = 'flex';
+        chatInput.value = '';
+        closeSidebar();
+      });
+
+      // Function Global untuk Suggestion Cards
+      window.sendSuggestedPrompt = function(promptText) {
+        chatInput.value = promptText;
+        handleSendMessage();
+      };
+    })();
+  </script>
+
+</body>
+</html>

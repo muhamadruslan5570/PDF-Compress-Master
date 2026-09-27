@@ -1,0 +1,1100 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Admin Blog â€” MR Compress PDF</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Dashboard khusus pengelolaan konten dan artikel Blog MR Compress PDF.">
+
+  <!-- FAVICON FIX (Jalur Relatif) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../js/api-config.js"></script>
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --sidebar-width: 250px;
+      --header-height: 72px;
+      --radius: 14px;
+      --max: 1400px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* LOADING & 403 STATES */
+    #loadingState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--muted);
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--surface-3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #accessDeniedState {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .error-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .error-card h1 {
+      font-size: 24px;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+
+    .error-card p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .btn-back-home {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn-back-home:hover {
+      background: var(--primary-hover);
+    }
+
+    /* MAIN ADMIN BLOG APP WRAPPER */
+    #developerApp {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .dashboard-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(7, 17, 31, .96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .dev-badge {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .mobile-menu {
+      display: none;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 21px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px 5px 5px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      max-width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-text {
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .logout-btn {
+      padding: 7px 14px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fecaca;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform .25s ease;
+    }
+
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      padding: 0 12px;
+      margin-bottom: 8px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .sidebar-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin: 2px 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sidebar-link:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .sidebar-link.active {
+      color: #fff;
+      background: rgba(59, 130, 246, .13);
+      border-color: rgba(59, 130, 246, .25);
+    }
+
+    .sidebar-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    /* MAIN CONTENT */
+    .dashboard-main {
+      margin-left: var(--sidebar-width);
+      padding-top: var(--header-height);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      padding: 38px 0 70px;
+      flex: 1;
+    }
+
+    .page-header {
+      margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 34px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-light);
+    }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--surface-3);
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* SECTION LAYOUT */
+    .section {
+      margin-bottom: 38px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    /* QUICK ACCESS GRID */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .quick-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .quick-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-light);
+      background: var(--surface-2);
+    }
+
+    .quick-card-top {
+      margin-bottom: 16px;
+    }
+
+    .quick-card h3 {
+      font-size: 15px;
+      color: #fff;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .btn-open {
+      padding: 8px 14px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      width: max-content;
+      transition: background 0.2s;
+    }
+
+    .btn-open:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* SYSTEM STATUS & PROFILE GRID */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .status-name {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+    }
+
+    .status-pill.checking {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* PROFILE DETAILS */
+    .profile-info-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .info-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted-2);
+      font-weight: 700;
+    }
+
+    .info-val {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .permission-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* RECENT ACTIVITY */
+    .empty-activity {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-left: var(--sidebar-width);
+      background: #0c1424;
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .footer-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .mobile-menu { display: flex; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.is-open { transform: translateX(0); }
+      .sidebar-overlay.is-open { display: block; }
+      .dashboard-main, footer { margin-left: 0; }
+      .dashboard-content { width: min(100% - 30px, var(--max)); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .quick-grid { grid-template-columns: 1fr; }
+      .two-col-grid { grid-template-columns: 1fr; }
+      .user-info { display: none; }
+    }
+
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+    <script src="/js/auth-nav.js"></script>
+</head>
+
+<body>
+
+  <!-- STATE 1: LOADING SCREEN INITIALIZATION -->
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <p>Memverifikasi hak akses Admin Blog...</p>
+  </div>
+
+  <!-- STATE 2: 403 ACCESS DENIED SCREEN -->
+  <div id="accessDeniedState">
+    <div class="error-card">
+      <span class="error-icon">&#128683;</span>
+      <h1>403 â€” Akses Ditolak</h1>
+      <p>Halaman ini khusus untuk Admin Blog atau Developer. Akun Anda tidak memiliki izin untuk mengakses area ini.</p>
+      <a href="/pages/dashboard.html" class="btn-back-home">Kembali ke Dashboard User</a>
+    </div>
+  </div>
+
+  <!-- STATE 3: ADMIN BLOG MAIN APP -->
+  <div id="developerApp">
+    
+    <!-- HEADER -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Buka Menu Sidebar">&#9776;</button>
+        <a href="/pages/admin-blog/index.html" class="brand-logo" aria-label="MR Compress PDF Admin Blog">
+          <img src="../../assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="140" height="45">
+          <span class="dev-badge">ADMIN BLOG</span>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="avatar" id="headerAvatar">A</div>
+          <div class="user-info">
+            <span class="user-name" id="headerUserName">Admin Blog</span>
+            <span class="user-role-text" id="headerUserRole">blog_admin</span>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- DASHBOARD AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">DASHBOARD</div>
+        <a href="/pages/admin-blog/index.html" class="sidebar-link active">
+          <span class="sidebar-icon">&#9997;</span>
+          <span>Admin Blog</span>
+        </a>
+      </div>
+
+      <!-- USER AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">USER AREA</div>
+        <a href="/pages/dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">&#8962;</span>
+          <span>User Dashboard</span>
+        </a>
+        <a href="/pages/tools/all-tools.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128190;</span>
+          <span>PDF Tools</span>
+        </a>
+        <a href="/pages/ai/chat-ai.html" class="sidebar-link">
+          <span class="sidebar-icon">&#10024;</span>
+          <span>AI</span>
+        </a>
+        <a href="/pages/history.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128340;</span>
+          <span>History</span>
+        </a>
+        <a href="/pages/profile.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128100;</span>
+          <span>Profile</span>
+        </a>
+        <a href="/pages/blog/index.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128240;</span>
+          <span>Blog</span>
+        </a>
+      </div>
+
+      <!-- ADMIN AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">ADMIN AREA</div>
+        <a href="/pages/admin-blog/index.html" class="sidebar-link active">
+          <span class="sidebar-icon">&#9997;</span>
+          <span>Admin Blog</span>
+        </a>
+      </div>
+
+      <!-- DEVELOPER AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">DEVELOPER</div>
+        <a href="/pages/developer/index.html" class="sidebar-link">
+          <span class="sidebar-icon">&#9881;</span>
+          <span>Dashboard</span>
+        </a>
+      </div>
+
+      <!-- ACCOUNT AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">ACCOUNT</div>
+        <a href="/pages/profile.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128104;</span>
+          <span>Profile</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebarLogoutBtn">
+          <span class="sidebar-icon">&#8617;</span>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="dashboard-main">
+      <div class="dashboard-content">
+
+        <!-- HEADER TITLE -->
+        <section class="page-header">
+          <h1>Admin Blog Dashboard</h1>
+          <p>Pengelolaan konten, publikasi, dan artikel Blog MR Compress PDF.</p>
+        </section>
+
+        <!-- STATISTIC CARDS -->
+        <section class="section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">&#128240;</div>
+              <div class="stat-value" id="statBlogPosts">--</div>
+              <div class="stat-label">TOTAL POSTS</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#9989;</div>
+              <div class="stat-value" id="statPublishedPosts">--</div>
+              <div class="stat-label">PUBLISHED</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#128221;</div>
+              <div class="stat-value" id="statDraftPosts">--</div>
+              <div class="stat-label">DRAFTS</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#128421;</div>
+              <div class="stat-value" style="color: var(--success); font-size: 16px;">ONLINE</div>
+              <div class="stat-label">BLOG SERVICE</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- QUICK ACCESS -->
+        <section class="section">
+          <h2 class="section-title">Quick Access</h2>
+          <div class="quick-grid">
+            
+            <div class="quick-card">
+              <div class="quick-card-top">
+                <h3><span>&#128240;</span> Publik Blog</h3>
+                <p>Lihat tampilan blog publik untuk pembaca.</p>
+              </div>
+              <a href="/pages/blog/index.html" class="btn-open">Open</a>
+            </div>
+
+            <div class="quick-card">
+              <div class="quick-card-top">
+                <h3><span>&#9997;</span> Tulis Artikel</h3>
+                <p>Buat dan publikasikan artikel blog baru.</p>
+              </div>
+              <a href="/pages/blog/posting-admin.html" class="btn-open">Open</a>
+            </div>
+
+            <div class="quick-card">
+              <div class="quick-card-top">
+                <h3><span>&#8962;</span> User Area</h3>
+                <p>Kembali ke area dashboard pengguna.</p>
+              </div>
+              <a href="/pages/dashboard.html" class="btn-open">Open</a>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SYSTEM STATUS & PROFILE GRID -->
+        <section class="section">
+          <div class="two-col-grid">
+            
+            <!-- SYSTEM STATUS PANEL -->
+            <div class="panel-card">
+              <div class="panel-title">
+                <span>Blog System Status</span>
+                <span style="font-size: 11px; color: var(--muted); font-weight: normal;">Live Checking</span>
+              </div>
+              <div class="status-list">
+                
+                <div class="status-item">
+                  <span class="status-name">Backend API</span>
+                  <span class="status-pill checking"><span class="status-dot"></span>Checking...</span>
+                </div>
+
+                <div class="status-item">
+                  <span class="status-name">Authentication</span>
+                  <span class="status-pill checking"><span class="status-dot"></span>Checking...</span>
+                </div>
+
+                <div class="status-item">
+                  <span class="status-name">Database</span>
+                  <span class="status-pill checking"><span class="status-dot"></span>Checking...</span>
+                </div>
+
+                <div class="status-item">
+                  <span class="status-name">Blog API</span>
+                  <span class="status-pill checking"><span class="status-dot"></span>Checking...</span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ADMIN PROFILE PANEL -->
+            <div class="panel-card">
+              <div class="panel-title">Admin Profile</div>
+              <div class="profile-info-list">
+                
+                <div class="info-row">
+                  <span class="info-label">Name</span>
+                  <span class="info-val" id="devProfileName">--</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Email</span>
+                  <span class="info-val" id="devProfileEmail">--</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Role</span>
+                  <span class="info-val" style="color: var(--primary); text-transform: uppercase;" id="devProfileRole">--</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Permissions</span>
+                  <div class="permission-tags" id="devProfilePermissions">
+                    <span class="tag">--</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- RECENT ACTIVITY -->
+        <section class="section">
+          <h2 class="section-title">Recent Blog Activity</h2>
+          <div class="empty-activity">
+            Belum ada aktivitas penulisan terbaru.
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-content">
+        <div>&copy; 2026 <strong>MR Compress PDF</strong>. All rights reserved.</div>
+        <div>Admin Blog Workspace</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (async () => {
+      const loadingState = document.getElementById('loadingState');
+      const accessDeniedState = document.getElementById('accessDeniedState');
+      const developerApp = document.getElementById('developerApp');
+
+      // 1. OTENTIKASI & OTORISASI VIA GET /api/auth/me
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        // Jika 401 Unauthenticated: Arahkan langsung ke halaman login
+        if (response.status === 401) {
+          window.location.href = '/pages/login.html';
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error('Gagal mengambil data session.');
+        }
+
+        const data = await response.json();
+
+        // Cek apakah authenticated === true dan role === "developer" atau "blog_admin"
+        if (!data.authenticated || (data.role !== 'developer' && data.role !== 'blog_admin')) {
+          loadingState.style.display = 'none';
+          accessDeniedState.style.display = 'flex';
+          return;
+        }
+
+        // Tampilkan Dashboard Admin Blog
+        loadingState.style.display = 'none';
+        developerApp.style.display = 'flex';
+
+        // 2. RENDER DATA PROFILE DINAMIS
+        const devName = data.name || 'Admin Blog';
+        const devEmail = data.email || '--';
+        const devRole = data.role || 'blog_admin';
+        const permissions = data.permissions || [];
+
+        document.getElementById('headerUserName').textContent = devName;
+        document.getElementById('headerUserRole').textContent = devRole;
+        document.getElementById('devProfileName').textContent = devName;
+        document.getElementById('devProfileEmail').textContent = devEmail;
+        document.getElementById('devProfileRole').textContent = devRole;
+
+        const avatarEl = document.getElementById('headerAvatar');
+        avatarEl.textContent = devName.charAt(0).toUpperCase();
+
+        const permissionsContainer = document.getElementById('devProfilePermissions');
+        permissionsContainer.innerHTML = '';
+        if (Array.isArray(permissions) && permissions.length > 0) {
+          permissions.forEach(perm => {
+            const tag = document.createElement('span');
+            tag.className = 'tag';
+            tag.textContent = perm;
+            permissionsContainer.appendChild(tag);
+          });
+        } else {
+          permissionsContainer.innerHTML = '<span class="tag">None</span>';
+        }
+
+        // 3. STATISTIK DEVELOPER/BLOG VIA GET /api/developer/stats
+        try {
+          const statsResponse = await fetch(`${API_BASE_URL}/api/developer/stats`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+
+          if (statsResponse.ok) {
+            const stats = await statsResponse.json();
+            document.getElementById('statBlogPosts').textContent = stats.total_blog_posts ?? '--';
+          }
+        } catch (e) {
+          console.warn('Gagal mengambil statistik blog:', e);
+        }
+
+      } catch (err) {
+        console.error('Auth verification error:', err);
+        loadingState.style.display = 'none';
+        accessDeniedState.style.display = 'flex';
+      }
+
+      // 4. HANDLER MOBILE MENU SIDEBAR
+      const mobileMenu = document.getElementById('mobileMenu');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      function closeSidebar() {
+        sidebar.classList.remove('is-open');
+        sidebarOverlay.classList.remove('is-open');
+      }
+
+      if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+          sidebar.classList.toggle('is-open');
+          sidebarOverlay.classList.toggle('is-open');
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      // 5. LOGOUT HANDLER (ASYNCHRONOUS CALL TO BACKEND)
+      const handleLogout = async (e) => {
+        if (e) e.preventDefault();
+
+        try {
+          await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'
+          });
+        } catch (err) {
+          console.error('Logout API error:', err);
+        } finally {
+          localStorage.removeItem('mr_pdf_user');
+          window.location.replace('/index.html');
+        }
+      };
+
+      document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+      document.getElementById('sidebarLogoutBtn').addEventListener('click', handleLogout);
+    })();
+  </script>
+</body>
+</html>
+
+
+

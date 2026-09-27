@@ -1,15 +1,19 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>AI PDF Assistant &mdash; PDF Master AI</title>
-  <meta name="description" content="Upload a document and let AI help you understand its contents.">
+  <title>AI PDF Question Answer &mdash; PDF Master AI</title>
+  <meta name="description" content="Tanyakan apa saja langsung kepada dokumen PDF Anda dengan kontekstual presisi menggunakan AI.">
 
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
-  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+  <!-- BRANDING GLOBAL -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../../js/api-config.js"></script>
 
   <style>
     :root {
@@ -30,10 +34,12 @@
       --accent-light: rgba(59, 130, 246, 0.12);
 
       --danger-color: #ef4444;
+      --danger-light: rgba(239, 68, 68, 0.12);
       --success-color: #22c55e;
+      --success-light: rgba(34, 197, 94, 0.12);
 
       --header-height: 65px;
-      --max-width: 1100px;
+      --max-width: 900px;
       --radius-sm: 8px;
       --radius-md: 12px;
       --radius-lg: 18px;
@@ -53,9 +59,9 @@
     }
 
     a { color: inherit; text-decoration: none; }
-    button, input, textarea { font: inherit; color: inherit; border: none; outline: none; }
+    button, input, textarea, select { font: inherit; color: inherit; border: none; outline: none; }
 
-    /* NAVBAR */
+    /* NAVBAR GLOBAL */
     .navbar {
       height: var(--header-height);
       padding: 0 32px;
@@ -114,7 +120,7 @@
       padding: 40px 24px 60px;
     }
 
-    /* HEADER SECTION */
+    /* PAGE HEADER */
     .page-header {
       text-align: center;
       margin-bottom: 32px;
@@ -135,7 +141,7 @@
     }
 
     .page-title {
-      font-size: clamp(24px, 4vw, 32px);
+      font-size: clamp(26px, 4vw, 34px);
       font-weight: 800;
       margin-bottom: 8px;
       letter-spacing: -0.02em;
@@ -148,36 +154,21 @@
       margin: 0 auto;
     }
 
-    /* WORKSPACE GRID LAYOUT */
-    .workspace-grid {
-      display: grid;
-      grid-template-columns: 380px 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-
-    /* UPLOAD & DOCUMENT PANEL */
-    .panel {
+    /* CARD PANEL */
+    .card-panel {
       background: var(--bg-secondary);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 28px;
+      margin-bottom: 24px;
       box-shadow: var(--shadow-md);
     }
 
-    .panel-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    /* UPLOAD DROPZONE */
     .dropzone {
       border: 2px dashed var(--border-color);
       border-radius: var(--radius-md);
-      padding: 32px 16px;
+      padding: 36px 20px;
       text-align: center;
       background: var(--bg-tertiary);
       cursor: pointer;
@@ -190,367 +181,298 @@
     }
 
     .dropzone-icon {
-      font-size: 36px;
-      margin-bottom: 8px;
+      font-size: 40px;
+      margin-bottom: 12px;
       display: block;
     }
 
     .dropzone-text {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    .btn-browse {
-      padding: 8px 16px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text-primary);
-      cursor: pointer;
-      transition: background 0.2s;
+      margin-bottom: 4px;
     }
 
-    .btn-browse:hover {
-      background: var(--border-color);
+    .dropzone-subtext {
+      font-size: 13px;
+      color: var(--text-muted);
     }
 
-    /* FILE INFO CARD */
-    .file-info-card {
+    /* FILE PREVIEW CARD */
+    .file-preview {
       display: none;
+      align-items: center;
+      justify-content: space-between;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
-      padding: 16px;
-      margin-top: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
     }
 
-    .file-info-header {
+    .file-info {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .file-details {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      gap: 14px;
       min-width: 0;
     }
 
     .file-icon {
-      font-size: 24px;
+      font-size: 32px;
       flex-shrink: 0;
     }
 
+    .file-details {
+      min-width: 0;
+    }
+
     .file-name {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
+      color: var(--text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .file-size {
-      font-size: 11px;
-      color: var(--text-muted);
+    .file-meta {
+      font-size: 12px;
+      color: var(--success-color);
+      margin-top: 2px;
+      font-weight: 600;
     }
 
     .btn-remove {
       background: transparent;
       color: var(--text-muted);
-      font-size: 16px;
+      font-size: 20px;
       cursor: pointer;
-      padding: 4px;
+      padding: 4px 8px;
       border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
     }
 
     .btn-remove:hover {
       color: var(--danger-color);
+      background: var(--danger-light);
     }
 
-    .btn-analyze {
-      width: 100%;
+    /* QUESTION INPUT AREA */
+    .qa-box {
       margin-top: 16px;
-      padding: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .form-textarea:focus {
+      border-color: var(--accent-color);
+    }
+
+    /* ACTION BUTTON */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
       background: var(--accent-color);
       color: #fff;
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-md);
       font-weight: 700;
-      font-size: 14px;
+      font-size: 15px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
+      gap: 10px;
+      transition: background 0.2s, opacity 0.2s;
     }
 
-    .btn-analyze:hover {
+    .btn-submit:hover:not(:disabled) {
       background: var(--accent-hover);
     }
 
-    .btn-analyze:disabled {
-      background: var(--border-color);
-      color: var(--text-muted);
-      cursor: not-allowed;
-    }
-
-    /* STATUS PDF CONTAINER */
-    .pdf-status-box {
-      display: none;
-      margin-top: 16px;
-      padding: 12px 14px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: var(--radius-sm);
-      font-size: 12px;
-      color: var(--success-color);
-    }
-
-    .pdf-status-title {
-      font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .pdf-status-meta {
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-
-    /* AI CHAT PANEL */
-    .chat-panel {
-      display: flex;
-      flex-direction: column;
-      height: 580px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      position: relative;
-    }
-
-    .chat-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--bg-tertiary);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-header-status {
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-muted);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--text-muted);
-    }
-
-    .status-dot.active {
-      background: var(--success-color);
-    }
-
-    /* QUICK ACTIONS */
-    .quick-actions {
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      background: var(--bg-primary);
-    }
-
-    .btn-quick {
-      padding: 6px 12px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-quick:hover:not(:disabled) {
-      border-color: var(--accent-color);
-      color: var(--accent-color);
-    }
-
-    .btn-quick:disabled {
+    .btn-submit:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* CHAT MESSAGES CONTAINER */
-    .chat-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .message-bubble {
-      max-width: 85%;
-      padding: 12px 16px;
-      border-radius: 14px;
+    /* ERROR NOTIFICATION */
+    .error-banner {
+      display: none;
+      padding: 14px 18px;
+      background: var(--danger-light);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius-md);
+      color: #fca5a5;
       font-size: 14px;
-      line-height: 1.6;
-      word-break: break-word;
-      overflow-wrap: break-word;
-    }
-
-    .message-bubble.user {
-      align-self: flex-end;
-      background: var(--accent-color);
-      color: #fff;
-      border-bottom-right-radius: 2px;
-    }
-
-    .message-bubble.ai {
-      align-self: flex-start;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      border-bottom-left-radius: 2px;
-    }
-
-    /* FORMAT TEXT DALAM CHAT (TANPA HASHTAG ####) */
-    .message-bubble.ai strong {
-      color: var(--text-primary);
-      font-weight: 700;
-    }
-    .message-bubble.ai ul, .message-bubble.ai ol {
-      margin: 6px 0 6px 20px;
-    }
-    .message-bubble.ai li {
-      margin-bottom: 4px;
-    }
-    .message-bubble.ai p {
-      margin-bottom: 8px;
-    }
-    .message-bubble.ai p:last-child {
-      margin-bottom: 0;
-    }
-    .message-bubble.ai code {
-      background: var(--bg-surface);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 12px;
-    }
-
-    /* OVERLAY BEFORE ANALYSIS */
-    .chat-disabled-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(7, 17, 31, 0.85);
-      backdrop-filter: blur(4px);
-      display: flex;
-      flex-direction: column;
+      margin-bottom: 24px;
       align-items: center;
-      justify-content: center;
-      z-index: 10;
-      text-align: center;
-      padding: 24px;
+      justify-content: space-between;
     }
 
-    .chat-disabled-icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      color: var(--text-muted);
-    }
-
-    .chat-disabled-title {
+    .error-banner-close {
+      background: transparent;
+      color: currentColor;
       font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .chat-disabled-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      max-width: 320px;
-    }
-
-    /* CHAT INPUT AREA */
-    .chat-input-area {
-      padding: 16px 20px;
-      border-top: 1px solid var(--border-color);
-      background: var(--bg-tertiary);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .chat-input {
-      flex: 1;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-
-    .chat-input:focus {
-      border-color: var(--accent-color);
-    }
-
-    .btn-send {
-      padding: 10px 20px;
-      background: var(--accent-color);
-      color: #fff;
-      border-radius: var(--radius-sm);
-      font-weight: 700;
-      font-size: 13px;
       cursor: pointer;
-      transition: background 0.2s;
     }
 
-    .btn-send:hover {
-      background: var(--accent-hover);
+    /* LOADING PANEL */
+    .loading-panel {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      margin-bottom: 24px;
     }
 
-    .btn-send:disabled {
-      background: var(--border-color);
-      color: var(--text-muted);
-      cursor: not-allowed;
-    }
-
-    /* LOADING SPINNER */
     .spinner {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255,255,255,0.3);
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-color);
       border-radius: 50%;
-      border-top-color: #fff;
       animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
     }
 
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
 
-    /* FOOTER */
+    .loading-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* RESULT PANEL & STYLING JAWABAN */
+    .result-panel {
+      display: none;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .result-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 8px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+    }
+
+    .result-content {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-primary);
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .result-content h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    .result-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .result-content p {
+      margin-bottom: 14px;
+      color: var(--text-secondary);
+    }
+
+    .result-content ul {
+      margin-left: 20px;
+      margin-bottom: 18px;
+    }
+
+    .result-content li {
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .result-content strong {
+      color: var(--text-primary);
+    }
+
+    /* FOOTER GLOBAL */
     .footer {
       border-top: 1px solid var(--border-color);
       background: var(--bg-secondary);
@@ -571,200 +493,200 @@
 
     .footer-links a:hover { color: var(--text-primary); }
 
-    /* RESPONSIVE DESIGN */
-    @media (max-width: 900px) {
-      .workspace-grid { grid-template-columns: 1fr; }
-      .chat-panel { height: 500px; }
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
       .navbar { padding: 0 16px; }
       .nav-links { display: none; }
-    }
-
-    @media (max-width: 600px) {
       .main-container { padding: 24px 16px 40px; }
-      .chat-panel { height: 450px; }
-      .chat-messages { padding: 14px; }
-      .message-bubble { max-width: 90%; font-size: 13.5px; }
-      .chat-input-area { padding: 12px; }
-      .btn-send { padding: 10px 14px; }
+      .result-header { flex-direction: column; align-items: flex-start; }
+      .result-actions { width: 100%; }
+      .btn-action { flex: 1; justify-content: center; }
     }
   </style>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<script src="../../js/api-config.js"></script>
 </head>
 <body>
 
+  <!-- NAVBAR GLOBAL -->
   <nav class="navbar">
     <a href="../dashboard.html" class="brand-logo" aria-label="PDF Master AI &mdash; Home">
-      <img src="../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+      <img src="../../../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
     </a>
 
     <ul class="nav-links">
       <li><a href="../dashboard.html" class="nav-link">Dashboard</a></li>
       <li><a href="../tools/all-tools.html" class="nav-link">PDF Tools</a></li>
       <li><a href="chat-ai.html" class="nav-link">AI Assistant</a></li>
-      <li><a href="pdf-ai.html" class="nav-link active">PDF AI</a></li>
+      <li><a href="../pdf-ai.html" class="nav-link active">PDF AI</a></li>
+      <li><a href="../tools.html" class="nav-link">AI Tools Hub</a></li>
       <li><a href="../about.html" class="nav-link">About Us</a></li>
-      <li><a href="../faq.html" class="nav-link">FAQ & Support</a></li>
     </ul>
 
     <a href="chat-ai.html" class="btn-nav">Coba AI Chat</a>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="main-container">
 
+    <!-- PAGE HEADER -->
     <header class="page-header">
       <div class="page-badge">
-        <span>&#128196;&#129302;</span>
-        <span>Document Intelligence</span>
+        <span>💬</span>
+        <span>Contextual Document Q&amp;A</span>
       </div>
-      <h1 class="page-title">AI PDF Assistant</h1>
-      <p class="page-desc">Upload a document and let AI help you understand its contents.</p>
+      <h1 class="page-title">AI PDF Question Answer</h1>
+      <p class="page-desc">Tanyakan apa saja langsung kepada dokumen PDF Anda dengan kontekstual presisi.</p>
     </header>
 
-    <div class="workspace-grid">
-
-      <section class="panel">
-        <h2 class="panel-title"><span>&#128194;</span> Unggah Berkas PDF</h2>
-        
-        <div class="dropzone" id="dropzone">
-          <span class="dropzone-icon">&#128229;</span>
-          <p class="dropzone-text">Seret &amp; Lepas file PDF di sini atau</p>
-          <button type="button" class="btn-browse" id="btnBrowse">Pilih File PDF</button>
-          <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
-        </div>
-
-        <div class="file-info-card" id="fileInfoCard">
-          <div class="file-info-header">
-            <div class="file-details">
-              <span class="file-icon">&#128196;</span>
-              <div style="min-width: 0;">
-                <div class="file-name" id="fileName">-</div>
-                <div class="file-size" id="fileSize">-</div>
-              </div>
-            </div>
-            <button class="btn-remove" id="btnRemoveFile" title="Hapus Berkas">&#10005;</button>
-          </div>
-        </div>
-
-        <button class="btn-analyze" id="btnAnalyze" disabled>
-          <span>Mulai Analisis PDF</span>
-        </button>
-
-        <div class="pdf-status-box" id="pdfStatusBox">
-          <div class="pdf-status-title">&#10003; PDF Siap Digunakan</div>
-          <div class="pdf-status-meta" id="pdfStatusMeta"></div>
-        </div>
-      </section>
-
-      <section class="chat-panel">
-
-        <div class="chat-disabled-overlay" id="chatOverlay">
-          <div class="chat-disabled-icon">&#128274;</div>
-          <h3 class="chat-disabled-title">Upload PDF Terlebih Dahulu</h3>
-          <p class="chat-disabled-desc">Silakan pilih dan jalankan analisis dokumen PDF untuk mulai bertanya kepada AI.</p>
-        </div>
-
-        <div class="chat-header">
-          <span style="font-weight: 700; font-size: 14px;">PDF Chat Assistant</span>
-          <div class="chat-header-status">
-            <span class="status-dot" id="statusDot"></span>
-            <span id="statusText">Upload PDF terlebih dahulu</span>
-          </div>
-        </div>
-
-        <div class="quick-actions">
-          <button class="btn-quick quick-action" data-prompt="Jelaskan isi buku/dokumen ini secara keseluruhan.">Explain PDF</button>
-          <button class="btn-quick quick-action" data-prompt="Tolong berikan ringkasan utama dokumen ini.">Summarize PDF</button>
-          <button class="btn-quick quick-action" data-prompt="Sebutkan poin-poin penting (Key Points) dalam bentuk daftar.">Key Points</button>
-          <button class="btn-quick quick-action" data-prompt="Temukan informasi atau instruksi paling penting dalam dokumen ini.">Find Important Info</button>
-        </div>
-
-        <div class="chat-messages" id="chatMessages"></div>
-
-        <div class="chat-input-area">
-          <input type="text" class="chat-input" id="chatInput" placeholder="Tanyakan sesuatu tentang PDF ini..." disabled>
-          <button class="btn-send" id="btnSend" disabled>Kirim</button>
-        </div>
-
-      </section>
-
+    <!-- ERROR BANNER NOTIFICATION -->
+    <div class="error-banner" id="errorBanner">
+      <span id="errorMessage">Terjadi kesalahan pada dokumen atau server.</span>
+      <button class="error-banner-close" id="btnErrorClose">&times;</button>
     </div>
+
+    <!-- MAIN CONTROL PANEL -->
+    <section class="card-panel" id="inputPanel">
+      
+      <!-- DROPZONE AREA -->
+      <div class="dropzone" id="dropzone">
+        <span class="dropzone-icon">📄</span>
+        <div class="dropzone-text">Klik untuk memilih atau seret berkas PDF ke sini</div>
+        <div class="dropzone-subtext">Format yang didukung: PDF (Maksimal 20 MB)</div>
+        <input type="file" id="fileInput" accept="application/pdf" style="display: none;">
+      </div>
+
+      <!-- FILE PREVIEW CARD -->
+      <div class="file-preview" id="filePreview">
+        <div class="file-info">
+          <span class="file-icon">📑</span>
+          <div class="file-details">
+            <div class="file-name" id="fileName">document.pdf</div>
+            <div class="file-meta" id="fileMeta">Terhubung &bull; Siap Ditanyakan</div>
+          </div>
+        </div>
+        <button type="button" class="btn-remove" id="btnRemoveFile" title="Ganti berkas">&times;</button>
+      </div>
+
+      <!-- QUESTION INPUT AREA -->
+      <div class="qa-box">
+        <div class="form-group">
+          <label class="form-label" for="userQuestion">Pertanyaan Anda Mengenai Dokumen</label>
+          <textarea class="form-textarea" id="userQuestion" placeholder="Contoh: Apa kesimpulan utama dari laporan ini? Atau jelaskan angka statistik di pasal 3."></textarea>
+        </div>
+
+        <!-- SUBMIT BUTTON -->
+        <button class="btn-submit" id="btnAsk" disabled>
+          <span>💬 Ajukan Pertanyaan</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- LOADING STATE PANEL -->
+    <section class="loading-panel" id="loadingPanel">
+      <div class="spinner"></div>
+      <div class="loading-text">AI sedang membaca konteks PDF dan menyusun jawaban...</div>
+    </section>
+
+    <!-- RESULT DISPLAY PANEL -->
+    <section class="result-panel" id="resultPanel">
+      <div class="result-header">
+        <div class="result-title-group">
+          <span>💡</span>
+          <h2 class="result-title" id="resultDocTitle">Jawaban AI</h2>
+        </div>
+        <div class="result-actions">
+          <button class="btn-action" id="btnCopy">
+            <span>📋</span> Salin Teks
+          </button>
+          <button class="btn-action" id="btnDownload">
+            <span>📥</span> Unduh TXT
+          </button>
+        </div>
+      </div>
+
+      <div class="result-content" id="resultContent"></div>
+    </section>
 
   </main>
 
+  <!-- FOOTER GLOBAL -->
   <footer class="footer">
     <div class="footer-links">
       <a href="../dashboard.html">Dashboard</a>
-      <a href="../tools/all-tools.html">Tools</a>
+      <a href="../tools/all-tools.html">PDF Tools</a>
       <a href="chat-ai.html">AI Chat</a>
-      <a href="pdf-ai.html">PDF AI</a>
-      <a href="../about.html">About</a>
+      <a href="../pdf-ai.html">PDF AI</a>
+      <a href="../tools.html">AI Tools Hub</a>
+      <a href="../about.html">About Us</a>
       <a href="../faq.html">FAQ</a>
       <a href="../contact.html">Contact</a>
-      <a href="../../legal/privacy.html">Privacy</a>
-      <a href="../../legal/terms.html">Terms</a>
+      <a href="../../../legal/privacy.html">Privacy Policy</a>
+      <a href="../../../legal/terms.html">Terms of Service</a>
     </div>
     <p>&copy; 2026 PDF Master AI. Developed by Muhamad Ruslan.</p>
   </footer>
 
   <script>
     (() => {
-      const UPLOAD_API_URL = `${API_BASE_URL}/api/pdf/upload`;
-      const CHAT_API_URL = `${API_BASE_URL}/api/pdf/chat`;
-      const MAX_FILE_SIZE = 25 * 1024 * 1024;
-
-      let pdfState = {
-        documentId: "",
-        fileName: "",
-        pages: 0,
-        text: "",
-        method: "",
-        ready: false
-      };
-
-      let conversationHistory = [];
-
-      const dropzone = document.getElementById('dropzone');
-      const btnBrowse = document.getElementById('btnBrowse');
-      const fileInput = document.getElementById('fileInput');
-      const fileInfoCard = document.getElementById('fileInfoCard');
-      const fileNameEl = document.getElementById('fileName');
-      const fileSizeEl = document.getElementById('fileSize');
-      const btnRemoveFile = document.getElementById('btnRemoveFile');
-      const btnAnalyze = document.getElementById('btnAnalyze');
-
-      const pdfStatusBox = document.getElementById('pdfStatusBox');
-      const pdfStatusMeta = document.getElementById('pdfStatusMeta');
-
-      const chatOverlay = document.getElementById('chatOverlay');
-      const statusDot = document.getElementById('statusDot');
-      const statusText = document.getElementById('statusText');
-      const chatMessages = document.getElementById('chatMessages');
-      const chatInput = document.getElementById('chatInput');
-      const btnSend = document.getElementById('btnSend');
-      const quickActionBtns = document.querySelectorAll('.quick-action');
-
-      if (window.pdfjsLib) {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+      /* ==========================================================================
+         1. CONFIGURATION (Backend Port 8001 AI Tools)
+         ========================================================================== */
+      const MAX_FILE_SIZE = 20 * 1024 * 1024; // Limit 20 MB
+      const AI_BACKEND_PORT = "8001";
+      
+      let baseHost = "http://127.0.0.1";
+      if (typeof window.API_BASE_URL !== 'undefined') {
+        baseHost = window.API_BASE_URL.replace(/:8000$/, '');
       }
+      
+      const API_BASE_URL = `${baseHost}:${AI_BACKEND_PORT}`;
+      const ENDPOINT_ASK = `${API_BASE_URL}/api/ai/pdf/ask`;
 
+      /* ==========================================================================
+         2. STATE
+         ========================================================================== */
+      let currentFile = null;
+
+      /* ==========================================================================
+         3. DOM ELEMENTS
+         ========================================================================== */
+      const dropzone = document.getElementById('dropzone');
+      const fileInput = document.getElementById('fileInput');
+      const filePreview = document.getElementById('filePreview');
+      const fileName = document.getElementById('fileName');
+      const fileMeta = document.getElementById('fileMeta');
+      const btnRemoveFile = document.getElementById('btnRemoveFile');
+
+      const userQuestion = document.getElementById('userQuestion');
+      const btnAsk = document.getElementById('btnAsk');
+
+      const errorBanner = document.getElementById('errorBanner');
+      const errorMessage = document.getElementById('errorMessage');
+      const btnErrorClose = document.getElementById('btnErrorClose');
+
+      const loadingPanel = document.getElementById('loadingPanel');
+      const resultPanel = document.getElementById('resultPanel');
+      const resultContent = document.getElementById('resultContent');
+      const resultDocTitle = document.getElementById('resultDocTitle');
+
+      const btnCopy = document.getElementById('btnCopy');
+      const btnDownload = document.getElementById('btnDownload');
+
+      /* ==========================================================================
+         4. FILE UPLOAD & HANDLERS
+         ========================================================================== */
       dropzone.addEventListener('click', () => fileInput.click());
 
-      btnBrowse.addEventListener('click', (e) => {
-        e.stopPropagation();
-        fileInput.click();
-      });
-
       fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-          handleFileSelection(e.target.files[0]);
+        if (e.target.files && e.target.files.length > 0) {
+          handleFileSelect(e.target.files[0]);
         }
       });
 
       ['dragenter', 'dragover'].forEach(eventName => {
         dropzone.addEventListener(eventName, (e) => {
           e.preventDefault();
+          e.stopPropagation();
           dropzone.classList.add('dragover');
         });
       });
@@ -772,287 +694,275 @@
       ['dragleave', 'drop'].forEach(eventName => {
         dropzone.addEventListener(eventName, (e) => {
           e.preventDefault();
+          e.stopPropagation();
           dropzone.classList.remove('dragover');
         });
       });
 
       dropzone.addEventListener('drop', (e) => {
         const files = e.dataTransfer.files;
-        if (files.length > 0) {
-          handleFileSelection(files[0]);
+        if (files && files.length > 0) {
+          handleFileSelect(files[0]);
         }
       });
 
-      function handleFileSelection(file) {
-        if (!file || file.type !== 'application/pdf') {
-          showErrorMessage('Format file harus berupa PDF.');
+      btnRemoveFile.addEventListener('click', resetFileUpload);
+
+      function handleFileSelect(file) {
+        hideError();
+
+        if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+          showError('Format berkas tidak valid. Harap unggah berkas bertipe PDF.');
           return;
         }
 
         if (file.size > MAX_FILE_SIZE) {
-          showErrorMessage('Ukuran file terlalu besar (Maksimal 25 MB).');
+          showError(`Ukuran berkas terlalu besar. Maksimal ukuran yang diizinkan adalah ${formatBytes(MAX_FILE_SIZE)}.`);
           return;
         }
 
-        pdfState.fileName = file.name;
-        fileNameEl.textContent = file.name;
-        fileSizeEl.textContent = formatBytes(file.size);
+        currentFile = file;
+        fileName.textContent = file.name;
+        fileMeta.textContent = `${formatBytes(file.size)} • PDF Terhubung`;
 
         dropzone.style.display = 'none';
-        fileInfoCard.style.display = 'block';
-        btnAnalyze.disabled = false;
-        pdfStatusBox.style.display = 'none';
+        filePreview.style.display = 'flex';
+        checkFormValidity();
       }
 
-      btnRemoveFile.addEventListener('click', resetPDFState);
-
-      function resetPDFState() {
-        pdfState = {
-          documentId: "",
-          fileName: "",
-          pages: 0,
-          text: "",
-          method: "",
-          ready: false
-        };
-        conversationHistory = [];
+      function resetFileUpload() {
+        currentFile = null;
         fileInput.value = '';
-
         dropzone.style.display = 'block';
-        fileInfoCard.style.display = 'none';
-        pdfStatusBox.style.display = 'none';
-        btnAnalyze.disabled = true;
-        btnAnalyze.innerHTML = '<span>Mulai Analisis PDF</span>';
-
-        chatOverlay.style.display = 'flex';
-        statusDot.classList.remove('active');
-        statusText.textContent = 'Upload PDF terlebih dahulu';
-        chatMessages.innerHTML = '';
-        chatInput.disabled = true;
-        btnSend.disabled = true;
+        filePreview.style.display = 'none';
+        btnAsk.disabled = true;
+        hideError();
       }
 
-      btnAnalyze.addEventListener('click', async () => {
-        const file = fileInput.files[0];
-        if (!file) return;
+      userQuestion.addEventListener('input', checkFormValidity);
 
-        btnAnalyze.disabled = true;
-        btnAnalyze.innerHTML = '<span class="spinner"></span> Memproses PDF...';
-
-        try {
-          const uploadData = new FormData();
-          uploadData.append('file', file);
-
-          const uploadResponse = await fetch(UPLOAD_API_URL, {
-            method: 'POST',
-            body: uploadData
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error(`Gagal mengunggah PDF ke server (Status ${uploadResponse.status}).`);
-          }
-
-          const uploadResult = await uploadResponse.json();
-          
-          const docId = uploadResult.document_id || uploadResult.documentId || uploadResult.id;
-          if (!docId) {
-            throw new Error('Respon server upload tidak memberikan document_id yang valid.');
-          }
-
-          pdfState.documentId = String(docId).trim();
-
-          const extracted = await extractPDFText(file);
-          pdfState.pages = extracted.pages;
-          pdfState.text = extracted.text;
-          pdfState.method = extracted.method;
-          pdfState.ready = true;
-
-          btnAnalyze.innerHTML = '<span>&#10003; Analisis Selesai</span>';
-          pdfStatusMeta.innerHTML = `
-            <strong>Nama:</strong> ${pdfState.fileName}<br>
-            <strong>Halaman:</strong> ${pdfState.pages} Hal<br>
-            <strong>Metode:</strong> ${pdfState.method}
-          `;
-          pdfStatusBox.style.display = 'block';
-
-          chatOverlay.style.display = 'none';
-          statusDot.classList.add('active');
-          statusText.textContent = 'PDF Siap';
-          chatInput.disabled = false;
-          btnSend.disabled = false;
-
-          renderMessage('ai', `Halo! Dokumen <strong>${pdfState.fileName}</strong> (${pdfState.pages} halaman) telah siap. Ada yang bisa saya bantu tentang dokumen ini?`);
-        } catch (error) {
-          console.error('Proses PDF Gagal:', error);
-          showErrorMessage(error.message || 'Gagal memproses dokumen PDF. Pastikan file tidak rusak.');
-          btnAnalyze.disabled = false;
-          btnAnalyze.innerHTML = '<span>Coba Analisis Lagi</span>';
+      function checkFormValidity() {
+        if (currentFile && userQuestion.value.trim().length > 0) {
+          btnAsk.disabled = false;
+        } else {
+          btnAsk.disabled = true;
         }
-      });
-
-      async function extractPDFText(file) {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let text = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-          const page = await pdf.getPage(i);
-          const content = await page.getTextContent();
-          text += content.items.map(item => item.str).join(' ') + '\n';
-        }
-        return {
-          pages: pdf.numPages,
-          text: text,
-          method: text.trim().length > 50 ? "Text Layer" : "OCR Scan"
-        };
       }
 
-      btnSend.addEventListener('click', sendMessage);
-
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-      });
-
-      quickActionBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (!chatInput.disabled) {
-            chatInput.value = btn.getAttribute('data-prompt');
-            sendMessage();
-          }
-        });
-      });
-
-      async function sendMessage() {
-        const userMessage = chatInput.value.trim();
-        if (!userMessage || btnSend.disabled) return;
-
-        if (!pdfState.documentId || !pdfState.ready) {
-          showErrorMessage('Dokumen PDF belum siap atau document_id hilang. Silakan unggah ulang PDF.');
+      /* ==========================================================================
+         5. API REQUEST & SUBMISSION
+         ========================================================================== */
+      btnAsk.addEventListener('click', async () => {
+        const question = userQuestion.value.trim();
+        if (!currentFile) {
+          showError('Harap pilih berkas PDF terlebih dahulu.');
+          return;
+        }
+        if (!question) {
+          showError('Harap tuliskan pertanyaan Anda mengenai dokumen.');
           return;
         }
 
-        renderMessage('user', userMessage);
-        chatInput.value = '';
+        hideError();
+        showLoading(true);
 
-        showTypingIndicator();
-
-        try {
-          const aiReply = await callChatBackendAPI(userMessage);
-
-          hideTypingIndicator();
-          renderMessage('ai', formatMarkdownText(aiReply));
-
-          conversationHistory.push({ role: "user", content: userMessage });
-          conversationHistory.push({ role: "assistant", content: aiReply });
-
-        } catch (error) {
-          hideTypingIndicator();
-          console.error('API Error:', error);
-          showErrorMessage(error.message);
-        }
-      }
-
-      async function callChatBackendAPI(userMessage) {
-        const cleanConversation = conversationHistory.map(item => ({
-          role: String(item.role || "user"),
-          content: String(item.content || "")
-        }));
-
-        const payload = {
-          document_id: String(pdfState.documentId).trim(),
-          message: String(userMessage).trim(),
-          conversation: cleanConversation
-        };
+        const formData = new FormData();
+        formData.append('file', currentFile);
+        formData.append('question', question);
 
         try {
-          const response = await fetch(CHAT_API_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
+          let response = await fetch(ENDPOINT_ASK, {
+            method: 'POST',
+            body: formData
           });
 
-          if (!response.ok) {
-            const errorJson = await response.json().catch(() => null);
-            console.error("Detail Error Backend (HTTP 422/500):", errorJson);
+          // Fallback Endpoint alternatif
+          if (response.status === 404) {
+             response = await fetch(`${API_BASE_URL}/api/ai-tools/ask-pdf`, {
+                method: 'POST',
+                body: formData
+             });
+          }
 
-            if (response.status === 422) {
-              throw new Error('Validasi data gagal (HTTP 422). Format pesan atau ID Dokumen tidak sesuai.');
-            }
-            throw new Error(`Server merespons dengan status error (${response.status}).`);
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            handleHttpError(response.status, errData.detail);
+            return;
           }
 
           const data = await response.json();
+          showLoading(false);
 
-          if (data && (data.success || data.reply)) {
-            return data.reply || data.message || data.response || "Menerima balasan dari AI.";
+          if (data && (data.answer || data.result)) {
+            renderResult(data.answer || data.result);
           } else {
-            throw new Error('Respon dari server tidak valid atau gagal diproses.');
+            showError('Respons backend tidak memuat jawaban yang valid.');
           }
 
         } catch (error) {
-          if (error.name === 'TypeError' || error.message.includes('fetch')) {
-            throw new Error('Tidak dapat terhubung ke server AI. Pastikan backend PDF Master sedang berjalan.');
+          showLoading(false);
+          showError('Backend AI belum berjalan di http://127.0.0.1:8001 atau terjadi kesalahan koneksi server.');
+          console.error('[AI PDF QA] Network/API Error:', error);
+        }
+      });
+
+      function handleHttpError(status, detail) {
+        showLoading(false);
+        if (detail) {
+          showError(`Gagal: ${detail}`);
+        } else if (status === 404) {
+          showError('Endpoint backend AI Q&A (/api/ai/pdf/ask) tidak ditemukan.');
+        } else if (status === 413) {
+          showError('Ukuran berkas melebihi kapasitas yang diizinkan server.');
+        } else if (status === 500) {
+          showError('Terjadi kesalahan internal pada server AI.');
+        } else {
+          showError(`Server merespons dengan kode kesalahan (HTTP ${status}).`);
+        }
+      }
+
+      /* ==========================================================================
+         6. UI RENDERING & PARSER TEKS (PEMBERSIH ASTERISK & MARKDOWN TOTAL)
+         ========================================================================== */
+      function showLoading(isLoading) {
+        if (isLoading) {
+          loadingPanel.style.display = 'block';
+          resultPanel.style.display = 'none';
+          btnAsk.disabled = true;
+        } else {
+          loadingPanel.style.display = 'none';
+          btnAsk.disabled = false;
+        }
+      }
+
+      function parseAndRenderResponse(rawText) {
+        if (!rawText) return '';
+
+        // 1. Bersihkan pembungkus blok kode markdown jika ada
+        let text = rawText.replace(/```html/gi, '').replace(/```/g, '').trim();
+
+        // 2. Decode HTML Entities jika teks ter-escape
+        const txtArea = document.createElement('textarea');
+        txtArea.innerHTML = text;
+        text = txtArea.value;
+
+        // 3. Konversi format Markdown (* dan **) secara ketat menjadi tag HTML
+        const lines = text.split('\n');
+        let htmlOutput = '';
+        let inList = false;
+
+        lines.forEach(line => {
+          let trimmed = line.trim();
+          if (!trimmed) return;
+
+          // Bersihkan tag HTML mentah jika terbawa
+          trimmed = trimmed.replace(/<\/?h[1-6]>/gi, '').replace(/<\/?p>/gi, '');
+
+          // Deteksi Judul Seksi (Markdown ### atau Judul Berangka "1. ")
+          if (/^(###|\d+\.)\s+/.test(trimmed)) {
+            if (inList) { htmlOutput += '</ul>'; inList = false; }
+            let titleText = trimmed
+              .replace(/^(###|\d+\.)\s+/, '')
+              .replace(/\*\*(.*?)\*\*/g, '$1')
+              .replace(/\*(.*?)\*/g, '$1');
+            htmlOutput += `<h3>${titleText}</h3>`;
+          } 
+          // Deteksi Poin-poin Bullet (* atau -)
+          else if (/^[\*\-]\s+/.test(trimmed)) {
+            if (!inList) { htmlOutput += '<ul>'; inList = true; }
+            let itemText = trimmed.replace(/^[\*\-]\s+/, '');
+            // Konversi **teks** menjadi <strong>teks</strong> dan hapus sisa *
+            itemText = itemText
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+              .replace(/\*/g, '');
+            htmlOutput += `<li>${itemText}</li>`;
+          } 
+          // Paragraf biasa
+          else {
+            if (inList) { htmlOutput += '</ul>'; inList = false; }
+            let paragraphText = trimmed
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
+              .replace(/\*/g, '');
+            htmlOutput += `<p>${paragraphText}</p>`;
           }
-          throw error;
-        }
+        });
+
+        if (inList) { htmlOutput += '</ul>'; }
+
+        return htmlOutput;
       }
 
-      function renderMessage(sender, htmlContent) {
-        const msgBubble = document.createElement('div');
-        msgBubble.className = `message-bubble ${sender}`;
-        msgBubble.innerHTML = htmlContent;
-        chatMessages.appendChild(msgBubble);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        return msgBubble;
+      function renderResult(answerText) {
+        resultDocTitle.textContent = 'Jawaban AI Kontekstual';
+        resultContent.innerHTML = parseAndRenderResponse(answerText);
+        resultPanel.style.display = 'block';
+        resultPanel.scrollIntoView({ behavior: 'smooth' });
       }
 
-      let typingBubble = null;
-      function showTypingIndicator() {
-        btnSend.disabled = true;
-        chatInput.disabled = true;
-        typingBubble = renderMessage('ai', '<span class="spinner"></span> AI sedang berpikir...');
+      function showError(msg) {
+        errorMessage.textContent = msg;
+        errorBanner.style.display = 'flex';
       }
 
-      function hideTypingIndicator() {
-        if (typingBubble) {
-          typingBubble.remove();
-          typingBubble = null;
-        }
-        btnSend.disabled = false;
-        chatInput.disabled = false;
-        chatInput.focus();
+      function hideError() {
+        errorBanner.style.display = 'none';
       }
 
-      function showErrorMessage(messageText) {
-        renderMessage('ai', `<span style="color: var(--danger-color);">&#9888; ${messageText}</span>`);
-      }
+      btnErrorClose.addEventListener('click', hideError);
 
-      function formatBytes(bytes) {
+      /* ==========================================================================
+         7. RESULT ACTIONS
+         ========================================================================== */
+      btnCopy.addEventListener('click', () => {
+        const text = resultContent.innerText;
+        if (!text) return;
+
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = btnCopy.innerHTML;
+          btnCopy.innerHTML = '<span>&#10004;</span> Tersalin!';
+          setTimeout(() => {
+            btnCopy.innerHTML = originalText;
+          }, 2000);
+        }).catch(err => {
+          console.error('Gagal menyalin teks:', err);
+        });
+      });
+
+      btnDownload.addEventListener('click', () => {
+        const text = resultContent.innerText;
+        if (!text) return;
+
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Jawaban_PDF_${currentFile ? currentFile.name : 'Dokumen'}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+
+      /* ==========================================================================
+         8. UTILITIES
+         ========================================================================== */
+      function formatBytes(bytes, decimals = 2) {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
       }
 
-      // FORMAT MARKDOWN TANPA SIMBOL HASHTAG HASIL PERBAIKAN
-      function formatMarkdownText(text) {
-        if (!text) return '';
-        return text
-          .replace(/^### (.*$)/gim, '<strong>$1</strong>')
-          .replace(/^## (.*$)/gim, '<strong>$1</strong>')
-          .replace(/^# (.*$)/gim, '<strong>$1</strong>')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/`([^`]+)`/g, '<code>$1</code>')
-          .replace(/^\* (.*$)/gim, '<ul><li>$1</li></ul>')
-          .replace(/\n\n/g, '<br><br>')
-          .replace(/\n/g, '<br>');
-      }
+      /* ==========================================================================
+         9. INITIALIZATION
+         ========================================================================== */
+      btnAsk.disabled = true;
 
     })();
   </script>
 </body>
 </html>
-

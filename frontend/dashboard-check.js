@@ -1,10 +1,3 @@
-﻿
-    (function () {
-      const user = localStorage.getItem('mr_pdf_user');
-      if (!user) {
-        window.location.replace('../index.html');
-      }
-    })();
   
 
 
@@ -45,7 +38,6 @@
         const response = await fetch(`${API_BASE_URL}/api/profile/`);
 
         if (response.status === 401) {
-          localStorage.removeItem('mr_pdf_user');
           window.location.replace('../index.html');
           return;
         }
@@ -145,7 +137,6 @@
     if (logoutButton) {
       logoutButton.addEventListener('click', (event) => {
         event.preventDefault();
-        localStorage.removeItem('mr_pdf_user');
         window.location.replace('../index.html');
       });
     }
@@ -162,4 +153,5 @@
     loadDashboardProfile();
     loadDashboardStats();
   })();
+
 

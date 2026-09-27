@@ -390,7 +390,7 @@
       }
     }
   </style>
-<script src="../js/api-config.js"></script>
+  <script src="/assets/js/config.js"></script>
 </head>
 
 <body>
@@ -466,11 +466,9 @@
   </div>
 
   <script>
-    const API_BASE = API_BASE_URL;
+    // Menggunakan base URL port 8000 dari konfigurasi terpusat
+    const API_BASE = CONFIG.API_PORT_8000;
 
-    // ============================================================
-    // AMBIL EMAIL DARI FORGOT-PASSWORD
-    // ============================================================
     const email = sessionStorage.getItem("reset_email");
     const emailDisplay = document.getElementById("emailDisplay");
 
@@ -480,9 +478,6 @@
       emailDisplay.textContent = email;
     }
 
-    // ============================================================
-    // INPUT KODE
-    // ============================================================
     const codeInput = document.getElementById("code");
 
     codeInput.addEventListener("input", function () {
@@ -491,9 +486,6 @@
         .slice(0, 6);
     });
 
-    // ============================================================
-    // VERIFIKASI
-    // ============================================================
     document.getElementById("resetCodeForm").addEventListener(
       "submit",
       async function (event) {
@@ -543,7 +535,6 @@
             );
           }
 
-          // Simpan token hasil verifikasi
           sessionStorage.setItem(
             "reset_token",
             data.reset_token

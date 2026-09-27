@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -373,11 +373,11 @@
         </div>
 
         <ul class="plan-features">
-          <li class="feature-item"><span class="feature-icon">✓</span> Maksimal ukuran file 10 MB</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> 5x Pemrosesan Kompresi PDF / hari</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> 10x Pesan AI Chat / hari</li>
-          <li class="feature-item disabled"><span class="feature-icon">✕</span> Analisis Teks Dokumen Kompleks</li>
-          <li class="feature-item disabled"><span class="feature-icon">✕</span> Tanpa Antrean (Priority Server)</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Maksimal ukuran file 10 MB</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> 5x Pemrosesan Kompresi PDF / hari</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> 10x Pesan AI Chat / hari</li>
+          <li class="feature-item disabled"><span class="feature-icon">&times;</span> Analisis Teks Dokumen Kompleks</li>
+          <li class="feature-item disabled"><span class="feature-icon">&times;</span> Tanpa Antrean (Priority Server)</li>
         </ul>
 
         <button class="btn-plan outline" onclick="handleSelectPlan('free')">Paket Saat Ini</button>
@@ -396,14 +396,14 @@
         </div>
 
         <ul class="plan-features">
-          <li class="feature-item"><span class="feature-icon">✓</span> Ukuran file hingga 50 MB</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Kompresi & Konversi Tanpa Batas</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> AI Chat Prompt Tanpa Batas</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Ekstraksi OCR Teks Dokumen</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Prioritas Pemrosesan Server Kilat</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Ukuran file hingga 50 MB</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Kompresi & Konversi Tanpa Batas</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> AI Chat Prompt Tanpa Batas</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Ekstraksi OCR Teks Dokumen</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Prioritas Pemrosesan Server Kilat</li>
         </ul>
 
-        <button class="btn-plan primary" onclick="handleUpgrade('pro_monthly', 49000)">Berlangganan Pro</button>
+        <button class="btn-plan primary" onclick="window.location.href='payment.html?plan=pro_monthly'">Berlangganan Pro</button>
       </div>
 
       <!-- PRO ANNUAL PLAN -->
@@ -418,14 +418,14 @@
         </div>
 
         <ul class="plan-features">
-          <li class="feature-item"><span class="feature-icon">✓</span> Seluruh Fitur Paket Pro Monthly</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Ukuran file hingga 100 MB</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Fitur Eksklusif Analisis PDF Massal</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Bantuan Priority Support 24/7</li>
-          <li class="feature-item"><span class="feature-icon">✓</span> Hemat Rp 189.000 / tahun</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Seluruh Fitur Paket Pro Monthly</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Ukuran file hingga 100 MB</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Fitur Eksklusif Analisis PDF Massal</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Bantuan Priority Support 24/7</li>
+          <li class="feature-item"><span class="feature-icon">&check;</span> Hemat Rp 189.000 / tahun</li>
         </ul>
 
-        <button class="btn-plan primary" onclick="handleUpgrade('pro_annual', 399000)">Berlangganan Tahunan</button>
+        <button class="btn-plan primary" onclick="window.location.href='payment.html?plan=pro_annual'">Berlangganan Tahunan</button>
       </div>
 
     </div>
@@ -450,51 +450,18 @@
 
   <!-- BACKEND INTEGRATION SCRIPT -->
   <script>
-    // FUNGSI UNTUK MENGHUBUGKAN KE API BACKEND PAYMENTS
     async function handleUpgrade(planId, price) {
-      const userToken = localStorage.getItem('auth_token'); // contoh token otentikasi user
+      const userToken = localStorage.getItem('auth_token');
 
-      // Cek apakah pengguna sudah masuk
       if (!userToken) {
         alert('Silakan login terlebih dahulu untuk melakukan pembayaran.');
-        window.location.href = 'auth/login.html'; // arahkan ke login jika ada
+        window.location.href = 'auth/login.html';
         return;
       }
 
       try {
         console.log(`Mengirim permintaan transaksi ke backend untuk plan: ${planId} (${price})...`);
-        
-        // CONTOH CALL API BACKEND
-        /*
-        const response = await fetch('/api/v1/payments/checkout', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`
-          },
-          body: JSON.stringify({
-            plan_id: planId,
-            amount: price
-          })
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.snap_token) {
-          // Jika menggunakan Midtrans Snap
-          snap.pay(data.snap_token, {
-            onSuccess: function(result){ window.location.href = 'dashboard.html?status=success'; },
-            onPending: function(result){ alert('Menunggu pembayaran...'); },
-            onError: function(result){ alert('Pembayaran gagal!'); }
-          });
-        } else {
-          alert(data.message || 'Gagal membuat sesi pembayaran.');
-        }
-        */
-
-        // SIMULASI SEMENTARA JIKA BACKEND BELUM DIAKTIFKAN
         alert(`Sistem Pembayaran Diinisiasi!\nPaket: ${planId.toUpperCase()}\nTotal: Rp ${price.toLocaleString('id-ID')}\n\n(Hubungkan endpoint '/api/v1/payments/checkout' untuk mengintegrasikan gateway asli)`);
-
       } catch (error) {
         console.error('Error payment checkout:', error);
         alert('Terjadi kesalahan koneksi ke server pembayaran.');

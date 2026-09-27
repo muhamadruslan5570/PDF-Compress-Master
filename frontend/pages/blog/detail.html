@@ -1,0 +1,852 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Artikel | Mr Tools AI</title>
+  <meta name="description" content="Artikel dari Mr Tools AI">
+  <link id="canonicalUrl" rel="canonical" href="">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Mr Tools AI">
+  <meta id="ogTitle" property="og:title" content="Artikel | Mr Tools AI">
+  <meta id="ogDescription" property="og:description" content="Artikel dari Mr Tools AI">
+  <meta id="ogUrl" property="og:url" content="">
+  <meta id="ogImage" property="og:image" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta id="twitterTitle" name="twitter:title" content="Artikel | Mr Tools AI">
+  <meta id="twitterDescription" name="twitter:description" content="Artikel dari Mr Tools AI">
+  <meta id="twitterImage" name="twitter:image" content="">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .site-header {
+      background: rgba(7, 17, 31, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .brand img {
+      width: 150px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .back-link {
+      color: #60a5fa;
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .back-link:hover {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    .article {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* PERBAIKAN RESPONSIF GAMBAR HERO AGAR TIDAK TERPOTONG */
+    .hero {
+      width: 100%;
+      height: auto;
+      max-height: 520px;
+      object-fit: contain;
+      background: var(--bg);
+      display: block;
+      margin: 0 auto;
+    }
+
+    .article-content {
+      padding: 40px;
+    }
+
+    .category {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    h1 {
+      margin: 0 0 15px;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.25;
+      color: #fff;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .excerpt {
+      padding: 18px 20px;
+      margin-bottom: 30px;
+      border-left: 4px solid var(--primary);
+      background: var(--surface-2);
+      color: var(--muted);
+      border-radius: 0 10px 10px 0;
+      font-size: 16px;
+    }
+
+    .content {
+      font-size: 16px;
+      color: var(--text);
+      overflow-wrap: break-word;
+    }
+
+    .content h1,
+    .content h2,
+    .content h3,
+    .content h4 {
+      color: #fff;
+      line-height: 1.3;
+      margin-top: 30px;
+    }
+
+    .content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .content a {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+
+    .content pre {
+      overflow-x: auto;
+      padding: 16px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: #e5e7eb;
+    }
+
+    .content code {
+      font-family: Consolas, monospace;
+      background: var(--surface-2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 1px solid var(--border);
+    }
+
+    .tag {
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .state {
+      text-align: center;
+      padding: 70px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .state h2 {
+      margin-top: 0;
+      color: #fff;
+    }
+
+    .state p {
+      color: var(--muted);
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .admin-actions {
+      display: none;
+      gap: 10px;
+      margin: 0 0 25px;
+      padding: 15px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .admin-actions.visible {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .admin-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      background: var(--surface-3);
+    }
+
+    .admin-action-btn.edit {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .admin-action-btn.edit:hover {
+      background: var(--primary-hover);
+    }
+
+    .admin-action-btn.delete {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .admin-action-btn.delete:hover {
+      background: #dc2626;
+    }
+
+    footer {
+      margin-top: auto;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 30px 20px;
+      text-align: center;
+      color: var(--muted-2);
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding: 14px 16px;
+      }
+
+      .brand img {
+        width: 130px;
+      }
+
+      .container {
+        margin: 25px auto;
+        padding: 0 12px;
+      }
+
+      .article-content {
+        padding: 25px 20px;
+      }
+
+      .content {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/pages/blog/index.html" class="brand" aria-label="Mr Tools AI Blog">
+      <img src="../../assets/images/logo.png" alt="Mr Tools AI">
+    </a>
+
+    <a href="/pages/blog/index.html" class="back-link">
+      &larr; Kembali ke Blog
+    </a>
+  </div>
+</header>
+
+<main class="container">
+  <div id="loading" class="state">
+    <h2>Memuat artikel...</h2>
+    <p>Mohon tunggu sebentar.</p>
+  </div>
+
+  <div id="error" class="state" hidden>
+    <h2>Artikel tidak ditemukan</h2>
+    <p id="errorMessage">
+      Artikel yang Anda cari tidak tersedia.
+    </p>
+    <a href="/pages/blog/index.html" class="btn">
+      Kembali ke Blog
+    </a>
+  </div>
+
+  <article id="article" class="article" hidden>
+    <img id="featuredImage" class="hero" alt="" hidden>
+
+    <div class="article-content">
+
+      <div id="adminActions" class="admin-actions">
+        <button
+          type="button"
+          id="editArticleBtn"
+          class="admin-action-btn edit">
+          Edit Artikel
+        </button>
+
+        <button
+          type="button"
+          id="deleteArticleBtn"
+          class="admin-action-btn delete">
+          Hapus Artikel
+        </button>
+      </div>
+
+      <div id="category" class="category" hidden></div>
+
+      <h1 id="title"></h1>
+
+      <div id="meta" class="meta"></div>
+
+      <div id="excerpt" class="excerpt" hidden></div>
+
+      <div id="content" class="content"></div>
+
+      <div id="tags" class="tags" hidden></div>
+    </div>
+  </article>
+</main>
+
+<footer>
+  &copy; <span id="year"></span> Mr Tools AI. All rights reserved.
+</footer>
+
+<script>
+  const API_BASE_URL =
+    window.API_BASE_URL ||
+    "http://127.0.0.1:8000";
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function formatDate(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "";
+    }
+
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  function normalizeTags(tags) {
+    if (!tags) return [];
+
+    if (Array.isArray(tags)) {
+      return tags.map(tag => String(tag).trim()).filter(Boolean);
+    }
+
+    return String(tags)
+      .split(",")
+      .map(tag => tag.trim())
+      .filter(Boolean);
+  }
+
+  async function setupAdminActions(post) {
+    const adminActions = document.getElementById("adminActions");
+    const editButton = document.getElementById("editArticleBtn");
+    const deleteButton = document.getElementById("deleteArticleBtn");
+
+    if (!adminActions || !editButton || !deleteButton) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/auth/me`,
+        {
+          method: "GET",
+          credentials: "include"
+        }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const user = await response.json();
+
+      const role = String(user.role || "").toLowerCase();
+
+      const isBlogAdmin =
+        role === "developer" ||
+        role === "admin" ||
+        role === "blog_admin";
+
+      if (!isBlogAdmin) {
+        return;
+      }
+
+      adminActions.classList.add("visible");
+
+      editButton.onclick = function () {
+        if (!post.id) {
+          alert("ID artikel tidak ditemukan.");
+          return;
+        }
+
+        window.location.href =
+          `/pages/blog/posting-admin.html?id=${encodeURIComponent(post.id)}`;
+      };
+
+      deleteButton.onclick = async function () {
+        if (!post.id) {
+          alert("ID artikel tidak ditemukan.");
+          return;
+        }
+
+        const confirmed = confirm(
+          `Hapus artikel "${post.title || "ini"}"?\n\nArtikel yang sudah dihapus tidak dapat dipulihkan.`
+        );
+
+        if (!confirmed) {
+          return;
+        }
+
+        deleteButton.disabled = true;
+        deleteButton.textContent = "Menghapus...";
+
+        try {
+          const deleteResponse = await fetch(
+            `${API_BASE_URL}/api/blog/admin/posts/${encodeURIComponent(post.id)}`,
+            {
+              method: "DELETE",
+              credentials: "include"
+            }
+          );
+
+          const result = await deleteResponse.json().catch(() => ({}));
+
+          if (!deleteResponse.ok) {
+            throw new Error(
+              result.detail ||
+              "Artikel gagal dihapus."
+            );
+          }
+
+          alert("Artikel berhasil dihapus.");
+
+          window.location.href =
+            "/pages/blog/index.html";
+
+        } catch (error) {
+          console.error("Delete blog error:", error);
+
+          alert(
+            error.message ||
+            "Gagal menghapus artikel."
+          );
+
+          deleteButton.disabled = false;
+          deleteButton.textContent = "Hapus Artikel";
+        }
+      };
+
+    } catch (error) {
+      console.error("Gagal mengecek hak akses blog:", error);
+    }
+  }
+
+  async function loadArticle() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("slug");
+
+    const loading = document.getElementById("loading");
+    const error = document.getElementById("error");
+    const article = document.getElementById("article");
+
+    if (!slug) {
+      loading.hidden = true;
+      error.hidden = false;
+      document.getElementById("errorMessage").textContent =
+        "Slug artikel tidak ditemukan pada URL.";
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/blog/posts/${encodeURIComponent(slug)}`
+      );
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("Artikel tidak ditemukan.");
+        }
+
+        throw new Error(
+          `Gagal mengambil artikel. Status: ${response.status}`
+        );
+      }
+
+      const post = await response.json();
+
+      document.title =
+        post.meta_title ||
+        post.title ||
+        "Artikel | Mr Tools AI";
+
+      const metaDescription =
+        document.querySelector('meta[name="description"]');
+
+      const seoDescription =
+        post.meta_description ||
+        post.excerpt ||
+        "Artikel dari Mr Tools AI";
+
+      if (metaDescription) {
+        metaDescription.setAttribute("content", seoDescription);
+      }
+
+      const canonicalUrl =
+        `${window.location.origin}/pages/blog/detail.html?slug=${encodeURIComponent(post.slug || slug)}`;
+
+      const canonical = document.getElementById("canonicalUrl");
+      if (canonical) {
+        canonical.setAttribute("href", canonicalUrl);
+      }
+
+      const ogTitle = document.getElementById("ogTitle");
+      if (ogTitle) {
+        ogTitle.setAttribute(
+          "content",
+          post.meta_title || post.title || "Artikel | Mr Tools AI"
+        );
+      }
+
+      const ogDescription = document.getElementById("ogDescription");
+      if (ogDescription) {
+        ogDescription.setAttribute("content", seoDescription);
+      }
+
+      const ogUrl = document.getElementById("ogUrl");
+      if (ogUrl) {
+        ogUrl.setAttribute("content", canonicalUrl);
+      }
+
+      const ogImage = document.getElementById("ogImage");
+      if (ogImage && post.featured_image) {
+        ogImage.setAttribute(
+          "content",
+          new URL(post.featured_image, window.location.href).href
+        );
+      }
+
+      const twitterTitle = document.getElementById("twitterTitle");
+      if (twitterTitle) {
+        twitterTitle.setAttribute(
+          "content",
+          post.meta_title || post.title || "Artikel | Mr Tools AI"
+        );
+      }
+
+      const twitterDescription =
+        document.getElementById("twitterDescription");
+      if (twitterDescription) {
+        twitterDescription.setAttribute("content", seoDescription);
+      }
+
+      const twitterImage =
+        document.getElementById("twitterImage");
+      if (twitterImage && post.featured_image) {
+        twitterImage.setAttribute(
+          "content",
+          new URL(post.featured_image, window.location.href).href
+        );
+      }
+
+      const schemaData = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalUrl
+        },
+        "headline":
+          post.title ||
+          "Artikel Mr Tools AI",
+        "description": seoDescription,
+        "url": canonicalUrl,
+        "image": post.featured_image
+          ? [new URL(post.featured_image, window.location.href).href]
+          : [],
+        "author": {
+          "@type": "Person",
+          "name": post.author_name ||
+            (post.author_id
+              ? `Penulis #${post.author_id}`
+              : "Mr Tools AI")
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Mr Tools AI",
+          "url": window.location.origin
+        },
+        "datePublished":
+          post.published_at ||
+          post.created_at ||
+          undefined,
+        "dateModified":
+          post.updated_at ||
+          post.published_at ||
+          post.created_at ||
+          undefined
+      };
+
+      let schemaScript =
+        document.getElementById("articleSchema");
+
+      if (!schemaScript) {
+        schemaScript = document.createElement("script");
+        schemaScript.type = "application/ld+json";
+        schemaScript.id = "articleSchema";
+        document.head.appendChild(schemaScript);
+      }
+
+      schemaScript.textContent =
+        JSON.stringify(schemaData);
+
+      const breadcrumbData = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Beranda",
+            "item": window.location.origin + "/pages/blog/index.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Blog",
+            "item": window.location.origin + "/pages/blog/index.html"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": post.title || "Artikel",
+            "item": canonicalUrl
+          }
+        ]
+      };
+
+      let breadcrumbScript =
+        document.getElementById("breadcrumbSchema");
+
+      if (!breadcrumbScript) {
+        breadcrumbScript = document.createElement("script");
+        breadcrumbScript.type = "application/ld+json";
+        breadcrumbScript.id = "breadcrumbSchema";
+        document.head.appendChild(breadcrumbScript);
+      }
+
+      breadcrumbScript.textContent =
+        JSON.stringify(breadcrumbData);
+
+      document.getElementById("title").textContent =
+        post.title || "";
+
+      const category = document.getElementById("category");
+
+      if (post.category) {
+        category.textContent = post.category;
+        category.hidden = false;
+      }
+
+      const metaParts = [];
+
+      if (post.published_at) {
+        metaParts.push(formatDate(post.published_at));
+      } else if (post.created_at) {
+        metaParts.push(formatDate(post.created_at));
+      }
+
+      if (post.author_id) {
+        metaParts.push(`Penulis #${post.author_id}`);
+      }
+
+      document.getElementById("meta").textContent =
+        metaParts.join(" • ");
+
+      const excerpt = document.getElementById("excerpt");
+
+      if (post.excerpt) {
+        excerpt.textContent = post.excerpt;
+        excerpt.hidden = false;
+      }
+
+      document.getElementById("content").innerHTML =
+        post.content || "";
+
+      const featuredImage =
+        document.getElementById("featuredImage");
+
+      if (post.featured_image) {
+        featuredImage.src = `${API_BASE_URL}${post.featured_image}`;
+        featuredImage.alt = post.title || "Featured image";
+        featuredImage.hidden = false;
+
+        featuredImage.onerror = function () {
+          this.hidden = true;
+        };
+      }
+
+      const tags = normalizeTags(post.tags);
+      const tagsContainer = document.getElementById("tags");
+
+      if (tags.length) {
+        tagsContainer.innerHTML = tags
+          .map(tag => `<span class="tag">#${escapeHtml(tag)}</span>`)
+          .join("");
+
+        tagsContainer.hidden = false;
+      }
+
+      loading.hidden = true;
+      article.hidden = false;
+
+      await setupAdminActions(post);
+
+    } catch (error) {
+      console.error("Blog detail error:", error);
+
+      loading.hidden = true;
+      error.hidden = false;
+
+      document.getElementById("errorMessage").textContent =
+        error.message || "Gagal memuat artikel.";
+    }
+  }
+
+  document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+  loadArticle();
+</script>
+
+</body>
+</html>
+
+

@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Hub &mdash; PDF Master AI</title>
+  <meta name="description" content="Pusat kendali fitur kecerdasan buatan (AI) terpadu di PDF Master AI.">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../../assets/images/favicon.png">
+  <script src="../../../js/api-config.js"></script>
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --radius: 14px;
+      --max: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container { width: min(100% - 40px, var(--max)); margin: auto; }
+
+    header {
+      height: 72px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(7, 17, 31, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo img {
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px 0 60px;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .ai-hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .ai-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      background: var(--surface-2);
+      box-shadow: 0 10px 25px -5px var(--accent-glow);
+    }
+
+    .ai-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--surface-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .ai-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .ai-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0 0 20px;
+    }
+
+    .ai-card-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 99px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: fit-content;
+    }
+
+    .ai-card-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .back-link:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="../dashboard.html" class="brand-logo">
+      <img src="../../assets/images/logo.png" alt="PDF Master AI">
+    </a>
+  </header>
+
+  <main class="main-content">
+    <div class="container">
+      <a href="../dashboard.html" class="back-link">&larr; Kembali ke Dashboard</a>
+      
+      <div class="page-header">
+        <h1>AI Hub &mdash; Pusat Kecerdasan Buatan</h1>
+        <p>Akses seluruh fitur dan alat berbasis AI untuk mempercepat produktivitas kerja dan analisis dokumen Anda.</p>
+      </div>
+
+      <div class="ai-hub-grid">
+        <!-- Chat MR AI -->
+        <div class="ai-card">
+          <div>
+            <div class="ai-card-icon">🤖</div>
+            <h3>Chat MR AI</h3>
+            <p>Asisten AI serba bisa untuk membantu pemrograman, penulisan konten, analisis data, dan tanya jawab umum secara instan.</p>
+          </div>
+          <a href="../chat-mr-ai/index.html" class="ai-card-btn">Buka Chat MR AI &rarr;</a>
+        </div>
+
+        <!-- AI PDF Assistant -->
+        <div class="ai-card">
+          <div>
+            <div class="ai-card-icon">📄</div>
+            <h3>AI PDF Assistant</h3>
+            <p>Unggah dokumen PDF Anda dan biarkan AI menganalisis, merangkum, serta menjawab pertanyaan khusus seputar isi dokumen tersebut.</p>
+          </div>
+          <a href="../ai/pdf-ai.html" class="ai-card-btn">Buka PDF Assistant &rarr;</a>
+        </div>
+
+        <!-- AI Tools Hub -->
+        <div class="ai-card">
+          <div>
+            <div class="ai-card-icon">⚡</div>
+            <h3>AI Productivity Tools</h3>
+            <p>Kumpulan utilitas pendukung berbasis AI untuk optimalisasi teks, pembuatan struktur laporan, dan otomatisasi tugas harian.</p>
+          </div>
+          <a href="../ai/tools.html" class="ai-card-btn">Jelajahi AI Tools &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

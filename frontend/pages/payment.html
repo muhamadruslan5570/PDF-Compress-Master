@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pembayaran — PDF Master AI</title>
+  <meta name="description" content="Pembayaran langganan PDF Master AI.">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../assets/images/favicon.png">
+
+  <style>
+    :root {
+      --bg-primary: #07111f;
+      --bg-secondary: #0c1424;
+      --bg-tertiary: #111c2e;
+      --bg-surface: #162338;
+      --border-color: #1e293b;
+      --border-hover: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-color: #3b82f6;
+      --accent-hover: #2563eb;
+      --accent-light: rgba(59, 130, 246, 0.12);
+      --danger-color: #ef4444;
+      --success-color: #22c55e;
+      --warning-color: #f59e0b;
+      --header-height: 65px;
+      --max-width: 900px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    .navbar {
+      height: var(--header-height);
+      padding: 0 32px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7, 17, 31, 0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 42px;
+      object-fit: contain;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      width: min(100% - 32px, var(--max-width));
+      margin: 0 auto;
+      padding: 42px 0 70px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .page-header h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+
+    .plan-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 18px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+    }
+
+    .plan-name {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .plan-price {
+      color: var(--accent-color);
+      font-size: 24px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .method-option {
+      position: relative;
+    }
+
+    .method-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .method-label {
+      display: block;
+      padding: 18px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-tertiary);
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .method-label:hover {
+      border-color: var(--border-hover);
+    }
+
+    .method-option input:checked + .method-label {
+      border-color: var(--accent-color);
+      background: var(--accent-light);
+    }
+
+    .method-title {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .method-number {
+      color: var(--text-secondary);
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .method-owner {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .payment-instruction {
+      padding: 16px;
+      margin-bottom: 24px;
+      border-left: 3px solid var(--accent-color);
+      background: var(--accent-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .file-input {
+      width: 100%;
+      padding: 14px;
+      color: var(--text-secondary);
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+    }
+
+    .file-help {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 7px;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      background: var(--accent-color);
+      color: white;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .submit-button:hover {
+      background: var(--accent-hover);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .message.error {
+      display: block;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fca5a5;
+    }
+
+    .message.success {
+      display: block;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #86efac;
+    }
+
+    .pending-box {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .pending-icon {
+      font-size: 44px;
+      margin-bottom: 12px;
+    }
+
+    .pending-box h2 {
+      margin-bottom: 8px;
+    }
+
+    .pending-box p {
+      color: var(--text-secondary);
+      margin-bottom: 22px;
+    }
+
+    .back-button {
+      display: inline-block;
+      padding: 11px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
+    }
+
+    .back-button:hover {
+      border-color: var(--border-hover);
+    }
+
+    @media (max-width: 700px) {
+      .navbar {
+        padding: 0 16px;
+      }
+
+      .nav-link {
+        display: none;
+      }
+
+      .container {
+        width: min(100% - 20px, var(--max-width));
+        padding-top: 28px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .method-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-summary {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <a href="dashboard.html" class="brand-logo" aria-label="PDF Master AI — Home">
+      <img src="../assets/images/logo.png" alt="PDF Master AI" class="site-logo">
+    </a>
+
+    <div class="nav-actions">
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <header class="page-header">
+      <h1>Pembayaran Pro</h1>
+      <p>Selesaikan pembayaran dan kirim bukti transfer untuk diverifikasi.</p>
+    </header>
+
+    <section class="card" id="paymentCard">
+
+      <div class="plan-summary">
+        <div>
+          <div class="plan-name" id="planName">Memuat paket...</div>
+          <div style="color: var(--text-secondary); font-size: 14px;">
+            Langganan PDF Master AI Pro
+          </div>
+        </div>
+
+        <div class="plan-price" id="planPrice">-</div>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <h2 class="section-title">1. Pilih metode pembayaran</h2>
+
+      <div class="method-grid">
+
+        <div class="method-option">
+          <input
+            type="radio"
+            name="payment_method"
+            id="seabank"
+            value="seabank"
+            checked
+          >
+
+          <label class="method-label" for="seabank">
+            <div class="method-title">SeaBank</div>
+            <div class="method-number">9018 8871 1383</div>
+            <div class="method-owner">A.n. Muhamad Ruslan</div>
+          </label>
+        </div>
+
+        <div class="method-option">
+          <input
+            type="radio"
+            name="payment_method"
+            id="gopay"
+            value="gopay"
+          >
+
+          <label class="method-label" for="gopay">
+            <div class="method-title">GoPay</div>
+            <div class="method-number">08381055378</div>
+            <div class="method-owner">Nomor GoPay</div>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="payment-instruction">
+        Transfer sesuai nominal paket yang dipilih. Setelah transfer berhasil,
+        upload bukti pembayaran pada formulir di bawah. Bukti pembayaran akan
+        berstatus <strong>PENDING</strong> sampai diverifikasi oleh developer.
+      </div>
+
+      <form id="paymentForm">
+
+        <h2 class="section-title">2. Upload bukti pembayaran</h2>
+
+        <div class="field">
+          <label for="proof">Bukti pembayaran</label>
+
+          <input
+            class="file-input"
+            type="file"
+            id="proof"
+            name="proof"
+            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+            required
+          >
+
+          <div class="file-help">
+            Format JPG, JPEG, PNG, atau WEBP. Maksimal 5 MB.
+          </div>
+        </div>
+
+        <button type="submit" class="submit-button" id="submitButton">
+          Kirim Bukti Pembayaran
+        </button>
+
+      </form>
+    </section>
+
+    <section class="card pending-box" id="pendingBox">
+      <div class="pending-icon">⏳</div>
+
+      <h2>Pembayaran Menunggu Verifikasi</h2>
+
+      <p>
+        Bukti pembayaran Anda sudah diterima. Status saat ini adalah
+        <strong>PENDING</strong>. Setelah pembayaran disetujui developer,
+        akun Anda akan berubah menjadi PRO.
+      </p>
+
+      <a href="dashboard.html" class="back-button">
+        Kembali ke Dashboard
+      </a>
+    </section>
+
+  </main>
+
+  <script>
+    const API_BASE_URL =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:8000"
+        : "https://desktop-umrm9nv.tail1b65f7.ts.net";
+
+    const PLANS = {
+      pro_monthly: {
+        name: "Pro Monthly",
+        price: 49000
+      },
+      pro_annual: {
+        name: "Pro Annual",
+        price: 399000
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const planId = (params.get("plan") || "").trim().toLowerCase();
+
+    const planName = document.getElementById("planName");
+    const planPrice = document.getElementById("planPrice");
+    const paymentForm = document.getElementById("paymentForm");
+    const submitButton = document.getElementById("submitButton");
+    const proofInput = document.getElementById("proof");
+    const message = document.getElementById("message");
+    const paymentCard = document.getElementById("paymentCard");
+    const pendingBox = document.getElementById("pendingBox");
+
+    function formatRupiah(value) {
+      return `Rp ${value.toLocaleString("id-ID")}`;
+    }
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = `message ${type}`;
+    }
+
+    function hideMessage() {
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    function showPending() {
+      paymentCard.style.display = "none";
+      pendingBox.style.display = "block";
+    }
+
+    function initializePlan() {
+      const plan = PLANS[planId];
+
+      if (!plan) {
+        planName.textContent = "Paket tidak valid";
+        planPrice.textContent = "-";
+
+        showMessage(
+          "Paket pembayaran tidak valid. Silakan kembali ke halaman Pricing.",
+          "error"
+        );
+
+        paymentForm.style.display = "none";
+        return false;
+      }
+
+      planName.textContent = plan.name;
+      planPrice.textContent = formatRupiah(plan.price);
+
+      return true;
+    }
+
+    async function checkSession() {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/auth/me`,
+          {
+            method: "GET",
+            credentials: "include"
+          }
+        );
+
+        if (!response.ok) {
+          showMessage(
+            "Sesi login tidak ditemukan. Silakan login terlebih dahulu, kemudian buka kembali halaman pembayaran.",
+            "error"
+          );
+
+          paymentForm.style.display = "none";
+          return false;
+        }
+
+        return true;
+
+      } catch (error) {
+        console.error("Session check error:", error);
+
+        showMessage(
+          "Tidak dapat terhubung ke server. Pastikan backend PDF Master AI sedang berjalan.",
+          "error"
+        );
+
+        paymentForm.style.display = "none";
+        return false;
+      }
+    }
+
+    paymentForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      hideMessage();
+
+      const proof = proofInput.files[0];
+
+      if (!proof) {
+        showMessage(
+          "Silakan pilih bukti pembayaran terlebih dahulu.",
+          "error"
+        );
+        return;
+      }
+
+      const maxSize = 5 * 1024 * 1024;
+
+      if (proof.size > maxSize) {
+        showMessage(
+          "Ukuran bukti pembayaran maksimal 5 MB.",
+          "error"
+        );
+        return;
+      }
+
+      const selectedMethod = document.querySelector(
+        'input[name="payment_method"]:checked'
+      );
+
+      if (!selectedMethod) {
+        showMessage(
+          "Silakan pilih metode pembayaran.",
+          "error"
+        );
+        return;
+      }
+
+      const formData = new FormData();
+
+      formData.append("plan_id", planId);
+      formData.append("payment_method", selectedMethod.value);
+      formData.append("proof", proof);
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Mengirim...";
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/payments/submit`,
+          {
+            method: "POST",
+            credentials: "include",
+            body: formData
+          }
+        );
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.detail ||
+            data.message ||
+            "Bukti pembayaran gagal dikirim."
+          );
+        }
+
+        if (data.success && data.payment?.status === "PENDING") {
+          showPending();
+          return;
+        }
+
+        throw new Error(
+          "Server tidak mengembalikan status pembayaran yang valid."
+        );
+
+      } catch (error) {
+        console.error("Payment submission error:", error);
+
+        showMessage(
+          error.message || "Terjadi kesalahan saat mengirim pembayaran.",
+          "error"
+        );
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Kirim Bukti Pembayaran";
+      }
+    });
+
+    (async function init() {
+      if (!initializePlan()) {
+        return;
+      }
+
+      await checkSession();
+    })();
+  </script>
+
+</body>
+</html>

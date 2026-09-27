@@ -1,0 +1,1921 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>AI System Logs â€” MR Compress PDF</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Pusat Monitoring, Analisis, dan Operations AI Knowledge Pipeline MR Compress PDF.">
+
+  <!-- FAVICON FIX (Jalur Relatif) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../js/api-config.js"></script>
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --sidebar-width: 250px;
+      --header-height: 72px;
+      --radius: 14px;
+      --max: 1400px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* LOADING & ACCESS DENIED STATES */
+    #loadingState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--muted);
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--surface-3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #accessDeniedState {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .error-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .error-card h1 {
+      font-size: 24px;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+
+    .error-card p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .btn-back-home {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn-back-home:hover {
+      background: var(--primary-hover);
+    }
+
+    /* MAIN APP WRAPPER */
+    #adminAiApp {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* HEADER GLOBAL */
+    .dashboard-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(7, 17, 31, .96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .ai-badge {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .mobile-menu {
+      display: none;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 21px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px 5px 5px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      max-width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-text {
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .logout-btn {
+      padding: 7px 14px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fecaca;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform .25s ease;
+    }
+
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      padding: 0 12px;
+      margin-bottom: 8px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .sidebar-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin: 2px 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sidebar-link:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .sidebar-link.active {
+      color: #fff;
+      background: rgba(59, 130, 246, .13);
+      border-color: rgba(59, 130, 246, .25);
+    }
+
+    .sidebar-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    /* MAIN CONTENT AREA */
+    .dashboard-main {
+      margin-left: var(--sidebar-width);
+      padding-top: var(--header-height);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      padding: 38px 0 70px;
+      flex: 1;
+    }
+
+    /* PAGE HEADER (SEKSI 1) */
+    .page-header {
+      margin-bottom: 30px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-header-info h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .page-header-info p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .header-action-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-head-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-head-action:hover {
+      background: var(--surface-3);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-head-action.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-head-action.primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* SYSTEM HEALTH SUMMARY PANEL (SEKSI 11) */
+    .health-summary-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .health-panel-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+
+    .health-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+
+    .health-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .health-service-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .health-status-tag {
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .health-status-tag.healthy { color: var(--success); }
+    .health-status-tag.attention { color: var(--warning); }
+    .health-status-tag.critical { color: var(--danger); }
+
+    /* STATS CARDS (SEKSI 2) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 16px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-light);
+    }
+
+    .stat-icon {
+      font-size: 18px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* FILTER & SEARCH PANEL (SEKSI 3) */
+    .filter-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(5, 1fr);
+      gap: 10px;
+      align-items: center;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 12px;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* LOG TABLE (SEKSI 4) */
+    .table-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .custom-table th {
+      background: var(--surface-2);
+      padding: 12px 14px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .custom-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .custom-table tbody tr {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .custom-table tbody tr:hover {
+      background: rgba(17, 28, 46, 0.7);
+    }
+
+    /* BADGES */
+    .badge-level {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .badge-level.info { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-level.warning { background: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-level.error { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .badge-status.success { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-status.failed { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .btn-tbl-view {
+      padding: 4px 10px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .btn-tbl-view:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    /* EMPTY STATE (SEKSI 12) */
+    .empty-logs-box {
+      display: none;
+      padding: 50px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-logs-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+      display: block;
+      color: var(--muted-2);
+    }
+
+    /* PAGINATION BAR (SEKSI 13) */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-page {
+      padding: 6px 12px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .btn-page:hover:not(:disabled) {
+      background: var(--surface-3);
+      color: #fff;
+    }
+
+    .btn-page:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .page-number-active {
+      padding: 6px 12px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* MODAL DRAWER LOG DETAIL & AI ANALYSIS (SEKSI 5, 6, 7, 8, 9, 10) */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: min(100%, 780px);
+      padding: 28px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .modal-close:hover { color: #fff; }
+
+    .detail-section-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+    }
+
+    .detail-card-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .detail-spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .detail-spec-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-spec-label {
+      font-size: 10px;
+      color: var(--muted-2);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .detail-spec-value {
+      color: var(--text);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    /* CODE BLOCK TERMINAL FOR STACKTRACE & SUGGESTED FIX */
+    .code-terminal {
+      background: #040913;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      color: #f87171;
+      line-height: 1.6;
+      max-height: 160px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .code-terminal.cmd {
+      color: #38bdf8;
+    }
+
+    .btn-code-copy {
+      padding: 3px 8px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .btn-code-copy:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* AI ERROR ANALYSIS PANEL (SEKSI 6) */
+    .ai-analysis-card {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+
+    .ai-analysis-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .ai-analysis-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .severity-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .severity-badge.HIGH { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.4); }
+    .severity-badge.MEDIUM { background: rgba(245, 158, 11, 0.2); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.4); }
+    .severity-badge.LOW { background: rgba(59, 130, 246, 0.2); color: var(--primary); border: 1px solid rgba(59, 130, 246, 0.4); }
+
+    .analysis-field {
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .analysis-field-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .analysis-field-desc {
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* PIPELINE TIMELINE VISUAL (SEKSI 8) */
+    .timeline-steps-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .timeline-step-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted-2);
+      padding: 6px 10px;
+      background: var(--surface-3);
+      border-radius: 8px;
+    }
+
+    .timeline-step-chip.completed { color: var(--success); background: rgba(34, 197, 94, 0.1); }
+    .timeline-step-chip.failed { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+    .timeline-step-chip.pending { color: var(--muted-2); }
+
+    /* RELATED LOGS LIST (SEKSI 9) */
+    .related-logs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .related-log-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: var(--surface-3);
+      border-radius: 6px;
+    }
+
+    /* RETRY ACTION FOOTER (SEKSI 10) */
+    .modal-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-retry-action {
+      padding: 9px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .btn-retry-action:hover { background: var(--primary-hover); }
+
+    /* FOOTER */
+    footer {
+      margin-left: var(--sidebar-width);
+      background: #0c1424;
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .footer-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+      .health-grid { grid-template-columns: repeat(2, 1fr); }
+      .filter-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 820px) {
+      .mobile-menu { display: flex; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.is-open { transform: translateX(0); }
+      .sidebar-overlay.is-open { display: block; }
+      .dashboard-main, footer { margin-left: 0; }
+      .dashboard-content { width: min(100% - 30px, var(--max)); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .health-grid { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
+      .detail-spec-grid { grid-template-columns: 1fr; }
+      .user-info { display: none; }
+    }
+
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+    <script src="/js/auth-nav.js"></script>
+</head>
+
+<body>
+
+  <!-- STATE 1: LOADING INITIALIZATION -->
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <p>Memverifikasi hak akses AI Operations Logs...</p>
+  </div>
+
+  <!-- STATE 2: 403 ACCESS DENIED -->
+  <div id="accessDeniedState">
+    <div class="error-card">
+      <span class="error-icon">&#128683;</span>
+      <h1>403 â€” Access Denied</h1>
+      <p id="accessDeniedMsg">Anda tidak memiliki izin mengelola AI System Logs.</p>
+      <a href="/pages/dashboard.html" class="btn-back-home">Kembali ke Dashboard User</a>
+    </div>
+  </div>
+
+  <!-- STATE 3: MAIN APP CONTENT -->
+  <div id="adminAiApp">
+    
+    <!-- HEADER GLOBAL -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Buka Menu Sidebar">&#9776;</button>
+        <a href="./index.html" class="brand-logo" aria-label="MR Compress PDF Admin AI">
+          <img src="../../assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="140" height="45">
+          <span class="ai-badge">ADMIN AI</span>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="avatar" id="headerAvatar">A</div>
+          <div class="user-info">
+            <span class="user-name" id="headerUserName">Admin AI</span>
+            <span class="user-role-text" id="headerUserRole">ai_admin</span>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- NAVIGASI AI -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">NAVIGASI AI</div>
+        <a href="./index.html" class="sidebar-link">
+          <span class="sidebar-icon">&#129302;</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="./knowledge.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128218;</span>
+          <span>Knowledge</span>
+        </a>
+        <a href="./documents.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128196;</span>
+          <span>Documents</span>
+        </a>
+        <a href="./processing.html" class="sidebar-link">
+          <span class="sidebar-icon">&#9881;</span>
+          <span>Processing</span>
+        </a>
+        <a href="./settings.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128295;</span>
+          <span>Settings</span>
+        </a>
+        <a href="./logs.html" class="sidebar-link active">
+          <span class="sidebar-icon">&#128203;</span>
+          <span>Logs</span>
+        </a>
+      </div>
+
+      <!-- NAVIGASI UTAMA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">NAVIGASI UTAMA</div>
+        <a href="/pages/dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">&#8962;</span>
+          <span>Kembali ke Dashboard User</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebarLogoutBtn">
+          <span class="sidebar-icon">&#8617;</span>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="dashboard-main">
+      <div class="dashboard-content">
+
+        <!-- PAGE HEADER (SEKSI 1) -->
+        <section class="page-header">
+          <div class="page-header-info">
+            <h1>AI System Logs</h1>
+            <p>Monitor, analisis, dan telusuri seluruh aktivitas sistem AI Knowledge.</p>
+          </div>
+          <div class="header-action-group">
+            <button class="btn-head-action" id="btnRefreshLogs"><span>&#8635;</span> Refresh Logs</button>
+            <button class="btn-head-action" id="btnExportLogs"><span>&#128229;</span> Export Logs</button>
+            <button class="btn-head-action primary" id="btnClearFilters">Clear Filters</button>
+          </div>
+        </section>
+
+        <!-- SYSTEM HEALTH SUMMARY PANEL (SEKSI 11) -->
+        <section class="health-summary-panel">
+          <div class="health-panel-title">System Health Summary</div>
+          <div class="health-grid">
+            <div class="health-card">
+              <span class="health-service-name">Knowledge Processing</span>
+              <span class="health-status-tag healthy"><span>&#10004;</span> Healthy</span>
+            </div>
+            <div class="health-card">
+              <span class="health-service-name">Embedding Service</span>
+              <span class="health-status-tag attention" id="healthEmbeddingTag"><span>&#9888;</span> Attention Required</span>
+            </div>
+            <div class="health-card">
+              <span class="health-service-name">Vector Database</span>
+              <span class="health-status-tag healthy"><span>&#10004;</span> Healthy</span>
+            </div>
+            <div class="health-card">
+              <span class="health-service-name">AI Chat Engine</span>
+              <span class="health-status-tag healthy"><span>&#10004;</span> Healthy</span>
+            </div>
+            <div class="health-card">
+              <span class="health-service-name">Authentication</span>
+              <span class="health-status-tag healthy"><span>&#10004;</span> Healthy</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATS CARDS (SEKSI 2) -->
+        <section class="section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-icon">&#128203;</span>
+              <div class="stat-value" id="statTotalLogs">--</div>
+              <div class="stat-label">TOTAL LOGS</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">&#9989;</span>
+              <div class="stat-value" id="statSuccessLogs">--</div>
+              <div class="stat-label">SUCCESS</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">&#9888;</span>
+              <div class="stat-value" id="statWarningLogs">--</div>
+              <div class="stat-label">WARNING</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">&#10060;</span>
+              <div class="stat-value" id="statErrorLogs">--</div>
+              <div class="stat-label">ERROR</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">&#9889;</span>
+              <div class="stat-value" id="statFailedPipeline">--</div>
+              <div class="stat-label">FAILED PIPELINE</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">&#8986;</span>
+              <div class="stat-value" id="statAvgTime">--</div>
+              <div class="stat-label">AVG EXECUTION TIME</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FILTER & SEARCH PANEL (SEKSI 3) -->
+        <section class="filter-panel">
+          <div class="filter-grid">
+            <input type="text" class="form-control" id="filterSearch" placeholder="Search Request ID, filename, message...">
+            
+            <select class="form-control" id="filterLevel">
+              <option value="ALL">All Levels</option>
+              <option value="INFO">Info</option>
+              <option value="WARNING">Warning</option>
+              <option value="ERROR">Error</option>
+            </select>
+
+            <select class="form-control" id="filterStatus">
+              <option value="ALL">All Status</option>
+              <option value="SUCCESS">Success</option>
+              <option value="FAILED">Failed</option>
+            </select>
+
+            <select class="form-control" id="filterService">
+              <option value="ALL">All Services</option>
+              <option value="Processing">Processing</option>
+              <option value="Chunking">Chunking</option>
+              <option value="Embedding">Embedding</option>
+              <option value="Vector Database">Vector Database</option>
+              <option value="AI Chat">AI Chat</option>
+              <option value="Authentication">Authentication</option>
+            </select>
+
+            <input type="date" class="form-control" id="filterDate">
+
+            <select class="form-control" id="filterSort">
+              <option value="NEWEST">Sort: Newest</option>
+              <option value="OLDEST">Sort: Oldest</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- LOG TABLE PANEL (SEKSI 4) -->
+        <section class="table-panel">
+          <div class="table-container">
+            <table class="custom-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Request ID</th>
+                  <th>Level</th>
+                  <th>Status</th>
+                  <th>Service</th>
+                  <th>Action</th>
+                  <th>Target File</th>
+                  <th>Duration</th>
+                  <th>Message</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="logsTableBody">
+                <!-- RENDERED BY JAVASCRIPT -->
+              </tbody>
+            </table>
+
+            <!-- EMPTY STATE (SEKSI 12) -->
+            <div class="empty-logs-box" id="emptyLogsBox">
+              <span class="empty-logs-icon">&#128065;</span>
+              <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px;">No logs found</div>
+              <div style="font-size: 13px;">Try changing your filters or search query.</div>
+            </div>
+          </div>
+
+          <!-- PAGINATION BAR (SEKSI 13) -->
+          <div class="pagination-bar">
+            <div id="paginationInfo">Showing 1â€“10 of 10 logs</div>
+            <div class="pagination-controls">
+              <button class="btn-page" id="btnPrevPage" disabled>&laquo; Previous</button>
+              <span class="page-number-active" id="currentPageNum">1</span>
+              <button class="btn-page" id="btnNextPage" disabled>Next &raquo;</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- MODAL DRAWER LOG DETAIL (SEKSI 5, 6, 7, 8, 9, 10) -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-container">
+        
+        <div class="modal-header">
+          <span class="modal-title"><span>&#128203;</span> Log Detail Specification</span>
+          <button class="modal-close" id="closeDetailModalBtn">&times;</button>
+        </div>
+
+        <!-- SPECIFICATION GRID (SEKSI 5) -->
+        <div class="detail-section-card">
+          <div class="detail-card-title">Basic Information</div>
+          <div class="detail-spec-grid">
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Timestamp</span>
+              <span class="detail-spec-value" id="modalTime">-</span>
+            </div>
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Request ID</span>
+              <span class="detail-spec-value" style="font-family: monospace;" id="modalReqId">-</span>
+            </div>
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Level / Status</span>
+              <span class="detail-spec-value" id="modalLevelStatus">-</span>
+            </div>
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Service / Action</span>
+              <span class="detail-spec-value" id="modalServiceAction">-</span>
+            </div>
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Target File</span>
+              <span class="detail-spec-value" id="modalTargetFile">-</span>
+            </div>
+            <div class="detail-spec-item">
+              <span class="detail-spec-label">Execution Duration</span>
+              <span class="detail-spec-value" id="modalDuration">-</span>
+            </div>
+          </div>
+          <div style="margin-top: 12px;">
+            <span class="detail-spec-label">Message</span>
+            <div class="detail-spec-value" style="color: #fff; margin-top: 2px;" id="modalMessage">-</div>
+          </div>
+        </div>
+
+        <!-- PIPELINE TIMELINE (SEKSI 8) -->
+        <div class="detail-section-card" id="timelineSection">
+          <div class="detail-card-title">Pipeline Timeline Status</div>
+          <div class="timeline-steps-flow" id="timelineFlowContainer">
+            <!-- RENDERED BY JS -->
+          </div>
+        </div>
+
+        <!-- STACK TRACE CODE BLOCK (SEKSI 5) -->
+        <div class="detail-section-card" id="stackTraceSection" style="display: none;">
+          <div class="detail-card-title">
+            <span>Error Detail & Stack Trace</span>
+            <button class="btn-code-copy" id="btnCopyStackTrace">Copy Stack Trace</button>
+          </div>
+          <div class="code-terminal" id="modalStackTrace"></div>
+        </div>
+
+        <!-- AI ERROR ANALYSIS AUTOMATION (SEKSI 6) -->
+        <div class="ai-analysis-card" id="aiAnalysisSection" style="display: none;">
+          <div class="ai-analysis-header">
+            <div class="ai-analysis-title"><span>&#9888;</span> AI Error Analysis</div>
+            <span class="severity-badge HIGH" id="modalSeverityBadge">HIGH</span>
+          </div>
+
+          <div class="analysis-field">
+            <div class="analysis-field-title">What Happened</div>
+            <div class="analysis-field-desc" id="analysisWhatHappened">-</div>
+          </div>
+
+          <div class="analysis-field">
+            <div class="analysis-field-title">Root Cause</div>
+            <div class="analysis-field-desc" id="analysisRootCause">-</div>
+          </div>
+
+          <div class="analysis-field">
+            <div class="analysis-field-title">Impact</div>
+            <div class="analysis-field-desc" id="analysisImpact">-</div>
+          </div>
+
+          <div class="analysis-field">
+            <div class="analysis-field-title">Recommended Action</div>
+            <div class="analysis-field-desc" id="analysisRecAction">-</div>
+          </div>
+        </div>
+
+        <!-- SUGGESTED FIX (SEKSI 7) -->
+        <div class="detail-section-card" id="suggestedFixSection" style="display: none;">
+          <div class="detail-card-title">
+            <span>Suggested Fix Commands</span>
+            <button class="btn-code-copy" id="btnCopyFixCmd">Copy Command</button>
+          </div>
+          <div class="code-terminal cmd" id="modalFixCmd">
+python -m pip install sentence-transformers
+python -c "import sentence_transformers; print(sentence_transformers.__file__)"
+          </div>
+        </div>
+
+        <!-- RELATED LOGS (SEKSI 9) -->
+        <div class="detail-section-card" id="relatedLogsSection">
+          <div class="detail-card-title">Related Logs Trace</div>
+          <div class="related-logs-list" id="relatedLogsContainer">
+            <!-- RENDERED BY JS -->
+          </div>
+        </div>
+
+        <!-- RETRY ACTION FOOTER (SEKSI 10) -->
+        <div class="modal-footer-actions">
+          <button class="btn-head-action" id="btnCancelModal">Close</button>
+          <button class="btn-retry-action" id="btnTriggerRetry" style="display: none;">Retry Pipeline</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-content">
+        <div>&copy; 2026 <strong>MR Compress PDF</strong>. All rights reserved.</div>
+        <div>Admin AI Operations Workspace</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (async () => {
+      // BASE URL CONFIGURATION
+      const API_BASE_URL = typeof window.API_BASE_URL !== 'undefined' ? window.API_BASE_URL : 'http://127.0.0.1:8000';
+
+      const loadingState = document.getElementById('loadingState');
+      const accessDeniedState = document.getElementById('accessDeniedState');
+      const accessDeniedMsg = document.getElementById('accessDeniedMsg');
+      const adminAiApp = document.getElementById('adminAiApp');
+
+      // STATE ARCHITECTURE (SEKSI 15 & 16)
+      let logsData = [];
+      let filteredLogsData = [];
+      let currentPage = 1;
+      const pageSize = 20;
+      let activeSelectedLog = null;
+
+      // MOCK DATA COLLECTION WITH KNOWLEDGE PIPELINE SCHEMA (SEKSI 4 & 17)
+      const mockLogsCollection = [
+        {
+          id: "req-101",
+          timestamp: "2026-09-01 10:30:21",
+          level: "ERROR",
+          status: "FAILED",
+          service: "Embedding",
+          action: "Generate Embeddings",
+          targetFile: "Buku Bisnis Ala Nabi.pdf",
+          duration: "-",
+          message: "No module named 'sentence_transformers'",
+          stackTrace: `Traceback (most recent call last):\n  File "app/services/knowledge_embedding_service.py", line 42, in generate\n    import sentence_transformers\nModuleNotFoundError: No module named 'sentence_transformers'`,
+          analysis: {
+            whatHappened: "Embedding pipeline gagal dijalankan karena Python tidak menemukan package sentence_transformers.",
+            rootCause: "Dependency belum tersedia pada environment Python yang digunakan oleh proses backend.",
+            impact: "Dokumen berhasil diproses tetapi embedding tidak dapat dibuat sehingga dokumen belum dapat masuk ke vector database.",
+            recommendedAction: "1. Pastikan backend menggunakan virtual environment yang benar.\n2. Pastikan sentence-transformers terinstall pada environment tersebut.\n3. Restart proses backend/Uvicorn.\n4. Jalankan ulang pipeline embedding.",
+            severity: "HIGH",
+            suggestedFix: `python -m pip install sentence-transformers\npython -c "import sentence_transformers; print(sentence_transformers.__file__)"`
+          },
+          pipeline: { upload: "Completed", processing: "Completed", chunking: "Completed", embedding: "Failed", vector: "Pending" }
+        },
+        {
+          id: "req-101",
+          timestamp: "2026-09-01 10:28:11",
+          level: "INFO",
+          status: "SUCCESS",
+          service: "Chunking",
+          action: "Chunking Text",
+          targetFile: "Buku Bisnis Ala Nabi.pdf",
+          duration: "1.21s",
+          message: "Created 396 text chunks (size 1000, overlap 200)",
+          pipeline: { upload: "Completed", processing: "Completed", chunking: "Completed", embedding: "Pending", vector: "Pending" }
+        },
+        {
+          id: "req-101",
+          timestamp: "2026-09-01 10:26:04",
+          level: "INFO",
+          status: "SUCCESS",
+          service: "Processing",
+          action: "Extract Text",
+          targetFile: "Buku Bisnis Ala Nabi.pdf",
+          duration: "8.31s",
+          message: "Extracted 292 pages text via PyMuPDF (395,494 chars)",
+          pipeline: { upload: "Completed", processing: "Completed", chunking: "Pending", embedding: "Pending", vector: "Pending" }
+        },
+        {
+          id: "req-101",
+          timestamp: "2026-09-01 10:25:31",
+          level: "INFO",
+          status: "SUCCESS",
+          service: "Processing",
+          action: "Upload Knowledge",
+          targetFile: "Buku Bisnis Ala Nabi.pdf",
+          duration: "0.42s",
+          message: "Buku Bisnis Ala Nabi.pdf uploaded to storage/knowledge/",
+          pipeline: { upload: "Completed", processing: "Pending", chunking: "Pending", embedding: "Pending", vector: "Pending" }
+        },
+        {
+          id: "req-102",
+          timestamp: "2026-09-01 09:40:12",
+          level: "WARNING",
+          status: "SUCCESS",
+          service: "AI Chat",
+          action: "Gemini RAG Query",
+          targetFile: "SOP AI.pdf",
+          duration: "1.15s",
+          message: "Low vector similarity score detected (0.42) for prompt context",
+          pipeline: { upload: "Completed", processing: "Completed", chunking: "Completed", embedding: "Completed", vector: "Completed" }
+        },
+        {
+          id: "req-103",
+          timestamp: "2026-09-01 09:15:20",
+          level: "INFO",
+          status: "SUCCESS",
+          service: "Vector Database",
+          action: "Index Vectors",
+          targetFile: "Panduan Fitur Compress.pdf",
+          duration: "0.85s",
+          message: "25 vectors indexed successfully into ChromaDB collection",
+          pipeline: { upload: "Completed", processing: "Completed", chunking: "Completed", embedding: "Completed", vector: "Completed" }
+        },
+        {
+          id: "req-104",
+          timestamp: "2026-09-01 08:30:00",
+          level: "INFO",
+          status: "SUCCESS",
+          service: "Authentication",
+          action: "Verify Token",
+          targetFile: "-",
+          duration: "0.04s",
+          message: "Admin AI authentication session verified via cookie",
+          pipeline: null
+        }
+      ];
+
+      // 1. AUTHENTICATION & ROLE CHECK
+      try {
+        const authResponse = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (authResponse.status === 401) {
+          window.location.href = '/pages/login.html';
+          return;
+        }
+
+        if (authResponse.status === 403) {
+          loadingState.style.display = 'none';
+          accessDeniedMsg.textContent = 'Access Denied: Anda tidak memiliki izin mengelola AI System Logs.';
+          accessDeniedState.style.display = 'flex';
+          return;
+        }
+
+        if (!authResponse.ok) {
+          throw new Error('Gagal memverifikasi otentikasi server.');
+        }
+
+        const authData = await authResponse.json();
+
+        if (!authData.authenticated || (authData.role !== 'ai_admin' && authData.role !== 'developer')) {
+          loadingState.style.display = 'none';
+          accessDeniedMsg.textContent = 'Access Denied: Halaman ini khusus untuk Admin AI atau Developer.';
+          accessDeniedState.style.display = 'flex';
+          return;
+        }
+
+        loadingState.style.display = 'none';
+        adminAiApp.style.display = 'flex';
+
+        const userName = authData.name || 'Admin AI';
+        document.getElementById('headerUserName').textContent = userName;
+        document.getElementById('headerUserRole').textContent = authData.role || 'ai_admin';
+        document.getElementById('headerAvatar').textContent = userName.charAt(0).toUpperCase();
+
+      } catch (err) {
+        console.error('Auth verification error:', err);
+        loadingState.style.display = 'none';
+        accessDeniedMsg.textContent = 'Terjadi kesalahan otentikasi server.';
+        accessDeniedState.style.display = 'flex';
+        return;
+      }
+
+      // 2. FETCH LOGS DATA (API READY: GET /api/ai-admin/logs) (SEKSI 16)
+      async function fetchLogs() {
+        try {
+          const res = await fetch(`${API_BASE_URL}/api/ai-admin/logs`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            logsData = Array.isArray(data) ? data : (data.logs || mockLogsCollection);
+          } else {
+            logsData = mockLogsCollection;
+          }
+        } catch (e) {
+          console.warn('Endpoint API GET /api/ai-admin/logs belum tersedia, menggunakan data simulasi.');
+          logsData = mockLogsCollection;
+        }
+
+        filterLogs();
+      }
+
+      // 3. FILTERING & SEARCHING (SEKSI 3)
+      function filterLogs() {
+        const searchText = document.getElementById('filterSearch').value.toLowerCase();
+        const levelVal = document.getElementById('filterLevel').value;
+        const statusVal = document.getElementById('filterStatus').value;
+        const serviceVal = document.getElementById('filterService').value;
+        const dateVal = document.getElementById('filterDate').value;
+        const sortVal = document.getElementById('filterSort').value;
+
+        filteredLogsData = logsData.filter(log => {
+          const matchSearch = !searchText || 
+            (log.id && log.id.toLowerCase().includes(searchText)) ||
+            (log.targetFile && log.targetFile.toLowerCase().includes(searchText)) ||
+            (log.message && log.message.toLowerCase().includes(searchText));
+
+          const matchLevel = levelVal === 'ALL' || log.level === levelVal;
+          const matchStatus = statusVal === 'ALL' || log.status === statusVal;
+          const matchService = serviceVal === 'ALL' || log.service === serviceVal;
+          const matchDate = !dateVal || log.timestamp.startsWith(dateVal);
+
+          return matchSearch && matchLevel && matchStatus && matchService && matchDate;
+        });
+
+        // Sorting
+        filteredLogsData.sort((a, b) => {
+          const timeA = new Date(a.timestamp).getTime();
+          const timeB = new Date(b.timestamp).getTime();
+          return sortVal === 'NEWEST' ? timeB - timeA : timeA - timeB;
+        });
+
+        updateStats();
+        currentPage = 1;
+        renderLogs();
+      }
+
+      // 4. UPDATE STATS CARDS (SEKSI 2)
+      function updateStats() {
+        document.getElementById('statTotalLogs').textContent = logsData.length;
+        document.getElementById('statSuccessLogs').textContent = logsData.filter(l => l.status === 'SUCCESS').length;
+        document.getElementById('statWarningLogs').textContent = logsData.filter(l => l.level === 'WARNING').length;
+        document.getElementById('statErrorLogs').textContent = logsData.filter(l => l.level === 'ERROR').length;
+        document.getElementById('statFailedPipeline').textContent = logsData.filter(l => l.status === 'FAILED').length;
+        document.getElementById('statAvgTime').textContent = '1.42s';
+      }
+
+      // 5. RENDER LOG TABLE (SEKSI 4 & 13)
+      function renderLogs() {
+        const tbody = document.getElementById('logsTableBody');
+        const emptyBox = document.getElementById('emptyLogsBox');
+        tbody.innerHTML = '';
+
+        if (filteredLogsData.length === 0) {
+          emptyBox.style.display = 'block';
+          document.getElementById('paginationInfo').textContent = 'Showing 0â€“0 of 0 logs';
+          document.getElementById('btnPrevPage').disabled = true;
+          document.getElementById('btnNextPage').disabled = true;
+          return;
+        }
+
+        emptyBox.style.display = 'none';
+
+        const startIdx = (currentPage - 1) * pageSize;
+        const endIdx = Math.min(startIdx + pageSize, filteredLogsData.length);
+        const pageItems = filteredLogsData.slice(startIdx, endIdx);
+
+        pageItems.forEach(log => {
+          const tr = document.createElement('tr');
+          const lvlClass = (log.level || 'INFO').toLowerCase();
+          const stClass = (log.status || 'SUCCESS').toLowerCase();
+
+          tr.innerHTML = `
+            <td style="font-family: monospace; font-size: 11px;">${log.timestamp}</td>
+            <td style="font-family: monospace; font-weight: 700; color: var(--primary);">${log.id}</td>
+            <td><span class="badge-level ${lvlClass}">${log.level}</span></td>
+            <td><span class="badge-status ${stClass}">${log.status}</span></td>
+            <td style="font-weight: 700;">${log.service}</td>
+            <td>${log.action}</td>
+            <td style="word-break: break-all;">${log.targetFile}</td>
+            <td style="font-family: monospace; font-size: 11px;">${log.duration}</td>
+            <td>${escapeHtml(log.message)}</td>
+            <td><button class="btn-tbl-view">View</button></td>
+          `;
+
+          tr.onclick = () => showLogDetail(log);
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('paginationInfo').textContent = `Showing ${startIdx + 1}â€“${endIdx} of ${filteredLogsData.length} logs`;
+        document.getElementById('currentPageNum').textContent = currentPage;
+        document.getElementById('btnPrevPage').disabled = currentPage === 1;
+        document.getElementById('btnNextPage').disabled = endIdx >= filteredLogsData.length;
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      // 6. SHOW LOG DETAIL MODAL & AI ERROR ANALYSIS (SEKSI 5, 6, 7, 8, 9, 10)
+      const detailModal = document.getElementById('detailModal');
+      const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
+      const btnCancelModal = document.getElementById('btnCancelModal');
+
+      function showLogDetail(log) {
+        activeSelectedLog = log;
+
+        // Basic Info
+        document.getElementById('modalTime').textContent = log.timestamp;
+        document.getElementById('modalReqId').textContent = log.id;
+        document.getElementById('modalLevelStatus').textContent = `${log.level} (${log.status})`;
+        document.getElementById('modalServiceAction').textContent = `${log.service} â†’ ${log.action}`;
+        document.getElementById('modalTargetFile').textContent = log.targetFile;
+        document.getElementById('modalDuration').textContent = log.duration;
+        document.getElementById('modalMessage').textContent = log.message;
+
+        // Stack Trace
+        const stackTraceSection = document.getElementById('stackTraceSection');
+        if (log.stackTrace) {
+          document.getElementById('modalStackTrace').textContent = log.stackTrace;
+          stackTraceSection.style.display = 'block';
+        } else {
+          stackTraceSection.style.display = 'none';
+        }
+
+        // AI Error Analysis & Suggested Fix
+        const aiAnalysisSection = document.getElementById('aiAnalysisSection');
+        const suggestedFixSection = document.getElementById('suggestedFixSection');
+
+        if (log.level === 'ERROR' || log.status === 'FAILED' || log.analysis) {
+          const ana = log.analysis || {
+            whatHappened: "Proses mengalami kegagalan pada tahapan eksekusi.",
+            rootCause: "Terjadi kesalahan internal pada layanan backend.",
+            impact: "Proses pipeline dihentikan sementara.",
+            recommendedAction: "Periksa kembali berkas dan konfigurasi environment.",
+            severity: "HIGH",
+            suggestedFix: "python -m pip install -r requirements.txt"
+          };
+
+          document.getElementById('modalSeverityBadge').textContent = ana.severity;
+          document.getElementById('modalSeverityBadge').className = `severity-badge ${ana.severity}`;
+          document.getElementById('analysisWhatHappened').textContent = ana.whatHappened;
+          document.getElementById('analysisRootCause').textContent = ana.rootCause;
+          document.getElementById('analysisImpact').textContent = ana.impact;
+          document.getElementById('analysisRecAction').innerText = ana.recommendedAction;
+          document.getElementById('modalFixCmd').innerText = ana.suggestedFix;
+
+          aiAnalysisSection.style.display = 'block';
+          suggestedFixSection.style.display = 'block';
+        } else {
+          aiAnalysisSection.style.display = 'none';
+          suggestedFixSection.style.display = 'none';
+        }
+
+        // Pipeline Timeline (Seksi 8)
+        const timelineFlowContainer = document.getElementById('timelineFlowContainer');
+        timelineFlowContainer.innerHTML = '';
+        const pipe = log.pipeline || { upload: "Completed", processing: "Completed", chunking: "Completed", embedding: "Completed", vector: "Completed" };
+
+        const steps = [
+          { name: "Upload", status: pipe.upload || "Completed" },
+          { name: "Processing", status: pipe.processing || "Completed" },
+          { name: "Chunking", status: pipe.chunking || "Completed" },
+          { name: "Embedding", status: pipe.embedding || "Completed" },
+          { name: "Vector Index", status: pipe.vector || "Completed" }
+        ];
+
+        steps.forEach((st, idx) => {
+          const chip = document.createElement('div');
+          const statusLower = st.status.toLowerCase();
+          chip.className = `timeline-step-chip ${statusLower}`;
+          chip.innerHTML = `${st.name}: <strong>${st.status}</strong>`;
+          timelineFlowContainer.appendChild(chip);
+
+          if (idx < steps.length - 1) {
+            const arr = document.createElement('span');
+            arr.style.color = 'var(--muted-2)';
+            arr.innerHTML = '&#8594;';
+            timelineFlowContainer.appendChild(arr);
+          }
+        });
+
+        // Related Logs (Seksi 9)
+        const relatedLogsContainer = document.getElementById('relatedLogsContainer');
+        relatedLogsContainer.innerHTML = '';
+        const related = logsData.filter(l => l.id === log.id || (l.targetFile !== '-' && l.targetFile === log.targetFile));
+
+        if (related.length === 0) {
+          relatedLogsContainer.innerHTML = '<div style="color: var(--muted);">Tidak ada related log yang terdeteksi.</div>';
+        } else {
+          related.forEach(rel => {
+            const relItem = document.createElement('div');
+            relItem.className = 'related-log-item';
+            relItem.innerHTML = `
+              <span><strong>${rel.timestamp}</strong> &bull; ${rel.service} (${rel.action})</span>
+              <span class="badge-status ${rel.status.toLowerCase()}">${rel.status}</span>
+            `;
+            relatedLogsContainer.appendChild(relItem);
+          });
+        }
+
+        // Retry Button (Seksi 10)
+        const btnTriggerRetry = document.getElementById('btnTriggerRetry');
+        if (log.status === 'FAILED' || log.level === 'ERROR') {
+          btnTriggerRetry.style.display = 'inline-block';
+        } else {
+          btnTriggerRetry.style.display = 'none';
+        }
+
+        detailModal.style.display = 'flex';
+      }
+
+      closeDetailModalBtn.onclick = () => detailModal.style.display = 'none';
+      btnCancelModal.onclick = () => detailModal.style.display = 'none';
+
+      // 7. COPY ACTIONS & RETRY HANDLER (SEKSI 7 & 10)
+      document.getElementById('btnCopyStackTrace').onclick = () => {
+        const text = document.getElementById('modalStackTrace').innerText;
+        navigator.clipboard.writeText(text);
+        alert('Stack trace berhasil disalin ke clipboard.');
+      };
+
+      document.getElementById('btnCopyFixCmd').onclick = () => {
+        const text = document.getElementById('modalFixCmd').innerText;
+        navigator.clipboard.writeText(text);
+        alert('Suggested fix command berhasil disalin.');
+      };
+
+      document.getElementById('btnTriggerRetry').onclick = async () => {
+        if (!activeSelectedLog) return;
+        const target = activeSelectedLog.targetFile !== '-' ? activeSelectedLog.targetFile : 'Knowledge Pipeline';
+        
+        if (confirm(`Retry pipeline untuk "${target}"?\n\nPilihan: Tekan OK untuk Retry Full Pipeline.`)) {
+          alert(`Memulai kembali eksekusi pipeline untuk "${target}"...`);
+          
+          try {
+            await fetch(`${API_BASE_URL}/api/ai-admin/logs/${activeSelectedLog.id}/retry`, {
+              method: 'POST',
+              credentials: 'include'
+            });
+          } catch (e) {
+            console.warn('Simulasi retry pipeline terkirim ke server.');
+          }
+
+          detailModal.style.display = 'none';
+          fetchLogs();
+        }
+      };
+
+      // 8. EXPORT LOGS (SEKSI 1)
+      document.getElementById('btnExportLogs').onclick = () => {
+        const jsonStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(filteredLogsData, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", jsonStr);
+        downloadAnchor.setAttribute("download", `ai_system_logs_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      };
+
+      // 9. FILTER LISTENERS & CLEAR FILTERS
+      ['filterSearch', 'filterLevel', 'filterStatus', 'filterService', 'filterDate', 'filterSort'].forEach(id => {
+        document.getElementById(id).addEventListener('change', filterLogs);
+        document.getElementById(id).addEventListener('keyup', filterLogs);
+      });
+
+      document.getElementById('btnClearFilters').onclick = () => {
+        document.getElementById('filterSearch').value = '';
+        document.getElementById('filterLevel').value = 'ALL';
+        document.getElementById('filterStatus').value = 'ALL';
+        document.getElementById('filterService').value = 'ALL';
+        document.getElementById('filterDate').value = '';
+        document.getElementById('filterSort').value = 'NEWEST';
+        filterLogs();
+      };
+
+      document.getElementById('btnRefreshLogs').onclick = fetchLogs;
+
+      // Pagination Controls
+      document.getElementById('btnPrevPage').onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderLogs();
+        }
+      };
+
+      document.getElementById('btnNextPage').onclick = () => {
+        if (currentPage * pageSize < filteredLogsData.length) {
+          currentPage++;
+          renderLogs();
+        }
+      };
+
+      // 10. MOBILE MENU & LOGOUT
+      const mobileMenu = document.getElementById('mobileMenu');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      if (mobileMenu) {
+        mobileMenu.onclick = () => {
+          sidebar.classList.toggle('is-open');
+          sidebarOverlay.classList.toggle('is-open');
+        };
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.onclick = () => {
+          sidebar.classList.remove('is-open');
+          sidebarOverlay.classList.remove('is-open');
+        };
+      }
+
+      const handleLogout = async (e) => {
+        if (e) e.preventDefault();
+        try {
+          await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'
+          });
+        } catch (err) {
+          console.error('Logout error:', err);
+        } finally {
+          localStorage.removeItem('mr_pdf_user');
+          window.location.replace('/index.html');
+        }
+      };
+
+      document.getElementById('logoutBtn').onclick = handleLogout;
+      document.getElementById('sidebarLogoutBtn').onclick = handleLogout;
+
+      // INITIAL LOAD
+      fetchLogs();
+
+    })();
+  </script>
+</body>
+</html>
+
+

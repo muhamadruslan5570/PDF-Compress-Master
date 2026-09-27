@@ -1,0 +1,1694 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>AI Knowledge Documents â€” MR Compress PDF</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Manajemen Dokumen Knowledge Base untuk MR Compress PDF AI RAG.">
+
+  <!-- FAVICON FIX (Jalur Relatif) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/images/favicon.png">
+
+  <!-- CONFIG BASE URL BACKEND PROYEK -->
+  <script src="../../js/api-config.js"></script>
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --surface: #0c1424;
+      --surface-2: #111c2e;
+      --surface-3: #162338;
+      --border: #1e293b;
+      --border-light: #26364e;
+
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --muted-2: #64748b;
+
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      --sidebar-width: 250px;
+      --header-height: 72px;
+      --radius: 14px;
+      --max: 1400px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* LOADING & ACCESS DENIED STATES */
+    #loadingState {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--muted);
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--surface-3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #accessDeniedState {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .error-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .error-card h1 {
+      font-size: 24px;
+      color: var(--danger);
+      margin-bottom: 8px;
+    }
+
+    .error-card p {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .btn-back-home {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .btn-back-home:hover {
+      background: var(--primary-hover);
+    }
+
+    /* MAIN APP WRAPPER */
+    #adminAiApp {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .dashboard-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(7, 17, 31, .96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .site-logo {
+      display: block;
+      width: 140px;
+      height: auto;
+      max-height: 45px;
+      object-fit: contain;
+    }
+
+    .ai-badge {
+      font-size: 10px;
+      font-weight: 800;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .mobile-menu {
+      display: none;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 21px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px 5px 5px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface-2);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      max-width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role-text {
+      color: var(--primary);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .logout-btn {
+      padding: 7px 14px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(239, 68, 68, 0.22);
+      color: #fecaca;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 14px;
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform .25s ease;
+    }
+
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      padding: 0 12px;
+      margin-bottom: 8px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .sidebar-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      margin: 2px 0;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .sidebar-link:hover {
+      color: var(--text);
+      background: var(--surface-2);
+    }
+
+    .sidebar-link.active {
+      color: #fff;
+      background: rgba(59, 130, 246, .13);
+      border-color: rgba(59, 130, 246, .25);
+    }
+
+    .sidebar-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 850;
+      background: rgba(0, 0, 0, .55);
+    }
+
+    /* MAIN CONTENT */
+    .dashboard-main {
+      margin-left: var(--sidebar-width);
+      padding-top: var(--header-height);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dashboard-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      padding: 38px 0 70px;
+      flex: 1;
+    }
+
+    /* PAGE HEADER WITH ACTIONS */
+    .page-header {
+      margin-bottom: 30px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .page-header-info h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .page-header-info p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .btn-action-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .btn-action-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* NOTIFICATION BANNER */
+    .notification {
+      display: none;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .notification.success {
+      display: flex;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+    }
+
+    .notification.error {
+      display: flex;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+
+    .notification-close {
+      background: none;
+      border: none;
+      color: currentColor;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 34px;
+    }
+
+    .stat-card {
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-light);
+    }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--surface-3);
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* STATUS PIPELINE FLOW VISUALIZATION */
+    .pipeline-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 34px;
+    }
+
+    .pipeline-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted-2);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 16px;
+    }
+
+    .pipeline-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .step-number {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 11px;
+    }
+
+    .step-arrow {
+      color: var(--muted-2);
+      font-size: 14px;
+    }
+
+    .step-item.ready .step-number {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--success);
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .step-item.ready {
+      color: var(--success);
+    }
+
+    /* SECTIONS & CARDS */
+    .section {
+      margin-bottom: 34px;
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* UPLOAD PANEL & MODAL */
+    .upload-zone {
+      border: 2px dashed var(--border-light);
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      background: var(--surface-2);
+      transition: border-color 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.05);
+    }
+
+    .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .upload-text {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .upload-subtext {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .selected-file-info {
+      display: none;
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    .btn-refresh {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border-light);
+      color: var(--text);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.2s ease;
+    }
+
+    .btn-refresh:hover {
+      background: var(--surface-3);
+      color: #fff;
+    }
+
+    /* DOCUMENT TABLE */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .custom-table th {
+      background: var(--surface-2);
+      padding: 12px 14px;
+      color: var(--muted-2);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .custom-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .custom-table tbody tr:hover {
+      background: rgba(17, 28, 46, 0.5);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-badge.ready, .status-badge.indexed, .status-badge.embedded {
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--success);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+
+    .status-badge.processing, .status-badge.uploaded, .status-badge.processed {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .status-badge.failed, .status-badge.error {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ACTION BUTTONS IN TABLE */
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-sm {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid var(--border-light);
+      background: var(--surface-3);
+      color: var(--text);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .btn-action-sm:hover:not(:disabled) {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-action-sm.btn-danger:hover:not(:disabled) {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+
+    .btn-action-sm:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .empty-state {
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* MODAL POPUP FOR DETAILS & UPLOAD */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: min(100%, 560px);
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-label {
+      color: var(--muted-2);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .detail-value {
+      color: var(--text);
+      font-weight: 600;
+      word-break: break-all;
+      text-align: right;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-left: var(--sidebar-width);
+      background: #0c1424;
+      border-top: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .footer-content {
+      width: min(100% - 48px, var(--max));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted-2);
+      font-size: 12px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 820px) {
+      .mobile-menu { display: flex; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.is-open { transform: translateX(0); }
+      .sidebar-overlay.is-open { display: block; }
+      .dashboard-main, footer { margin-left: 0; }
+      .dashboard-content { width: min(100% - 30px, var(--max)); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline-steps { flex-direction: column; align-items: flex-start; }
+      .step-arrow { display: none; }
+      .user-info { display: none; }
+    }
+
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+    <script src="/js/auth-nav.js"></script>
+</head>
+
+<body>
+
+  <!-- STATE 1: LOADING INITIALIZATION -->
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <p>Memverifikasi hak akses AI Documents Manager...</p>
+  </div>
+
+  <!-- STATE 2: 403 ACCESS DENIED -->
+  <div id="accessDeniedState">
+    <div class="error-card">
+      <span class="error-icon">&#128683;</span>
+      <h1>403 â€” Akses Ditolak</h1>
+      <p id="accessDeniedMsg">Anda tidak memiliki akses ke halaman AI Knowledge Documents.</p>
+      <a href="/pages/dashboard.html" class="btn-back-home">Kembali ke Dashboard User</a>
+    </div>
+  </div>
+
+  <!-- STATE 3: MAIN APP CONTENT -->
+  <div id="adminAiApp">
+    
+    <!-- HEADER -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Buka Menu Sidebar">&#9776;</button>
+        <a href="./index.html" class="brand-logo" aria-label="MR Compress PDF Admin AI">
+          <img src="../../assets/images/logo.png" alt="MR Compress PDF" class="site-logo" width="140" height="45">
+          <span class="ai-badge">ADMIN AI</span>
+        </a>
+      </div>
+
+      <div class="header-right">
+        <div class="user-menu">
+          <div class="avatar" id="headerAvatar">A</div>
+          <div class="user-info">
+            <span class="user-name" id="headerUserName">Admin AI</span>
+            <span class="user-role-text" id="headerUserRole">ai_admin</span>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      
+      <!-- DASHBOARD AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">DASHBOARD</div>
+        <a href="./index.html" class="sidebar-link">
+          <span class="sidebar-icon">&#129302;</span>
+          <span>AI Overview</span>
+        </a>
+        <a href="./knowledge.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128218;</span>
+          <span>Knowledge Base</span>
+        </a>
+        <a href="./documents.html" class="sidebar-link active">
+          <span class="sidebar-icon">&#128196;</span>
+          <span>Documents</span>
+        </a>
+        <a href="./processing.html" class="sidebar-link">
+          <span class="sidebar-icon">&#9881;</span>
+          <span>AI Processing</span>
+        </a>
+        <a href="./settings.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128295;</span>
+          <span>AI Settings</span>
+        </a>
+        <a href="./logs.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128203;</span>
+          <span>Logs</span>
+        </a>
+      </div>
+
+      <!-- USER AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">USER AREA</div>
+        <a href="/pages/dashboard.html" class="sidebar-link">
+          <span class="sidebar-icon">&#8962;</span>
+          <span>User Dashboard</span>
+        </a>
+        <a href="/pages/ai/chat-ai.html" class="sidebar-link">
+          <span class="sidebar-icon">&#10024;</span>
+          <span>AI Chat</span>
+        </a>
+      </div>
+
+      <!-- DEVELOPER AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">DEVELOPER</div>
+        <a href="/pages/developer/index.html" class="sidebar-link">
+          <span class="sidebar-icon">&#9881;</span>
+          <span>Dashboard</span>
+        </a>
+      </div>
+
+      <!-- ACCOUNT AREA -->
+      <div class="sidebar-section">
+        <div class="sidebar-title">ACCOUNT</div>
+        <a href="/pages/profile.html" class="sidebar-link">
+          <span class="sidebar-icon">&#128104;</span>
+          <span>Profile</span>
+        </a>
+        <a href="#" class="sidebar-link" id="sidebarLogoutBtn">
+          <span class="sidebar-icon">&#8617;</span>
+          <span>Logout</span>
+        </a>
+      </div>
+
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="dashboard-main">
+      <div class="dashboard-content">
+
+        <!-- PAGE HEADER (BAGIAN 2) -->
+        <section class="page-header">
+          <div class="page-header-info">
+            <h1>AI Knowledge Documents</h1>
+            <p>Kelola dokumen yang digunakan sebagai Knowledge Base untuk AI.</p>
+          </div>
+          <button class="btn-action-primary" id="openUploadModalBtn">
+            <span>+</span> Upload Knowledge
+          </button>
+        </section>
+
+        <!-- NOTIFICATION BANNER (BAGIAN 9) -->
+        <div class="notification" id="notificationBanner">
+          <span id="notificationMessage">Pesan notifikasi</span>
+          <button class="notification-close" id="notificationCloseBtn">&times;</button>
+        </div>
+
+        <!-- STATISTIK CARDS (BAGIAN 3) -->
+        <section class="section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">&#128196;</div>
+              <div class="stat-value" id="statTotalDocuments">--</div>
+              <div class="stat-label">TOTAL DOCUMENTS</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#9889;</div>
+              <div class="stat-value" id="statProcessed">--</div>
+              <div class="stat-label">PROCESSED</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#129513;</div>
+              <div class="stat-value" id="statEmbedded">--</div>
+              <div class="stat-label">EMBEDDED</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">&#128190;</div>
+              <div class="stat-value" id="statIndexed">--</div>
+              <div class="stat-label">INDEXED</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- STATUS PIPELINE FLOW VISUALIZATION (BAGIAN 8) -->
+        <section class="pipeline-card">
+          <div class="pipeline-title">Status Pipeline Knowledge Base</div>
+          <div class="pipeline-steps">
+            <div class="step-item"><span class="step-number">1</span> UPLOAD</div>
+            <span class="step-arrow">&#8594;</span>
+            <div class="step-item"><span class="step-number">2</span> PROCESS</div>
+            <span class="step-arrow">&#8594;</span>
+            <div class="step-item"><span class="step-number">3</span> CHUNK</div>
+            <span class="step-arrow">&#8594;</span>
+            <div class="step-item"><span class="step-number">4</span> EMBEDDING</div>
+            <span class="step-arrow">&#8594;</span>
+            <div class="step-item"><span class="step-number">5</span> CHROMADB INDEX</div>
+            <span class="step-arrow">&#8594;</span>
+            <div class="step-item ready"><span class="step-number">&#10003;</span> READY</div>
+          </div>
+        </section>
+
+        <!-- DOCUMENT TABLE (BAGIAN 5 & 6) -->
+        <section class="section">
+          <div class="panel-card">
+            <div class="panel-header">
+              <span class="panel-title">Daftar Dokumen Knowledge</span>
+              <button class="btn-refresh" id="refreshBtn">
+                <span>&#8635;</span> Refresh
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Size</th>
+                    <th>Pages</th>
+                    <th>Chunks</th>
+                    <th>Embeddings</th>
+                    <th>Vector</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="documentTableBody">
+                  <tr>
+                    <td colspan="8" class="empty-state">Memuat daftar dokumen...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- MODAL 1: UPLOAD DOCUMENT (BAGIAN 4) -->
+    <div class="modal-overlay" id="uploadModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <span class="modal-title">Upload Knowledge Document</span>
+          <button class="modal-close" id="closeUploadModalBtn">&times;</button>
+        </div>
+        <form id="uploadForm">
+          <div class="upload-zone" id="uploadDropZone">
+            <span class="upload-icon">&#128194;</span>
+            <div class="upload-text">Klik atau tarik file PDF ke area ini</div>
+            <div class="upload-subtext">Hanya menerima format PDF untuk Knowledge Base RAG</div>
+            <input type="file" id="documentFile" class="file-input" accept=".pdf" required>
+          </div>
+
+          <div class="selected-file-info" id="selectedFileInfo">
+            File: <span id="fileNameDisplay" style="color: #fff; font-weight: 700;">-</span>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="btn-refresh" id="cancelUploadBtn">Batal</button>
+            <button type="submit" class="btn-action-primary" id="uploadSubmitBtn">
+              <span id="uploadBtnSpinner" class="spinner" style="width: 12px; height: 12px; border-width: 2px; display: none;"></span>
+              <span id="uploadBtnText">Upload File</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 2: DOCUMENT DETAIL (BAGIAN 7) -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <span class="modal-title">Detail Dokumen Knowledge</span>
+          <button class="modal-close" id="closeDetailModalBtn">&times;</button>
+        </div>
+        <div class="detail-list">
+          <div class="detail-row">
+            <span class="detail-label">Filename</span>
+            <span class="detail-value" id="detailFilename">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">File Size</span>
+            <span class="detail-value" id="detailFileSize">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Pages</span>
+            <span class="detail-value" id="detailPages">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Characters</span>
+            <span class="detail-value" id="detailChars">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Processing Method</span>
+            <span class="detail-value" id="detailMethod">PyMuPDF / RAG Chunking</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Chunk Count</span>
+            <span class="detail-value" id="detailChunks">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Embedding Dimension</span>
+            <span class="detail-value" id="detailDim">384</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Embedding Model</span>
+            <span class="detail-value" id="detailModel">all-MiniLM-L6-v2</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Vector Count (ChromaDB)</span>
+            <span class="detail-value" id="detailVectors">-</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Current Status</span>
+            <span class="detail-value" id="detailStatus">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-content">
+        <div>&copy; 2026 <strong>MR Compress PDF</strong>. All rights reserved.</div>
+        <div>Admin AI Documents Workspace</div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    (async () => {
+      // BASE URL CONFIGURATION
+      const API_BASE_URL = typeof window.API_BASE_URL !== 'undefined' ? window.API_BASE_URL : 'http://127.0.0.1:8000';
+
+      const loadingState = document.getElementById('loadingState');
+      const accessDeniedState = document.getElementById('accessDeniedState');
+      const accessDeniedMsg = document.getElementById('accessDeniedMsg');
+      const adminAiApp = document.getElementById('adminAiApp');
+
+      const notificationBanner = document.getElementById('notificationBanner');
+      const notificationMessage = document.getElementById('notificationMessage');
+      const notificationCloseBtn = document.getElementById('notificationCloseBtn');
+
+      const documentTableBody = document.getElementById('documentTableBody');
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      // MODAL UPLOAD ELEMENTS
+      const uploadModal = document.getElementById('uploadModal');
+      const openUploadModalBtn = document.getElementById('openUploadModalBtn');
+      const closeUploadModalBtn = document.getElementById('closeUploadModalBtn');
+      const cancelUploadBtn = document.getElementById('cancelUploadBtn');
+      const uploadForm = document.getElementById('uploadForm');
+      const uploadDropZone = document.getElementById('uploadDropZone');
+      const documentFile = document.getElementById('documentFile');
+      const selectedFileInfo = document.getElementById('selectedFileInfo');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      const uploadSubmitBtn = document.getElementById('uploadSubmitBtn');
+      const uploadBtnSpinner = document.getElementById('uploadBtnSpinner');
+      const uploadBtnText = document.getElementById('uploadBtnText');
+
+      // MODAL DETAIL ELEMENTS
+      const detailModal = document.getElementById('detailModal');
+      const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
+
+      // UTILITY: NOTIFIKASI
+      function showNotification(msg, type = 'success') {
+        notificationBanner.className = `notification ${type}`;
+        notificationMessage.textContent = msg;
+        notificationBanner.style.display = 'flex';
+      }
+
+      function hideNotification() {
+        notificationBanner.style.display = 'none';
+      }
+
+      notificationCloseBtn.addEventListener('click', hideNotification);
+
+      // UTILITY: FORMAT BYTES
+      function formatBytes(bytes) {
+        if (bytes === undefined || bytes === null || isNaN(bytes)) return '-';
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      // 1. AUTHENTICATION & PERMISSION CHECK
+      try {
+        const authResponse = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (authResponse.status === 401) {
+          window.location.href = '/pages/login.html';
+          return;
+        }
+
+        if (authResponse.status === 403) {
+          loadingState.style.display = 'none';
+          accessDeniedMsg.textContent = 'Anda tidak memiliki akses ke halaman AI Knowledge Documents.';
+          accessDeniedState.style.display = 'flex';
+          return;
+        }
+
+        if (!authResponse.ok) {
+          throw new Error('Gagal memverifikasi hak akses pengguna.');
+        }
+
+        const authData = await authResponse.json();
+
+        // Validasi Role: ai_admin atau developer
+        if (!authData.authenticated || (authData.role !== 'ai_admin' && authData.role !== 'developer')) {
+          loadingState.style.display = 'none';
+          accessDeniedMsg.textContent = 'Anda tidak memiliki akses ke halaman AI Knowledge Documents.';
+          accessDeniedState.style.display = 'flex';
+          return;
+        }
+
+        loadingState.style.display = 'none';
+        adminAiApp.style.display = 'flex';
+
+        const userName = authData.name || 'Admin AI';
+        document.getElementById('headerUserName').textContent = userName;
+        document.getElementById('headerUserRole').textContent = authData.role || 'ai_admin';
+        document.getElementById('headerAvatar').textContent = userName.charAt(0).toUpperCase();
+
+      } catch (err) {
+        console.error('Auth check error:', err);
+        loadingState.style.display = 'none';
+        accessDeniedMsg.textContent = 'Terjadi kesalahan sistem saat memverifikasi hak akses.';
+        accessDeniedState.style.display = 'flex';
+        return;
+      }
+
+      // 2. FETCH STATISTIK (BAGIAN 3)
+      async function loadStats() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/ai-admin/stats`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+
+          if (response.ok) {
+            const stats = await response.json();
+            document.getElementById('statTotalDocuments').textContent = stats.total_documents ?? stats.total_knowledge ?? '-';
+            document.getElementById('statProcessed').textContent = stats.processed_documents ?? stats.total_documents ?? '-';
+            document.getElementById('statEmbedded').textContent = stats.embedded_documents ?? stats.total_chunks ?? '-';
+            document.getElementById('statIndexed').textContent = stats.indexed_vectors ?? stats.total_chunks ?? '-';
+          } else {
+            resetStats();
+          }
+        } catch (e) {
+          console.warn('Statistik backend tidak tersedia:', e);
+          resetStats();
+        }
+      }
+
+      function resetStats() {
+        document.getElementById('statTotalDocuments').textContent = '-';
+        document.getElementById('statProcessed').textContent = '-';
+        document.getElementById('statEmbedded').textContent = '-';
+        document.getElementById('statIndexed').textContent = '-';
+      }
+
+      // 3. FETCH LIST DOKUMEN (BAGIAN 5)
+      async function loadDocuments() {
+        documentTableBody.innerHTML = `
+          <tr>
+            <td colspan="8" class="empty-state">Memuat daftar dokumen...</td>
+          </tr>
+        `;
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/ai-admin/knowledge`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+
+          if (response.status === 401) {
+            window.location.href = '/pages/login.html';
+            return;
+          }
+
+          if (response.status === 403) {
+            showNotification('Anda tidak memiliki izin untuk melihat dokumen.', 'error');
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error(`Gagal mengambil dokumen (Status: ${response.status})`);
+          }
+
+          const data = await response.json();
+          const docs = Array.isArray(data) ? data : (data.items || data.documents || []);
+
+          if (docs.length === 0) {
+            documentTableBody.innerHTML = `
+              <tr>
+                <td colspan="8" class="empty-state">Belum ada dokumen Knowledge Base yang diunggah.</td>
+              </tr>
+            `;
+            return;
+          }
+
+          documentTableBody.innerHTML = '';
+
+          docs.forEach(doc => {
+            const tr = document.createElement('tr');
+
+            // Document Name (XSS Protected)
+            const tdName = document.createElement('td');
+            tdName.style.fontWeight = '600';
+            tdName.textContent = doc.name || doc.filename || 'Dokumen Tanpa Nama';
+            tr.appendChild(tdName);
+
+            // Size
+            const tdSize = document.createElement('td');
+            tdSize.textContent = formatBytes(doc.size);
+            tr.appendChild(tdSize);
+
+            // Pages
+            const tdPages = document.createElement('td');
+            tdPages.textContent = doc.pages !== undefined ? doc.pages : '-';
+            tr.appendChild(tdPages);
+
+            // Chunks
+            const tdChunks = document.createElement('td');
+            tdChunks.textContent = doc.chunks !== undefined ? doc.chunks : '-';
+            tr.appendChild(tdChunks);
+
+            // Embeddings
+            const tdEmbeddings = document.createElement('td');
+            tdEmbeddings.textContent = doc.embeddings !== undefined ? doc.embeddings : '-';
+            tr.appendChild(tdEmbeddings);
+
+            // Vector
+            const tdVector = document.createElement('td');
+            tdVector.textContent = doc.vectors !== undefined ? doc.vectors : '-';
+            tr.appendChild(tdVector);
+
+            // Status Badge
+            const tdStatus = document.createElement('td');
+            const statusSpan = document.createElement('span');
+            const rawStatus = (doc.status || 'Ready').toLowerCase();
+
+            if (rawStatus === 'ready' || rawStatus === 'indexed') {
+              statusSpan.className = 'status-badge ready';
+              statusSpan.innerHTML = '<span class="badge-dot"></span> Ready';
+            } else if (rawStatus === 'processing' || rawStatus === 'uploaded') {
+              statusSpan.className = 'status-badge processing';
+              statusSpan.innerHTML = '<span class="badge-dot"></span> Processing';
+            } else {
+              statusSpan.className = 'status-badge failed';
+              statusSpan.innerHTML = '<span class="badge-dot"></span> Failed';
+            }
+            tdStatus.appendChild(statusSpan);
+            tr.appendChild(tdStatus);
+
+            // Actions (BAGIAN 6)
+            const tdActions = document.createElement('td');
+            const actionDiv = document.createElement('div');
+            actionDiv.className = 'action-group';
+
+            // View Btn
+            const btnView = document.createElement('button');
+            btnView.className = 'btn-action-sm';
+            btnView.textContent = 'View';
+            btnView.onclick = () => showDocumentDetail(doc);
+            actionDiv.appendChild(btnView);
+
+            // Process / Index Btn
+            const btnProcess = document.createElement('button');
+            btnProcess.className = 'btn-action-sm';
+            btnProcess.textContent = 'Process';
+            btnProcess.onclick = () => triggerProcessDocument(doc, btnProcess);
+            actionDiv.appendChild(btnProcess);
+
+            // Delete Btn
+            const btnDelete = document.createElement('button');
+            btnDelete.className = 'btn-action-sm btn-danger';
+            btnDelete.textContent = 'Delete';
+            btnDelete.onclick = () => triggerDeleteDocument(doc, btnDelete);
+            actionDiv.appendChild(btnDelete);
+
+            tdActions.appendChild(actionDiv);
+            tr.appendChild(tdActions);
+
+            documentTableBody.appendChild(tr);
+          });
+
+        } catch (err) {
+          console.error('Error load documents:', err);
+          showNotification('Gagal mengambil daftar dokumen dari backend.', 'error');
+          documentTableBody.innerHTML = `
+            <tr>
+              <td colspan="8" class="empty-state" style="color: var(--danger);">Terjadi kesalahan saat memuat data.</td>
+            </tr>
+          `;
+        }
+      }
+
+      // 4. ACTION HANDLERS (BAGIAN 6 & 10)
+      async function triggerProcessDocument(doc, btnEl) {
+        const docName = doc.name || doc.filename;
+        if (!confirm(`Jalankan proses Chunking & Embedding untuk "${docName}"?`)) return;
+
+        btnEl.disabled = true;
+        btnEl.textContent = 'Processing...';
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/ai-admin/knowledge/process`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: docName })
+          });
+
+          if (!response.ok) {
+            throw new Error(`Proses gagal (Status: ${response.status})`);
+          }
+
+          showNotification(`Dokumen "${docName}" berhasil diproses dan di-index ke ChromaDB.`, 'success');
+          refreshData();
+        } catch (err) {
+          console.error('Process Error:', err);
+          showNotification(`Gagal memproses dokumen "${docName}".`, 'error');
+        } finally {
+          btnEl.disabled = false;
+          btnEl.textContent = 'Process';
+        }
+      }
+
+      async function triggerDeleteDocument(doc, btnEl) {
+        const docName = doc.name || doc.filename;
+        if (!confirm(`Apakah Anda yakin ingin menghapus dokumen "${docName}" dari Knowledge Base?`)) return;
+
+        btnEl.disabled = true;
+        btnEl.textContent = 'Deleting...';
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/ai-admin/knowledge/${encodeURIComponent(docName)}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            throw new Error(`Gagal menghapus (Status: ${response.status})`);
+          }
+
+          showNotification(`Dokumen "${docName}" berhasil dihapus.`, 'success');
+          refreshData();
+        } catch (err) {
+          console.error('Delete Error:', err);
+          showNotification(`Gagal menghapus dokumen "${docName}".`, 'error');
+        } finally {
+          btnEl.disabled = false;
+          btnEl.textContent = 'Delete';
+        }
+      }
+
+      // 5. DETAIL MODAL (BAGIAN 7)
+      function showDocumentDetail(doc) {
+        document.getElementById('detailFilename').textContent = doc.name || doc.filename || '-';
+        document.getElementById('detailFileSize').textContent = formatBytes(doc.size);
+        document.getElementById('detailPages').textContent = doc.pages !== undefined ? doc.pages : '-';
+        document.getElementById('detailChars').textContent = doc.characters !== undefined ? doc.characters : '-';
+        document.getElementById('detailChunks').textContent = doc.chunks !== undefined ? doc.chunks : '-';
+        document.getElementById('detailVectors').textContent = doc.vectors !== undefined ? doc.vectors : '-';
+        document.getElementById('detailStatus').textContent = doc.status || 'Ready';
+
+        detailModal.style.display = 'flex';
+      }
+
+      closeDetailModalBtn.onclick = () => detailModal.style.display = 'none';
+
+      // 6. UPLOAD MODAL & FORM HANDLER (BAGIAN 4)
+      openUploadModalBtn.onclick = () => {
+        uploadForm.reset();
+        selectedFileInfo.style.display = 'none';
+        uploadModal.style.display = 'flex';
+      };
+
+      closeUploadModalBtn.onclick = () => uploadModal.style.display = 'none';
+      cancelUploadBtn.onclick = () => uploadModal.style.display = 'none';
+
+      uploadDropZone.onclick = () => documentFile.click();
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        uploadDropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          uploadDropZone.classList.add('dragover');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        uploadDropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          uploadDropZone.classList.remove('dragover');
+        });
+      });
+
+      uploadDropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          documentFile.files = files;
+          updateSelectedFile();
+        }
+      });
+
+      documentFile.onchange = updateSelectedFile;
+
+      function updateSelectedFile() {
+        if (documentFile.files.length > 0) {
+          const file = documentFile.files[0];
+          fileNameDisplay.textContent = `${file.name} (${formatBytes(file.size)})`;
+          selectedFileInfo.style.display = 'block';
+        } else {
+          selectedFileInfo.style.display = 'none';
+        }
+      }
+
+      uploadForm.onsubmit = async (e) => {
+        e.preventDefault();
+        hideNotification();
+
+        if (!documentFile.files || documentFile.files.length === 0) {
+          showNotification('Pilih file PDF terlebih dahulu.', 'error');
+          return;
+        }
+
+        const file = documentFile.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+
+        uploadSubmitBtn.disabled = true;
+        uploadBtnSpinner.style.display = 'inline-block';
+        uploadBtnText.textContent = 'Uploading...';
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/ai-admin/knowledge`, {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.detail || `Upload gagal (Status: ${response.status})`);
+          }
+
+          showNotification(`Dokumen "${file.name}" berhasil diunggah.`, 'success');
+          uploadModal.style.display = 'none';
+          refreshData();
+
+        } catch (err) {
+          console.error('Upload error:', err);
+          showNotification(err.message || 'Gagal mengunggah dokumen.', 'error');
+        } finally {
+          uploadSubmitBtn.disabled = false;
+          uploadBtnSpinner.style.display = 'none';
+          uploadBtnText.textContent = 'Upload File';
+        }
+      };
+
+      // 7. REFRESH & NAVIGATION HANDLERS
+      function refreshData() {
+        hideNotification();
+        loadStats();
+        loadDocuments();
+      }
+
+      refreshBtn.onclick = refreshData;
+
+      // Mobile Menu
+      const mobileMenu = document.getElementById('mobileMenu');
+      const sidebar = document.getElementById('sidebar');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      if (mobileMenu) {
+        mobileMenu.onclick = () => {
+          sidebar.classList.toggle('is-open');
+          sidebarOverlay.classList.toggle('is-open');
+        };
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.onclick = () => {
+          sidebar.classList.remove('is-open');
+          sidebarOverlay.classList.remove('is-open');
+        };
+      }
+
+      // Logout
+      const handleLogout = async (e) => {
+        if (e) e.preventDefault();
+        try {
+          await fetch(`${API_BASE_URL}/api/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'
+          });
+        } catch (err) {
+          console.error('Logout error:', err);
+        } finally {
+          localStorage.removeItem('mr_pdf_user');
+          window.location.replace('/index.html');
+        }
+      };
+
+      document.getElementById('logoutBtn').onclick = handleLogout;
+      document.getElementById('sidebarLogoutBtn').onclick = handleLogout;
+
+      // INITIAL LOAD
+      refreshData();
+
+    })();
+  </script>
+</body>
+</html>
+
+
